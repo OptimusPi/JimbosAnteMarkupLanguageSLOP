@@ -1,0 +1,85 @@
+name: Negative Retrigger Party
+author: pifreak
+description: >
+  Anaglyph's post-boss Double Tag doubles the Negative Tag from a skipped small
+  blind, so the next two base-edition shop jokers are free and Negative. Wants
+  retrigger jokers (Hanging Chad, Sock and Buskin, Seltzer, Dusk) in that window:
+  the same ante's shop slots 2-5 or the next ante's slots 0-3. Negative Tag starts
+  at ante 2, so pairings run antes 2-5; every extra one scores.
+deck: Anaglyph
+stake: White
+
+must:
+  - voucher: Hieroglyph
+    antes: [1]
+  - legendaryJoker: Perkeo
+    antes: [0]
+    sources: { boosterPacks: [0, 1] }
+  - or:
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [2]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [2]
+            sources: { shopItems: [2, 3, 4, 5] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [2]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [3]
+            sources: { shopItems: [0, 1, 2, 3] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [3]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [3]
+            sources: { shopItems: [2, 3, 4, 5] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [3]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [4]
+            sources: { shopItems: [0, 1, 2, 3] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [4]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [4]
+            sources: { shopItems: [2, 3, 4, 5] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [4]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [5]
+            sources: { shopItems: [0, 1, 2, 3] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [5]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [5]
+            sources: { shopItems: [2, 3, 4, 5] }
+      - and:
+          - smallBlindTag: NegativeTag
+            antes: [5]
+          - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+            antes: [6]
+            sources: { shopItems: [0, 1, 2, 3] }
+
+should:
+  - smallBlindTag: NegativeTag
+    antes: [2, 3, 4, 5, 6]
+    score: 20
+    label: negative_tags
+  - jokers: [HangingChad, SockAndBuskin, Seltzer, Dusk]
+    antes: [2, 3, 4, 5, 6]
+    sources: { shopItems: [0, 1, 2, 3, 4, 5] }
+    score: 10
+    label: retriggers
+  - joker: Blueprint
+    antes: [1, 2, 3, 4]
+    score: 15
+    label: blueprint
+  - joker: Brainstorm
+    antes: [1, 2, 3, 4]
+    score: 15
+    label: brainstorm

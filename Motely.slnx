@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Motely.Web/">
+    <File Path="Motely.Web/package.json" />
+    <File Path="Motely.Web/vite.config.ts" />
+    <File Path="Motely.Web/src/AgentPanel.tsx" />
+    <File Path="Motely.Web/src/agui.ts" />
+    <File Path="Motely.Web/src/App.tsx" />
+    <File Path="Motely.Web/src/FilterFolder.tsx" />
+    <File Path="Motely.Web/src/main.tsx" />
+    <File Path="Motely.Web/src/webmcp.ts" />
+    <File Path="Motely.Web/src/webmcp-tools.ts" />
+  </Folder>
+  <Project Path="Motely.CLI/Motely.CLI.csproj" />
+  <Project Path="Motely.Wasm/Motely.Wasm.csproj" />
+  <Project Path="Motely/Motely.csproj" />
+  <Project Path="Motely.Tests/Motely.Tests.csproj" />
+</Solution>

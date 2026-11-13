@@ -1,0 +1,14 @@
+name: AmberAcorn Boss Blind
+author: jammy
+description: AmberAcorn boss blind flips and debuffs 3 random jokers
+deck: Red
+stake: White
+must:
+  - boss: AmberAcorn
+    antes:
+      - 8
+should:
+  - rareJoker: Blueprint
+    score: 50
+  - legendaryJoker: Chicot
+    score: 60
