@@ -89,22 +89,32 @@ public struct JamlShouldScoreDesc
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public unsafe VectorMask Score(
+        public VectorMask Score(
             ref MotelyVectorSearchContext searchContext,
             MotelyScoredSeedResult[] buffer,
             VectorMask baseFilterMask,
             int scoreThreshold = int.MinValue
         )
         {
-            if (baseFilterMask.IsAllFalse())
+            int cutoff = Math.Max(_minimumTotalScore, scoreThreshold);
+            if (baseFilterMask.IsAllFalse() || (_shouldClauses.Length == 0 && cutoff > 0))
                 return VectorMask.NoBitsSet;
 
+            return ScoreSeeds(ref searchContext, buffer, baseFilterMask, cutoff);
+        }
+
+        private unsafe VectorMask ScoreSeeds(
+            ref MotelyVectorSearchContext searchContext,
+            MotelyScoredSeedResult[] buffer,
+            VectorMask baseFilterMask,
+            int cutoff
+        )
+        {
             var mustClauses = _mustClauses;
             var shouldClauses = _shouldClauses;
             var mustNotClauses = _mustNotClauses;
             var prepareClauses = _prepareClauses;
             var seedMatchCallback = _seedMatchCallback;
-            int cutoff = Math.Max(_minimumTotalScore, scoreThreshold);
             bool skipMust = _skipMustReeval;
 
             // Must-only + exact SIMD confirm + no score cutoff: identity is enough.
@@ -132,11 +142,7 @@ public struct JamlShouldScoreDesc
                 (MotelySingleSearchContext singleCtx) =>
                 {
                     var runState = singleCtx.Deck.GetDefaultRunState();
-                    // Empty only with a cutoff above zero and nothing to re-evaluate (exact
-                    // must-only, or no clauses at all): nothing below reads the run state then,
-                    // and the cutoff rejects the seed.
-                    if (prepareClauses.Length > 0)
-                        ClauseScoring.PrepareRunState(ref singleCtx, prepareClauses, runState);
+                    ClauseScoring.PrepareRunState(ref singleCtx, prepareClauses, runState);
 
                     long totalScore = 0;
                     ref var tally = ref buffer[singleCtx.VectorLane];

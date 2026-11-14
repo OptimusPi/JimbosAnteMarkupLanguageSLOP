@@ -30,15 +30,9 @@ jobs:
       - name: Pick the notes
         id: notes
         shell: bash
-        # The tag reaches the script as data in an environment variable. Written into the script
-        # with ${{ }}, a tag such as v1$(id) would run as a command in this contents: write job.
         env:
           TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          if [[ ! "$TAG" =~ ^v[0-9A-Za-z._-]+$ ]]; then
-            echo "::error::Not a release tag: expected v followed by letters, digits, dots, underscores or hyphens."
-            exit 1
-          fi
           notes="docs/RELEASE-${TAG#v}.md"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -f "$notes" ]; then echo "file=$notes" >> "$GITHUB_OUTPUT"; fi

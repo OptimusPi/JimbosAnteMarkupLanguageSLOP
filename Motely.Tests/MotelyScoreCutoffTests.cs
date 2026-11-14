@@ -109,27 +109,27 @@ public sealed class MotelyScoreCutoffTests
         Assert.Equal(0, Matches(int.MaxValue));
     }
 
-    // A filter with nothing to score: no clauses, or only mustNot clauses the SIMD chain decides
-    // exactly. Every seed it keeps scores 0, so a floor above zero drops them all.
     [Theory]
-    [InlineData("deck: Red\n")]
-    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n")]
-    public void Cutoff_HoldsWhenNoClauseScores(string yaml)
+    [InlineData("deck: Red\n", "ALEEB")]
+    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n", "ALEEB")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n", "P1111111")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n    min: 0\n", "ALEEB")]
+    [InlineData("mustNot:\n  - legendaryJoker: Perkeo\n    antes: [1]\n", "ALEEB")]
+    public void Cutoff_HoldsWhenNoClauseScores(string yaml, string seed)
     {
-        Assert.Equal(1, CutoffMatches(yaml, int.MinValue));
-        Assert.Equal(1, CutoffMatches(yaml, 0));
-        Assert.Equal(0, CutoffMatches(yaml, 1));
+        Assert.Equal(1, CutoffMatches(yaml, seed, int.MinValue));
+        Assert.Equal(1, CutoffMatches(yaml, seed, 0));
+        Assert.Equal(0, CutoffMatches(yaml, seed, 1));
 
-        // The filter's own cutoff: is the floor when the host gives none, and loses to the host.
-        Assert.Equal(0, CutoffMatches("cutoff: 1\n" + yaml, null));
-        Assert.Equal(1, CutoffMatches("cutoff: 1\n" + yaml, int.MinValue));
+        Assert.Equal(0, CutoffMatches("cutoff: 1\n" + yaml, seed, null));
+        Assert.Equal(1, CutoffMatches("cutoff: 1\n" + yaml, seed, int.MinValue));
     }
 
-    private static long CutoffMatches(string yaml, int? engineCutoff)
+    private static long CutoffMatches(string yaml, string seed, int? engineCutoff)
     {
         using var search = Motely.Filters.MotelySearchBuilder
             .CreateSettings(Motely.Filters.JamlConfig.FromJaml(yaml), engineCutoff)
-            .WithSeedList(["ALEEB"])
+            .WithSeedList([seed])
             .WithThreadCount(1)
             .WithQuietMode(true)
             .WithAutoScoreCutoff(false)

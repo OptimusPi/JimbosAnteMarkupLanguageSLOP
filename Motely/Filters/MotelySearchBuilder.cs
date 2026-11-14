@@ -178,7 +178,8 @@ public static class MotelySearchBuilder
 
     /// <summary>
     /// The engine's search settings for a filter: its deck and stake, its must and exact mustNot
-    /// clauses as the SIMD chain, and the scoring pass when anything scores.
+    /// clauses as the SIMD chain, and the scoring pass when there is a clause for it to evaluate
+    /// or the floor is above zero.
     /// </summary>
     /// <param name="engineCutoff">
     /// The score floor the scorer drops seeds below, before any callback. Null takes the filter's
@@ -225,8 +226,6 @@ public static class MotelySearchBuilder
             );
         }
 
-        // A floor above zero needs the scoring pass even when no clause reaches it (no clauses at
-        // all, or exact mustNot clauses only): those seeds score 0 and the floor drops them.
         if (config.Must.Count + config.Should.Count + scoredMustNot.Length > 0 || floor > 0)
         {
             settings = settings.WithSeedScoreProvider(

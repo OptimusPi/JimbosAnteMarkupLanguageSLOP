@@ -58,8 +58,6 @@ public sealed class JamlAdversarialTests
     [InlineData("must:\n  - legendaryJoker: Perkeo\n    antes: [1]\n    soulEditionRolls: 5000\n")]
     public void AnOutOfRangeBound_IsRefused(string yaml) => RefusedWith(yaml, "out of range");
 
-    // jaml/index.d.ts and the schema type and:/or: as a list or null, with the children under
-    // clauses: in the null case. A mapping under the key is not a form the loader reads.
     [Theory]
     [InlineData("and", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
     [InlineData("or", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
