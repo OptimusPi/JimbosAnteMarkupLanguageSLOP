@@ -127,6 +127,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
         run: |
           tarball=$(cd ../Motely.Wasm && npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP" | tail -n 1)
-          npm install --no-save --force "$RUNNER_TEMP/$tarball"
+          npm install --no-save "$RUNNER_TEMP/$tarball"
           diff -r ../Motely.Wasm/bin/motely-wasm node_modules/motely-wasm/bin/motely-wasm
       - run: npm run build
