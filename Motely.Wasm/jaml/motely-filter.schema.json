@@ -5423,58 +5423,10 @@
               }
             },
             {
-              "$ref": "#/definitions/andPayload"
-            },
-            {
               "type": "null"
             }
           ]
         },
-        "clauses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/clause"
-          }
-        },
-        "label": {
-          "anyOf": [
-            {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "max": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "min": {
-          "type": "integer"
-        },
-        "mode": {
-          "$ref": "#/definitions/enums/LogicScoreMode"
-        },
-        "score": {
-          "type": "integer"
-        }
-      }
-    },
-    "andPayload": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
         "clauses": {
           "type": "array",
           "items": {
@@ -5565,57 +5517,9 @@
               }
             },
             {
-              "$ref": "#/definitions/orPayload"
-            },
-            {
               "type": "null"
             }
           ]
-        },
-        "score": {
-          "type": "integer"
-        }
-      }
-    },
-    "orPayload": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "clauses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/clause"
-          }
-        },
-        "label": {
-          "anyOf": [
-            {
-              "type": [
-                "string",
-                "number",
-                "boolean"
-              ]
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "max": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "min": {
-          "type": "integer"
-        },
-        "mode": {
-          "$ref": "#/definitions/enums/LogicScoreMode"
         },
         "score": {
           "type": "integer"

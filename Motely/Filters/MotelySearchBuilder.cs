@@ -225,7 +225,9 @@ public static class MotelySearchBuilder
             );
         }
 
-        if (config.Must.Count + config.Should.Count + scoredMustNot.Length > 0)
+        // A floor above zero needs the scoring pass even when no clause reaches it (no clauses at
+        // all, or exact mustNot clauses only): those seeds score 0 and the floor drops them.
+        if (config.Must.Count + config.Should.Count + scoredMustNot.Length > 0 || floor > 0)
         {
             settings = settings.WithSeedScoreProvider(
                 new JamlShouldScoreDesc(

@@ -508,16 +508,7 @@ export interface JamlBloodstoneTriggerClause {
 }
 
 export interface JamlAndClause {
-  and?: JamlClause[] | JamlAndPayload | null;
-  clauses?: JamlClause[];
-  label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
-  mode?: LogicScoreModeName;
-  score?: number;
-}
-
-export interface JamlAndPayload {
+  and?: JamlClause[] | null;
   clauses?: JamlClause[];
   label?: string | number | boolean | null;
   max?: number | null;
@@ -532,16 +523,7 @@ export interface JamlOrClause {
   max?: number | null;
   min?: number;
   mode?: LogicScoreModeName;
-  or?: JamlClause[] | JamlOrPayload | null;
-  score?: number;
-}
-
-export interface JamlOrPayload {
-  clauses?: JamlClause[];
-  label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
-  mode?: LogicScoreModeName;
+  or?: JamlClause[] | null;
   score?: number;
 }
 

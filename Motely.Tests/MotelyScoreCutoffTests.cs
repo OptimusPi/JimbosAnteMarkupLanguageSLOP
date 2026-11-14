@@ -109,6 +109,35 @@ public sealed class MotelyScoreCutoffTests
         Assert.Equal(0, Matches(int.MaxValue));
     }
 
+    // A filter with nothing to score: no clauses, or only mustNot clauses the SIMD chain decides
+    // exactly. Every seed it keeps scores 0, so a floor above zero drops them all.
+    [Theory]
+    [InlineData("deck: Red\n")]
+    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n")]
+    public void Cutoff_HoldsWhenNoClauseScores(string yaml)
+    {
+        Assert.Equal(1, CutoffMatches(yaml, int.MinValue));
+        Assert.Equal(1, CutoffMatches(yaml, 0));
+        Assert.Equal(0, CutoffMatches(yaml, 1));
+
+        // The filter's own cutoff: is the floor when the host gives none, and loses to the host.
+        Assert.Equal(0, CutoffMatches("cutoff: 1\n" + yaml, null));
+        Assert.Equal(1, CutoffMatches("cutoff: 1\n" + yaml, int.MinValue));
+    }
+
+    private static long CutoffMatches(string yaml, int? engineCutoff)
+    {
+        using var search = Motely.Filters.MotelySearchBuilder
+            .CreateSettings(Motely.Filters.JamlConfig.FromJaml(yaml), engineCutoff)
+            .WithSeedList(["ALEEB"])
+            .WithThreadCount(1)
+            .WithQuietMode(true)
+            .WithAutoScoreCutoff(false)
+            .Start();
+        search.AwaitCompletion();
+        return search.MatchingSeeds;
+    }
+
     [Fact]
     public void WithScoredResultGate_GatesCallbacksMatchingSeedsAndStopAfter()
     {

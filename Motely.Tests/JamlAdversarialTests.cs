@@ -58,6 +58,25 @@ public sealed class JamlAdversarialTests
     [InlineData("must:\n  - legendaryJoker: Perkeo\n    antes: [1]\n    soulEditionRolls: 5000\n")]
     public void AnOutOfRangeBound_IsRefused(string yaml) => RefusedWith(yaml, "out of range");
 
+    // jaml/index.d.ts and the schema type and:/or: as a list or null, with the children under
+    // clauses: in the null case. A mapping under the key is not a form the loader reads.
+    [Theory]
+    [InlineData("and", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
+    [InlineData("or", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
+    [InlineData("and", "~", "    clauses: [{ joker: Blueprint }, { joker: Brainstorm }]\n")]
+    [InlineData("or", "~", "    clauses: [{ joker: Blueprint }, { joker: Brainstorm }]\n")]
+    public void AndOr_LoadAsAListOrUnderClauses(string key, string value, string rest)
+    {
+        Assert.True(JamlConfig.TryLoad($"must:\n  - {key}: {value}\n{rest}", out var config, out var error), error);
+        Assert.Equal(2, Assert.IsAssignableFrom<LogicClause>(Assert.Single(config!.Must)).Clauses.Length);
+    }
+
+    [Theory]
+    [InlineData("and")]
+    [InlineData("or")]
+    public void AndOr_WrittenAsAMapping_IsRefused(string key) =>
+        Refused($"must:\n  - {key}: {{ clauses: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}] }}\n");
+
     [Fact]
     public void AnAliasBetweenRealKeys_IsRefused() =>
         RefusedWith(

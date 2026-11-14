@@ -2,7 +2,8 @@
 # `test` builds Motely.slnx (Motely.Wasm included) and runs the whole xunit suite in Release.
 # `aot` NativeAOT-publishes Motely.CLI (the trim/AOT gate) and runs one filter on two seeds.
 # `wasm` publishes Motely.Wasm with NativeAOT-LLVM and runs its node:test suite.
-# `web` builds Motely.Web against that package.
+# `web` builds Motely.Web against that package: it installs the one `wasm` built over the
+# registry's copy before building.
 # REWAFFLE_TOKEN: read:packages on rewaffle's GitHub Packages (NuGet and npm). Without it (a PR
 # from a fork, or a repo where the secret isn't set) `test` builds Motely.Wasm without
 # Bootsharp.FileSystem (-p:MotelyFileSystem=false), and `wasm`/`web`, which need the packages,
@@ -89,7 +90,9 @@ jobs:
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
-      - run: dotnet publish -c Release
+      # npm run build is dotnet publish plus the Uint8Array base64 fallback the package ships with,
+      # so the uploaded package is the one a release packs.
+      - run: npm run build
       - run: npm test
       - uses: actions/upload-artifact@v5
         with:
@@ -116,5 +119,19 @@ jobs:
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+      # npm ci installs the motely-wasm the lockfile names, from the registry. Replace it with
+      # the package this run built: packed from Motely.Wasm (package.json and jaml/ from the
+      # checkout, bin/motely-wasm from the artifact) and installed without touching package.json.
+      # --ignore-scripts skips prepack, which would run dotnet publish again. The cmp lines fail
+      # the job if the installed package is not this run's.
+      - name: Install this run's motely-wasm
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: |
+          tarball=$(cd ../Motely.Wasm && npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP" | tail -n 1)
+          npm install --no-save "$RUNNER_TEMP/$tarball"
+          cmp ../Motely.Wasm/bin/motely-wasm/index.mjs node_modules/motely-wasm/bin/motely-wasm/index.mjs
+          cmp ../Motely.Wasm/jaml/index.mjs node_modules/motely-wasm/jaml/index.mjs
       - run: npm ls
       - run: npm run build

@@ -67,8 +67,8 @@ public struct JamlShouldScoreDesc
         {
             mustNotClauses ??= [];
             Debug.Assert(
-                mustClauses.Length + shouldClauses.Length + mustNotClauses.Length > 0,
-                "Scoring pass requires at least one must, should or mustNot clause."
+                mustClauses.Length + shouldClauses.Length + mustNotClauses.Length > 0 || minimumTotalScore > 0,
+                "Scoring pass requires at least one must, should or mustNot clause, or a score floor above zero."
             );
             Debug.Assert(
                 shouldClauses.Length <= MotelyScoredSeedResult.MAX_TALLY_COUNT,
@@ -132,8 +132,9 @@ public struct JamlShouldScoreDesc
                 (MotelySingleSearchContext singleCtx) =>
                 {
                     var runState = singleCtx.Deck.GetDefaultRunState();
-                    // Empty only for exact must-only with a cutoff: nothing below reads the run
-                    // state then, and the cutoff rejects the seed.
+                    // Empty only with a cutoff above zero and nothing to re-evaluate (exact
+                    // must-only, or no clauses at all): nothing below reads the run state then,
+                    // and the cutoff rejects the seed.
                     if (prepareClauses.Length > 0)
                         ClauseScoring.PrepareRunState(ref singleCtx, prepareClauses, runState);
 
