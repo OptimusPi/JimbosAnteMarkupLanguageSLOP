@@ -4,11 +4,11 @@ import {
   JimboBackground,
   JimboBalatroFooter,
   JimboBadge,
-  JimboTabs,
   JimboWordmark,
   SeedLab,
   STARTER_JAML,
 } from "jaml-ui";
+import { JimboTabs } from "jaml-ui/ui";
 import { AgentPanel } from "./AgentPanel.js";
 import { FilterFolder, type OpenedFilter } from "./FilterFolder.js";
 import { SeedPile } from "./SeedPile.js";
