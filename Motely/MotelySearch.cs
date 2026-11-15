@@ -2063,7 +2063,7 @@ public sealed unsafe partial class MotelySearch<TBaseFilter> : IInternalMotelySe
                 else
                 {
                     // No score provider - report basic seeds
-                    ReportBasicSeeds(searchResultMask, in searchParams);
+                    VectorMask reportedMask = ReportBasicSeeds(searchResultMask, in searchParams);
 
                     if (Search._analyzeProvider != null)
                     {
@@ -2072,7 +2072,8 @@ public sealed unsafe partial class MotelySearch<TBaseFilter> : IInternalMotelySe
                             in searchParams
                         );
                         // No scoring happened, so there are no score rows to hand along.
-                        Search._analyzeProvider.Analyze(ref searchContext, searchResultMask, null);
+                        if (reportedMask.IsPartiallyTrue())
+                            Search._analyzeProvider.Analyze(ref searchContext, reportedMask, null);
                     }
                 }
             }
@@ -2135,17 +2136,21 @@ public sealed unsafe partial class MotelySearch<TBaseFilter> : IInternalMotelySe
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ReportBasicSeeds(
+        private VectorMask ReportBasicSeeds(
             VectorMask searchResultMask,
             in MotelySearchContextParams searchParams
         )
         {
             char* seed = stackalloc char[MotelyGlobals.MaxSeedLength];
+            uint reported = 0;
 
             for (int lane = 0; lane < MotelyGlobals.MaxVectorWidth; lane++)
             {
                 if (searchResultMask[lane] && searchParams.IsLaneValid(lane))
                 {
+                    if (Search._scoredResultGate is { } gate && !gate(0))
+                        continue;
+
                     int length = searchParams.GetSeed(lane, seed);
 
                     // Increment thread-local counter
@@ -2153,9 +2158,11 @@ public sealed unsafe partial class MotelySearch<TBaseFilter> : IInternalMotelySe
 
                     string seedStr = new Span<char>(seed, length).ToString();
                     Search._seedMatchCallback?.Invoke(seedStr);
+                    reported |= 1u << lane;
                     Search.NoteMatchForStop();
                 }
             }
+            return new VectorMask(reported);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

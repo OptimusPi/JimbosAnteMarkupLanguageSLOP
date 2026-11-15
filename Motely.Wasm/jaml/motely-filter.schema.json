@@ -5420,7 +5420,8 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/clause"
-              }
+              },
+              "minItems": 1
             },
             {
               "type": "null"
@@ -5431,7 +5432,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/clause"
-          }
+          },
+          "minItems": 1
         },
         "label": {
           "anyOf": [
@@ -5459,7 +5461,24 @@
         "score": {
           "type": "integer"
         }
-      }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "and": {
+              "type": "array"
+            }
+          },
+          "required": [
+            "and"
+          ]
+        },
+        {
+          "required": [
+            "clauses"
+          ]
+        }
+      ]
     },
     "orClause": {
       "type": "object",
@@ -5469,7 +5488,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/clause"
-          }
+          },
+          "minItems": 1
         },
         "label": {
           "anyOf": [
@@ -5501,7 +5521,8 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/clause"
-              }
+              },
+              "minItems": 1
             },
             {
               "type": "null"
@@ -5511,7 +5532,24 @@
         "score": {
           "type": "integer"
         }
-      }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "or": {
+              "type": "array"
+            }
+          },
+          "required": [
+            "or"
+          ]
+        },
+        {
+          "required": [
+            "clauses"
+          ]
+        }
+      ]
     },
     "legendarySoulOrderClause": {
       "type": "object",

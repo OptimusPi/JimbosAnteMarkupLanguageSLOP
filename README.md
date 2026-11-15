@@ -96,7 +96,7 @@ Exit codes: `0` finished, `1` bad input, `130` interrupted (the resume point is 
 
 **Other options:** `--deck`, `--stake` (override the filter's values), `--threads`, `--collect N` (stop after N matches), `--cutoff N|auto|max|off`, `--save` (merge the printed seeds into the filter's `seeds:` block), `-q`.
 
-**Cutoff.** `--cutoff N` prints seeds that score at least N. `auto`, the default, prints every match until finds flood in, then only seeds that tie or beat the best score so far. `max` prints only a seed that beats every score before it, except on a filter with nothing to score (no clauses, or only `mustNot` clauses such as a voucher or a boss), where every match still prints. `off` prints every match. A filter's own top-level `cutoff: N` is the floor when the flag is not given. Only `should` clauses score, so a filter without them scores every seed 0 and a cutoff above zero prints nothing.
+**Cutoff.** `--cutoff N` prints seeds that score at least N. `auto`, the default, prints every match until finds flood in, then only seeds that tie or beat the best score so far. `max` prints only a seed that beats every score before it. `off` prints every match. A filter's own top-level `cutoff: N` is the floor when the flag is not given. Only `should` clauses score, so a filter without them scores every seed 0 and a cutoff above zero prints nothing.
 
 ### Researching a pile of seeds
 

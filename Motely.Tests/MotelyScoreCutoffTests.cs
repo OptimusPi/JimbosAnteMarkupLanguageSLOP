@@ -202,6 +202,43 @@ public sealed class MotelyScoreCutoffTests
         }
     }
 
+    [Theory]
+    [InlineData("deck: Red\n")]
+    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n")]
+    public void WithScoredResultGate_GatesAFilterWithNothingToScore(string yaml)
+    {
+        var config = Motely.Filters.JamlConfig.FromJaml(yaml);
+        string[] seeds = ["ALEEB", "PIROCKS", "P1111111", "MOTELY77"];
+
+        long Matches(Func<int, bool>? gate, List<string> seen)
+        {
+            using var search = Motely.Filters.MotelySearchBuilder
+                .CreateSettings(config, int.MinValue)
+                .WithSeedList(seeds)
+                .WithThreadCount(1)
+                .WithQuietMode(true)
+                .WithAutoScoreCutoff(false)
+                .WithScoredResultGate(gate)
+                .WithSeedMatchCallback(seen.Add)
+                .Start();
+            search.AwaitCompletion();
+            return search.MatchingSeeds;
+        }
+
+        var open = new List<string>();
+        long ungated = Matches(null, open);
+        Assert.True(ungated >= 2, $"{ungated} seeds pass with no gate");
+        Assert.Equal(ungated, open.Count);
+
+        var shut = new List<string>();
+        Assert.Equal(0, Matches(_ => false, shut));
+        Assert.Empty(shut);
+
+        var record = new List<string>();
+        Assert.Equal(1, Matches(MotelyScoreCutoff.Max().ShouldEmit, record));
+        Assert.Single(record);
+    }
+
     [Fact]
     public void WithScoredResultGate_GatesCallbacksMatchingSeedsAndStopAfter()
     {
