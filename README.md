@@ -5,7 +5,7 @@ Balatro seed search. You write a filter in JAML (YAML-shaped), and a SIMD engine
 | Project | What it is |
 |---|---|
 | `Motely` | The engine and the JAML filter loader |
-| `Motely.CLI` | `motely`, the command-line search |
+| `Motely.CLI` | The command-line search. The build names it `Motely.CLI`; the examples below call it `motely` |
 | `Motely.Tests` | The test suite |
 | `Motely.Wasm` | Browser build via WebAssembly |
 | `Motely.Web` | The seed lab, a web app on `motely-wasm` and `jaml-ui` |
@@ -44,7 +44,7 @@ Some keys and names have a second spelling that loads the same clause:
 | `rank: K` | `rank: King` (J, Q, K, A) |
 | `dateCreated: 2025-12-25` | metadata, kept and ignored by the search |
 
-**What a clause looks at without `sources:`.** A joker, tarot, planet or spectral clause reads the first eight shop cards of each ante (`shopItems: [0..7]`, the opening shop and about three rerolls); spectral also reads every pack, the others don't. The analyzer (`MotelyJamlyzer`) lists 15 shop cards for antes 0–1 and 50 after, so a card it shows at position 9 or later scores 0 unless the clause names the slot: the 11th card is `sources: { shopItems: [10] }`.
+**What a clause looks at without `sources:`.** A joker, tarot, planet or spectral clause reads the first eight shop cards of each ante (`shopItems: [0..7]`, the opening shop and about three rerolls); spectral also reads every pack, the others don't. A `joker` clause that names a legendary, or names no joker at all, also counts legendaries as a `legendaryJoker` clause does. A `standardCard` clause reads packs only until it names shop slots. The analyzer (`MotelyJamlyzer`) lists 15 shop cards for antes 0–1 and 50 after, so a card it shows at position 9 or later scores 0 unless the clause names the slot: the 11th card is `sources: { shopItems: [10] }`.
 
 **What the player holds: `with:`.** A clause can say what the player has while it is read. The block is a mapping; each clause type reads the keys that change it and ignores the others.
 
@@ -60,7 +60,7 @@ must:
 
 | Key | Read by | What it changes |
 |---|---|---|
-| `vouchers: [...]` | `joker`, `commonJoker`, `uncommonJoker`, `rareJoker`, `tarotCard`, `planetCard`, `spectralCard`, `standardCard` | The shop the clause reads is rolled with these vouchers redeemed on top of the deck's own. Tarot Merchant/Tycoon and Planet Merchant/Tycoon change how often tarots and planets appear, which moves every other card's slot too. Magic Trick adds playing cards |
+| `vouchers: [...]` | `joker`, `commonJoker`, `uncommonJoker`, `rareJoker`, `tarotCard`, `planetCard`, `spectralCard`, `standardCard` | The shop the clause reads is rolled with these vouchers redeemed on top of the deck's own. Tarot Merchant/Tycoon and Planet Merchant/Tycoon change how often tarots and planets appear, which moves every other card's slot too. Magic Trick adds playing cards. No other voucher changes the roll: Hone and Glow Up, for one, do nothing here |
 | `jokers: [...]` | `legendaryJoker`, `soulOrder` | A held legendary is out of the Soul's pool; holding `Showman` keeps repeats in |
 | `luck: X2` | `luckyMoney`, `luckyMult`, `wheelOfFortune`, `wheelStaysFlipped`, `glassDestroy`, `cavendishExtinct`, `grosMichelExtinct`, `spaceLevelup` | The Oops! All 6s multiplier on the odds (X1, X2, X4, X5, X8, X16, X32, X64, or the number) |
 
@@ -75,6 +75,8 @@ Limits, each a load error: `*name` aliases aren't read, so write the value out w
 ```sh
 dotnet run --project Motely.CLI -- --jaml <filter> [mode] [options]
 ```
+
+`<filter>` is a path, or a bare name that is looked up as `Filters/<name>.yaml` under the current directory.
 
 stdout carries only results (CSV: `seed,score,<tallies>`). Progress, warnings and the summary go to stderr, so `> out.csv` saves a clean file.
 Exit codes: `0` finished, `1` bad input, `130` interrupted (the resume point is printed).
@@ -94,7 +96,7 @@ Exit codes: `0` finished, `1` bad input, `130` interrupted (the resume point is 
 
 **Other options:** `--deck`, `--stake` (override the filter's values), `--threads`, `--collect N` (stop after N matches), `--cutoff N|auto|max|off`, `--save` (merge the printed seeds into the filter's `seeds:` block), `-q`.
 
-**Cutoff.** `--cutoff N` prints seeds that score at least N. `auto`, the default, prints every match until finds flood in, then only seeds that tie or beat the best score so far. `max` prints only a seed that beats every score before it. `off` prints every match. A filter's own top-level `cutoff: N` is the floor when the flag is not given. Only `should` clauses score, so a filter without them scores every seed 0 and a cutoff above zero prints nothing.
+**Cutoff.** `--cutoff N` prints seeds that score at least N. `auto`, the default, prints every match until finds flood in, then only seeds that tie or beat the best score so far. `max` prints only a seed that beats every score before it, except on a filter with nothing to score (no clauses, or only `mustNot` clauses such as a voucher or a boss), where every match still prints. `off` prints every match. A filter's own top-level `cutoff: N` is the floor when the flag is not given. Only `should` clauses score, so a filter without them scores every seed 0 and a cutoff above zero prints nothing.
 
 ### Researching a pile of seeds
 
