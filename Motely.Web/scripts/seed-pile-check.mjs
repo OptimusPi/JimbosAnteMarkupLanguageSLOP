@@ -16,6 +16,11 @@ assert.deepEqual(
   ["1JHBI111", "FVSII111"],
   "a motely CSV gives its first column, not its scores",
 );
+assert.deepEqual(seedsIn("ALEEB\t41\t0\nPIROCKS;7;1"), ["ALEEB", "PIROCKS"], "tabs and semicolons split a results row too");
+assert.deepEqual(seedsIn("ALEEB 12345678"), ["ALEEB", "12345678"], "a seed made of digits, beside another, is a seed");
+assert.deepEqual(seedsIn("ALEEB,12345678"), ["ALEEB", "12345678"], "eight digits is a seed, not a score");
+assert.deepEqual(seedsIn("SEED"), ["SEED"], "the word SEED alone is a seed");
+assert.deepEqual(seedsIn("SEED ALEEB"), ["SEED", "ALEEB"], "and so is SEED beside another");
 assert.deepEqual(seedsIn("ALEEB\nALEEB\nPIROCKS"), ["ALEEB", "PIROCKS"], "repeats count once");
 assert.deepEqual(seedsIn("AB0CD"), ["ABOCD"], "a typed zero is the letter O");
 assert.deepEqual(seedsIn("TOOLONGSEED ok! ALEEB"), ["ALEEB"], "what cannot be a seed is left out");
@@ -42,16 +47,29 @@ assert.deepEqual(
 assert.deepEqual(spot(aleeb, []), [], "an empty watch list spots nothing");
 assert.deepEqual(spot(aleeb, ["No Such Card"]), [], "an unknown name spots nothing");
 
-// A tag is spotted with or without the word "tag", and names where it is offered.
-const firstTag = spot(aleeb, ["speed"]).find((hit) => hit.where.endsWith("Skip"));
-const firstTagFull = spot(aleeb, ["Speed Tag"]).find((hit) => hit.where.endsWith("Skip"));
-assert.deepEqual(firstTag, firstTagFull);
-
-// Every shop and pack hit names a real slot.
-for (const hit of spot(aleeb, ["Blueprint", "Brainstorm", "Ankh", "Oops All 6s", "Joker"])) {
-  assert.match(hit.where, /^(Shop \d+|Pack \d+, .+|Voucher|Small Blind Skip|Big Blind Skip)$/);
-  assert.ok(hit.ante >= 0);
-}
+// Known finds on ALEEB, one for each place a watched name can sit. Each is asserted as present,
+// so a branch of spot() that stops reporting fails here.
+const early = (names) => spot(aleeb, names).filter((hit) => hit.ante <= 2);
+assert.deepEqual(
+  early(["Speed Tag"]),
+  [
+    { ante: 0, where: "Small Blind Skip", name: "Speed Tag" },
+    { ante: 0, where: "Big Blind Skip", name: "Speed Tag" },
+    { ante: 1, where: "Small Blind Skip", name: "Speed Tag" },
+    { ante: 1, where: "Big Blind Skip", name: "Speed Tag" },
+  ],
+  "skip tags, both blinds",
+);
+assert.deepEqual(early(["speed"]), early(["Speed Tag"]), 'a tag is spotted with or without the word "tag"');
+assert.deepEqual(early(["Blueprint"]), [{ ante: 2, where: "Shop 8", name: "Blueprint" }], "a shop slot");
+assert.deepEqual(
+  early(["Temperance"]),
+  [
+    { ante: 0, where: "Pack 1, Jumbo Arcana", name: "Temperance" },
+    { ante: 1, where: "Pack 2, Arcana", name: "Temperance" },
+  ],
+  "packs, by number and kind",
+);
 
 // A seed made of digits, and one that reads as a YAML word, both analyze as seeds.
 assert.equal(analyze("12345678", "Red", "White")[0].seed, "12345678");

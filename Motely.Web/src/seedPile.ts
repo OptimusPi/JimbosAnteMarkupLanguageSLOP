@@ -19,12 +19,19 @@ function asSeed(token: string): string | null {
   return SEED_RE.test(seed) ? seed : null;
 }
 
+/** The header of a motely results file: `seed,score,...`. The word SEED alone is a seed. */
+const RESULTS_HEADER_RE = /^\s*"?seed"?\s*[,;\t]\s*"?score\b/i;
+
+/** A score or tally column. Eight digits is a seed, not a score. */
+const SCORE_RE = /^-?\d{1,7}$/;
+
 /**
  * The seeds in a pasted pile, in the order pasted, each once.
  *
- * A line that is a seed followed only by numbers is a motely CSV row (`seed,score,tallies`):
- * its first column is the seed and the numbers are not. Any other line gives every seed on it,
- * so one per line, a row of them, or a spreadsheet column all work. A header line is skipped.
+ * A motely results row is columns split by commas, semicolons or tabs: a seed, then nothing but
+ * scores (`1JHBI111, 41, 0`). Its first column is the seed and the scores are not. Any other
+ * line gives every seed on it, so one per line, a row of them with spaces, or a spreadsheet
+ * column all work, and `ALEEB 12345678` is two seeds. A results file's header line is skipped.
  */
 export function seedsIn(text: string): string[] {
   const seen = new Set<string>();
@@ -37,13 +44,12 @@ export function seedsIn(text: string): string[] {
     }
   };
   for (const line of text.split(/\r?\n/)) {
-    const tokens = line.split(/[\s,;|"']+/).filter((t) => t.length > 0);
-    if (tokens.length === 0) continue;
-    if (tokens[0].toLowerCase() === "seed") continue;
-    const rest = tokens.slice(1);
-    const isCsvRow = rest.length > 0 && rest.every((t) => /^-?\d+$/.test(t));
-    if (isCsvRow) take(tokens[0]);
-    else tokens.forEach(take);
+    if (RESULTS_HEADER_RE.test(line)) continue;
+    const columns = line.split(/[,;\t]/).map((column) => column.trim().replace(/^["']|["']$/g, ""));
+    const isResultsRow =
+      columns.length > 1 && asSeed(columns[0]) !== null && columns.slice(1).every((column) => SCORE_RE.test(column));
+    if (isResultsRow) take(columns[0]);
+    else line.split(/[\s,;|"']+/).forEach(take);
   }
   return seeds;
 }
