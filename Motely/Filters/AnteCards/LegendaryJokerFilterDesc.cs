@@ -42,7 +42,7 @@ public sealed partial class LegendaryJokerClause: IMotelyClause, IAnteScopedClau
     /// run. Empty = every opened Soul. <c>rolls: [0, 1], min: 2</c> with Perkeo = the first two Souls
     /// both give Perkeo (sell the first before opening the second, or it resamples — see <see cref="With"/>).
     /// </summary>
-    public int[] Rolls { get; set; } = [];
+    public int[] Rolls { get; set => field = value ?? []; } = [];
 
     /// <summary><c>with: { jokers: [Perkeo] }</c> — legendaries held while opening Souls drop out of
     /// the pool and resample; holding Showman keeps them in.</summary>
@@ -177,15 +177,15 @@ public sealed partial record LegendaryJokerSourceConfig
     /// Legacy: pack offering slots where The Soul may count from either arcana or Spectral path.
     /// Ignored for slot matching when <see cref="ArcanaPacks"/> or <see cref="SpectralPacks"/> is non-empty.
     /// </summary>
-    public int[] BoosterPacks { get; set; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>
     /// If non-empty (or <see cref="SpectralPacks"/> non-empty), only listed slots are checked on the arcana/Tarot path.
     /// </summary>
-    public int[] ArcanaPacks { get; set; } = [];
+    public int[] ArcanaPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>Only listed slots on the Spectral pack path.</summary>
-    public int[] SpectralPacks { get; set; } = [];
+    public int[] SpectralPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>
     /// Charm Tag Mega Arcana packs, opened at blind select before the ante's shop: 0 = small-blind
@@ -194,7 +194,7 @@ public sealed partial record LegendaryJokerSourceConfig
     /// the player skipped that blind for a Charm Tag; pair it with a <c>smallBlindTag</c>/<c>bigBlindTag</c>
     /// must. Mirrors <see cref="TarotCardSourceConfig.TagPacks"/>; always Mega.
     /// </summary>
-    public int[] TagPacks { get; set; } = [];
+    public int[] TagPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>If true, only Mega-sized booster packs (e.g. Charm Tag Mega arcana) match.</summary>
     public bool RequireMegaPack { get; set; }

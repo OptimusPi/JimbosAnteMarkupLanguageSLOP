@@ -408,10 +408,10 @@ public sealed partial record SpectralCardSourceConfig
     /// <summary><c>requireMega:</c> is <c>requireMegaPack:</c>.</summary>
     public bool? RequireMega { get => null; set => RequireMegaPack = value ?? RequireMegaPack; }
 
-    public int[] ShopItems { get; set; } = [];
-    public int[] BoosterPacks { get; set; } = [];
-    public int[] SixthSense { get; set; } = [];
-    public int[] Seance { get; set; } = [];
+    public int[] ShopItems { get; set => field = value ?? []; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
+    public int[] SixthSense { get; set => field = value ?? []; } = [];
+    public int[] Seance { get; set => field = value ?? []; } = [];
     public bool RequireMegaPack { get; set; }
 
     /// <summary>

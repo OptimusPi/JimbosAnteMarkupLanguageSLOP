@@ -98,8 +98,53 @@ public sealed class JamlAdversarialTests
     [InlineData("must:\n  - or: [{ joker: Blueprint }]\n    min: ~\n")]
     [InlineData("must:\n  - joker: Blueprint\n    min: ~\n")]
     [InlineData("must:\n  - joker: Blueprint\n    score: ~\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    min:\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    min: null\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    min: \"\"\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    antes: [1, ~]\n")]
+    [InlineData("{\"must\":[{\"joker\":\"Blueprint\",\n\"antes\":[1],\n\"min\":null}]}")]
     public void ANullWhereANumberGoes_SaysSo(string yaml) =>
-        RefusedWith(yaml, "JAML line 3: this key needs a value");
+        RefusedWith(yaml, "JAML line 3: a value is missing here. Null and empty are not values.");
+
+    [Theory]
+    [InlineData("joker: Blueprint", "shopItems: ~")]
+    [InlineData("joker: Blueprint", "boosterPacks:")]
+    [InlineData("joker: Blueprint", "judgement: null")]
+    [InlineData("tarotCard: TheFool", "emperor: ~")]
+    [InlineData("spectralCard: Ankh", "seance: ~")]
+    [InlineData("planetCard: Mars", "shopItems: ~")]
+    [InlineData("standardCard: AceOfSpades", "boosterPacks: ~")]
+    [InlineData("legendaryJoker: Perkeo", "spectralPacks: ~")]
+    public void ANullSourceSlot_KeepsItsDefault_AndTheSearchRuns(string clause, string slot)
+    {
+        // 32.0.1 loaded a null slot as null and threw NullReferenceException when the search
+        // built its filter. A null slot is the slot left out, as `ante: ~` is the default antes.
+        string[] seeds = ["ALEEB", "PIROCKS", "P1111111", "MOTELY77"];
+
+        List<(string Seed, int Score)> Scores(string yaml)
+        {
+            var config = ProofSearch.LoadOrThrow(yaml);
+            var rows = new List<(string, int)>();
+            using var search = MotelySearchBuilder.CreateSettings(config, int.MinValue)
+                .WithSeedList(seeds)
+                .WithThreadCount(1)
+                .WithQuietMode(true)
+                .WithScoredResultCallback(result => rows.Add((result.Seed, result.Score)))
+                .Start();
+            search.AwaitCompletion();
+            return rows;
+        }
+
+        var withNull = Scores($"should:\n  - {clause}\n    antes: [1, 2, 3]\n    sources:\n      requireMegaPack: false\n      {slot}\n");
+        var leftOut = Scores($"should:\n  - {clause}\n    antes: [1, 2, 3]\n    sources:\n      requireMegaPack: false\n");
+        Assert.Equal(seeds.Length, leftOut.Count);
+        Assert.Equal(leftOut, withNull);
+    }
+
+    [Theory]
+    [InlineData("must:\n  - joker: Blueprint\n    antes: ~\n", "antes: needs a number or a list of them")]
+    [InlineData("must:\n  - voucher: Hieroglyph\n    antes: [1]\n    rolls: ~\n", "rolls: needs a number or a list of them")]
+    public void ANullAntesOrRolls_IsRefused(string yaml, string why) => RefusedWith(yaml, why);
 
     [Theory]
     [InlineData("and", "[]", "")]

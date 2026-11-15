@@ -53,8 +53,8 @@ public static partial class JamlConfigLoader
             var inner = ex;
             while (inner.InnerException is YamlException next)
                 inner = next;
-            var reason = inner.InnerException is NullReferenceException
-                ? "this key needs a value; ~ is not one."
+            var reason = inner.InnerException is NullReferenceException or IndexOutOfRangeException
+                ? "a value is missing here. Null and empty are not values."
                 : inner.InnerException?.Message ?? inner.Message;
             var message = $"JAML line {inner.Start.Line}: {reason}";
             throw new JamlFilterException(message, (int)inner.Start.Line, (int)inner.Start.Column, ex);

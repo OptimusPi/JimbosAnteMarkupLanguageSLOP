@@ -67,7 +67,7 @@ public sealed partial class LegendarySoulOrderClause: IMotelyClause, IWithScoped
     public int MaxAnte { get; set; } = 8;
 
     /// <summary>Booster-pack slots the walk reads Souls from. Empty = <c>[0..5]</c>.</summary>
-    public int[] BoosterPacks { get; set; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>
     /// Jokers held while opening Souls (<c>with: { jokers: [Showman] }</c>). A held legendary drops
@@ -87,7 +87,7 @@ public sealed partial record SoulOrderEntry
 
     /// <summary>Antes this Soul may be opened in. Empty = any ante from 1 up to the clause's
     /// <c>maxAnte</c>; ante 0, in the run only after Hieroglyph or Petroglyph, only when an entry names it.</summary>
-    public int[] Antes { get; set; } = [];
+    public int[] Antes { get; set => field = value ?? []; } = [];
 }
 
 public struct LegendarySoulOrderFilterDesc(LegendarySoulOrderClause clause)
