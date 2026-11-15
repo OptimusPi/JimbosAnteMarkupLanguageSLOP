@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPublishable>false</IsPublishable>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <Version>$(MotelyVersion)</Version>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Motely.CLI" />
+    <InternalsVisibleTo Include="Motely.Tests" />
+    <InternalsVisibleTo Include="Motely.Wasm" />
+  </ItemGroup>
+
+  <!-- Packages (versions from Directory.Packages.props) -->
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="Vecc.YamlDotNet.Analyzers.StaticGenerator" />
+    <PackageReference Include="Parquet.Net" />
+  </ItemGroup>
+</Project>

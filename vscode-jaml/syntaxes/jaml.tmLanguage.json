@@ -1,0 +1,41 @@
+{
+  "name": "JAML",
+  "scopeName": "source.jaml",
+  "fileTypes": [
+    "jaml"
+  ],
+  "patterns": [
+    {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.jaml"
+    },
+    {
+      "match": "(?i)\\b(?:bloodstoneTrigger|grosMichelExtinct|wheelStaysFlipped|cavendishExtinct|legendaryJokers|businessPayout|legendaryJoker|uncommonJokers|wheelOfFortune|parkingPayout|smallBlindTag|spectralCards|standardCards|uncommonJoker|boosterPacks|commonJokers|erraticRanks|erraticSuits|glassDestroy|misprintMult|spaceLevelup|spectralCard|standardCard|startingDraw|bigBlindTag|boosterPack|commonJoker|erraticRank|erraticSuit|planetCards|luckyMoney|planetCard|pokerHands|rareJokers|soulOrders|tarotCards|luckyMult|pokerHand|rareJoker|soulJoker|soulOrder|tarotCard|vouchers|voucher|bosses|jokers|joker|boss|tags|and|tag|or)(?=\\s*:)",
+      "name": "entity.name.tag.discriminator.jaml"
+    },
+    {
+      "match": "(?i)\\b(?:purpleSealOrEightBall|uncommonShopJokers|commonShopJokers|legendarySources|soulEditionRolls|requireMegaPack|rareShopJokers|allShopJokers|spectralPacks|soulCardOnly|arcanaPacks|dateCreated|description|enhancement|etherealTag|requireMega|uncommonTag|sixthSense|judgement|legendary|omenGlobe|shopItems|spectrals|charmTag|defaults|riffRaff|stickers|tagPacks|clauses|edition|emperor|entries|maxAnte|mustNot|planets|rareTag|sources|author|cutoff|seance|should|tarots|wraith|antes|label|packs|rolls|score|seeds|stake|ante|card|deck|luck|mode|mult|must|name|rank|seal|suit|with|max|min|id)(?=\\s*:)",
+      "name": "keyword.other.key.jaml"
+    },
+    {
+      "match": "(?i)\\b(?:DelayedGratification|TheWheelOfFortune|CeremonialDagger|TheHighPriestess|EightOfDiamonds|GluttonousJoker|QueenOfDiamonds|ReservedParking|SevenOfDiamonds|ThreeOfDiamonds|DriversLicense|FiveOfDiamonds|FourOfDiamonds|HolographicTag|InvisibleJoker|JackOfDiamonds|JumboCelestial|KingOfDiamonds|NineOfDiamonds|PlanetMerchant|AbstractJoker|AceOfDiamonds|ChaostheClown|ClearanceSale|Constellation|EightOfHearts|EightOfSpades|FacelessJoker|FortuneTeller|Hallucination|InvestmentTag|JumboSpectral|JumboStandard|MegaCelestial|OverstockPlus|PolychromeTag|QueenOfHearts|QueenOfSpades|RerollSurplus|SevenOfHearts|SevenOfSpades|SixOfDiamonds|SockAndBuskin|SpareTrousers|StraightFlush|Superposition|TarotMerchant|TenOfDiamonds|TheHierophant|ThreeOfHearts|ThreeOfSpades|TwoOfDiamonds|WrathfulJoker|AncientJoker|BaseballCard|BusinessCard|CeruleanBell|CrimsonHeart|DeviousJoker|DirectorsCut|EightOfClubs|FiveOfHearts|FiveOfSpades|FourOfHearts|FourOfSpades|GoldenTicket|JackOfHearts|JackOfSpades|JokerStencil|JumboBuffoon|KingOfHearts|KingOfSpades|MailInRebate|MegaSpectral|MegaStandard|MysticSummit|NineOfHearts|NineOfSpades|PlanetTycoon|QueenOfClubs|Recyclomancy|SeeingDouble|SevenOfClubs|ShootTheMoon|SmearedJoker|Swashbuckler|TheHangedMan|ThreeOfAKind|ThreeOfClubs|VioletVessel|WalkieTalkie|AceOfHearts|AceOfSpades|Cartomancer|Certificate|CleverJoker|CraftyJoker|CrystalBall|EtherealTag|FiveOfClubs|FourFingers|FourOfAKind|FourOfClubs|GoldenJoker|GreedyJoker|HangingChad|Holographic|Incantation|JackOfClubs|JumboArcana|KingOfClubs|Liquidation|LoyaltyCard|MarbleJoker|MegaBuffoon|NegativeTag|NineOfClubs|Observatory|SixOfHearts|SixOfSpades|SquareJoker|StandardTag|TarotTycoon|TenOfHearts|TenOfSpades|TheMagician|TradingCard|TwoOfHearts|TwoOfSpades|UncommonTag|VerdantLeaf|AceOfClubs|AmberAcorn|Antimatter|Astronomer|Blackboard|Bloodstone|Bootstraps|Brainstorm|BuffoonTag|BurntJoker|CrazyJoker|CreditCard|DrollJoker|EconomyTag|EvenSteven|GarbageTag|GlassJoker|GreenJoker|GrosMichel|Hieroglyph|HitTheRoad|JollyJoker|LustyJoker|MagicTrick|MegaArcana|OrbitalTag|PaintBrush|Pareidolia|Perishable|Petroglyph|Photograph|Polychrome|RaisedFist|RerollGlut|RideTheBus|SixOfClubs|SixthSense|SmileyFace|SpaceJoker|SteelJoker|StoneJoker|Temperance|TenOfClubs|TheChariot|TheEmperor|TheEmpress|TheManacle|ThePsychic|TheSerpent|Troubadour|TurtleBean|TwoOfClubs|VoucherTag|Abandoned|Arrowhead|BlackHole|BlueJoker|Blueprint|CardSharp|Cavendish|Celestial|Checkered|CouponTag|DoubleTag|Ectoplasm|EightBall|Fibonacci|FlashCard|FlowerPot|FullHouse|HalfJoker|Judgement|JuggleTag|MerryAndy|MeteorTag|MidasMask|MoneyTree|NachoTong|OmenGlobe|OnyxAgate|OopsAll6s|Overstock|Satellite|ScaryFace|SeedMoney|Supernova|Telescope|TheFamily|TheHermit|TheLovers|TheNeedle|ThePillar|TheWindow|Throwback|ToTheMoon|Triboulet|WilyJoker|ZanyJoker|Anaglyph|Campfire|CharmTag|Diamonds|DietCola|Drunkard|Familiar|GiftCard|HandyTag|HighCard|Hologram|IceCream|Illusion|Immolate|Luchador|LuckyCat|MadJoker|Misprint|Negative|RiffRaff|RoughGem|Shortcut|SlyJoker|Spectral|SpeedTag|Standard|Straight|Strength|Stuntman|Talisman|TheDevil|TheFlint|TheHouse|TheMouth|TheOrder|ThePlant|TheTooth|TheTower|TheTribe|TheWater|TheWheel|TheWorld|ToDoList|TopupTag|Vagabond|Wasteful|WeeJoker|Acrobat|BossTag|Buffoon|Burglar|Cryptid|Erosion|Erratic|Eternal|FoilTag|Grabber|Juggler|Jupiter|Justice|Madness|Matador|Mercury|MrBones|Neptune|Obelisk|OddTodd|Painted|Palette|PlanetX|Popcorn|RareTag|RedCard|Scholar|Seltzer|Showman|TheClub|TheFish|TheFool|TheGoad|TheHead|TheHook|TheIdol|TheMark|TheMoon|TheSoul|TheStar|TheTrio|TheWall|TwoPair|Vampire|Arcana|Banner|Castle|Chicot|Cloud9|DejaVu|GlowUp|Hearts|Medium|Nebula|Orange|Perkeo|Plasma|Purple|Rental|Retcon|Rocket|Runner|Saturn|Seance|Spades|Splash|TheArm|TheDuo|TheEye|TheSun|Trance|Uranus|Wraith|Yellow|Yorick|Zodiac|Baron|Black|Blank|Bonus|Canio|Ceres|Clubs|D6Tag|Death|Earth|Eight|Flush|Ghost|Glass|Green|Hiker|Joker|Lucky|Magic|Ouija|Pluto|Queen|Ramen|Seven|Sigil|Steel|Stone|TheOx|Three|Venus|White|Ankh|Aura|Blue|Bull|Dusk|Eris|Five|Foil|Four|Gold|Grim|Hack|Hone|Jack|King|Mars|Mime|Mult|Nine|None|Pair|Wild|Ace|DNA|Egg|Hex|Max|Red|Six|Sum|Ten|Two|X16|X32|X64|X1|X2|X4|X5|X8)\\b",
+      "name": "support.constant.enum.jaml"
+    },
+    {
+      "match": "\\b(?:true|false)\\b",
+      "name": "constant.language.boolean.jaml"
+    },
+    {
+      "match": "\\b\\d+\\b",
+      "name": "constant.numeric.jaml"
+    },
+    {
+      "match": "\"[^\"]*\"",
+      "name": "string.quoted.double.jaml"
+    },
+    {
+      "match": "'[^']*'",
+      "name": "string.quoted.single.jaml"
+    }
+  ]
+}

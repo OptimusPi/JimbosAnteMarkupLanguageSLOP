@@ -1,0 +1,12 @@
+# Trimmed from the owner's loki.yaml: a card rank written as its letter.
+name: Loki
+deck: Anaglyph
+stake: White
+must:
+  - !standardCard
+    standardCard:
+      rank: K
+      seal: Red
+      edition: Polychrome
+  - !legendaryJoker
+    legendaryJoker: Perkeo

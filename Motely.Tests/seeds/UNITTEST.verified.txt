@@ -1,0 +1,504 @@
+﻿==ANTE 0==
+Boss: TheWindow
+Voucher: MagicTrick
+Tags: PolychromeTag, DoubleTag
+Shop Queue: 
+1) EvenSteven
+2) CleverJoker
+3) Mercury
+4) BlueJoker
+5) Photograph
+6) Uranus
+7) Egg
+8) PlanetX
+9) RideTheBus
+10) Drunkard
+11) TradingCard
+12) ShootTheMoon
+13) EightBall
+14) TheStar
+15) DrollJoker
+
+Packs: 
+Standard - Blue Seal NineOfSpades, EightOfDiamonds, Gold Seal TwoOfHearts
+Arcana - TheDevil, TheHangedMan, TheMoon
+Standard - Mult SixOfSpades, Red Seal FourOfHearts, Bonus QueenOfClubs
+Standard - JackOfDiamonds, ThreeOfDiamonds, Blue Seal AceOfClubs
+Buffoon - AncientJoker, RedCard
+Celestial - Saturn, Neptune, Venus
+
+==ANTE 1==
+Boss: TheWindow
+Voucher: TarotMerchant
+Tags: SpeedTag, SpeedTag
+Shop Queue: 
+1) Hallucination
+2) StoneJoker
+3) AbstractJoker
+4) Superposition
+5) GluttonousJoker
+6) Superposition
+7) TheEmpress
+8) RiffRaff
+9) Judgement
+10) Obelisk
+11) RedCard
+12) GlassJoker
+13) GiftCard
+14) Mercury
+15) Saturn
+
+Packs: 
+Buffoon - Constellation, Cloud9
+MegaStandard - Glass SevenOfClubs, Gold Seal SixOfClubs, SevenOfDiamonds, JackOfSpades, JackOfSpades
+JumboCelestial - Jupiter, PlanetX, Saturn, Mars, Pluto
+Spectral - Wraith, Talisman
+
+==ANTE 2==
+Boss: TheMouth
+Voucher: PlanetMerchant
+Tags: D6Tag, EconomyTag
+Shop Queue: 
+1) TheMagician
+2) Foil Scholar
+3) PlanetX
+4) TheLovers
+5) Justice
+6) LoyaltyCard
+7) TurtleBean
+8) ShootTheMoon
+9) TheEmpress
+10) Banner
+11) EvenSteven
+12) Splash
+13) Mercury
+14) ToDoList
+15) Pluto
+16) DrollJoker
+17) TheEmperor
+18) ZanyJoker
+19) Dusk
+20) ScaryFace
+21) RideTheBus
+22) Ceres
+23) Earth
+24) BusinessCard
+25) RedCard
+26) Troubadour
+27) WalkieTalkie
+28) Jupiter
+29) DietCola
+30) MadJoker
+31) MarbleJoker
+32) Hack
+33) Earth
+34) TheWorld
+35) TheDevil
+36) TheHierophant
+37) GluttonousJoker
+38) Arrowhead
+39) RideTheBus
+40) Popcorn
+41) TheWorld
+42) Holographic HangingChad
+43) Eris
+44) Uranus
+45) Brainstorm
+46) ChaostheClown
+47) Bootstraps
+48) Certificate
+49) BusinessCard
+50) GluttonousJoker
+
+Packs: 
+Arcana - Judgement, TheEmpress, TheDevil
+Standard - Red Seal Stone AceOfClubs, SixOfHearts, Red Seal Lucky JackOfDiamonds
+Standard - Purple Seal Bonus TwoOfClubs, FourOfClubs, Mult FiveOfHearts
+Celestial - Mars, Mercury, Eris
+Celestial - Jupiter, Neptune, Eris
+MegaArcana - Strength, TheFool, TheSun, TheHighPriestess, Justice
+
+==ANTE 3==
+Boss: TheHouse
+Voucher: Telescope
+Tags: CouponTag, SpeedTag
+Shop Queue: 
+1) DrollJoker
+2) Drunkard
+3) RaisedFist
+4) BusinessCard
+5) Mars
+6) CrazyJoker
+7) Mercury
+8) Banner
+9) Swashbuckler
+10) Mercury
+11) Scholar
+12) Acrobat
+13) MadJoker
+14) Earth
+15) Banner
+16) TheFamily
+17) Foil Superposition
+18) Blackboard
+19) BusinessCard
+20) Neptune
+21) DrollJoker
+22) TheSun
+23) TheHighPriestess
+24) Mars
+25) Banner
+26) Bull
+27) Mercury
+28) Polychrome WilyJoker
+29) Matador
+30) Juggler
+31) TradingCard
+32) EightBall
+33) TheEmpress
+34) BlueJoker
+35) Cavendish
+36) Swashbuckler
+37) Joker
+38) Temperance
+39) TheMagician
+40) Shortcut
+41) TradingCard
+42) ZanyJoker
+43) OnyxAgate
+44) TheTower
+45) TheSun
+46) Foil Hallucination
+47) TheLovers
+48) Juggler
+49) Drunkard
+50) Death
+
+Packs: 
+MegaStandard - ThreeOfDiamonds, FiveOfClubs, AceOfDiamonds, TwoOfDiamonds, Steel FiveOfDiamonds
+MegaArcana - TheDevil, TheHighPriestess, TheWheelOfFortune, TheLovers, Temperance
+Standard - FourOfClubs, FiveOfSpades, EightOfClubs
+Buffoon - Erosion, CraftyJoker
+JumboCelestial - Ceres, Eris, PlanetX, Jupiter, Venus
+JumboCelestial - Pluto, Saturn, Neptune, Earth, Uranus
+
+==ANTE 4==
+Boss: TheTooth
+Voucher: CrystalBall
+Tags: NegativeTag, HandyTag
+Shop Queue: 
+1) SquareJoker
+2) TheWheelOfFortune
+3) Satellite
+4) Mime
+5) HalfJoker
+6) Holographic Misprint
+7) Bootstraps
+8) GreenJoker
+9) TheStar
+10) Neptune
+11) TheTower
+12) Eris
+13) TheDevil
+14) Bloodstone
+15) TheWorld
+16) Vampire
+17) Cavendish
+18) MrBones
+19) TheMoon
+20) Neptune
+21) DrollJoker
+22) Superposition
+23) Uranus
+24) TheChariot
+25) Ceres
+26) Drunkard
+27) BlueJoker
+28) Fibonacci
+29) OddTodd
+30) StoneJoker
+31) HalfJoker
+32) ShootTheMoon
+33) SquareJoker
+34) Hallucination
+35) HitTheRoad
+36) BusinessCard
+37) Eris
+38) Holographic GoldenTicket
+39) GreedyJoker
+40) SpaceJoker
+41) GoldenTicket
+42) Drunkard
+43) SquareJoker
+44) TheTower
+45) Troubadour
+46) TheHighPriestess
+47) DeviousJoker
+48) GreenJoker
+49) Jupiter
+50) Banner
+
+Packs: 
+JumboArcana - Judgement, TheLovers, TheHangedMan, TheHermit, Justice
+Arcana - TheFool, TheMagician, Temperance
+JumboCelestial - Earth, Ceres, Jupiter, Eris, PlanetX
+JumboCelestial - Mercury, Saturn, Ceres, Neptune, Mars
+JumboCelestial - Venus, Pluto, Jupiter, Mars, Neptune
+Buffoon - Runner, SeeingDouble
+
+==ANTE 5==
+Boss: TheFish
+Voucher: PaintBrush
+Tags: GarbageTag, GarbageTag
+Shop Queue: 
+1) IceCream
+2) MadJoker
+3) TheEmpress
+4) SmearedJoker
+5) Neptune
+6) Banner
+7) DelayedGratification
+8) SmileyFace
+9) TheHangedMan
+10) TheEmperor
+11) RedCard
+12) FourFingers
+13) FortuneTeller
+14) TheHierophant
+15) GrosMichel
+16) Neptune
+17) AncientJoker
+18) FlowerPot
+19) Jupiter
+20) Jupiter
+21) Astronomer
+22) Ceres
+23) TheLovers
+24) Seance
+25) Temperance
+26) TheChariot
+27) LustyJoker
+28) GiftCard
+29) TheChariot
+30) GluttonousJoker
+31) SmearedJoker
+32) Uranus
+33) Earth
+34) RideTheBus
+35) LustyJoker
+36) HangingChad
+37) SquareJoker
+38) AbstractJoker
+39) TheHighPriestess
+40) WilyJoker
+41) Pareidolia
+42) RideTheBus
+43) GoldenJoker
+44) LustyJoker
+45) Hologram
+46) Runner
+47) HangingChad
+48) Juggler
+49) FortuneTeller
+50) Mercury
+
+Packs: 
+Spectral - Medium, Cryptid
+Standard - Bonus KingOfHearts, SixOfClubs, Wild FiveOfSpades
+JumboCelestial - PlanetX, Neptune, Mars, Earth, Ceres
+Standard - SevenOfHearts, SixOfDiamonds, Purple Seal Bonus FourOfDiamonds
+Celestial - Venus, PlanetX, Saturn
+JumboStandard - SevenOfHearts, Holographic TenOfSpades, SixOfSpades, Gold FourOfSpades, Red Seal JackOfSpades
+
+==ANTE 6==
+Boss: ThePillar
+Voucher: SeedMoney
+Tags: RareTag, CouponTag
+Shop Queue: 
+1) Egg
+2) Hallucination
+3) SlyJoker
+4) TheStar
+5) CraftyJoker
+6) TurtleBean
+7) IceCream
+8) ShootTheMoon
+9) Earth
+10) Erosion
+11) EvenSteven
+12) Judgement
+13) TheHighPriestess
+14) Pluto
+15) BaseballCard
+16) Mercury
+17) TheWorld
+18) MysticSummit
+19) Banner
+20) Swashbuckler
+21) Hack
+22) AbstractJoker
+23) Scholar
+24) DrollJoker
+25) GoldenJoker
+26) Madness
+27) Supernova
+28) AbstractJoker
+29) JokerStencil
+30) Judgement
+31) GreenJoker
+32) FortuneTeller
+33) SixthSense
+34) HalfJoker
+35) Blueprint
+36) Justice
+37) Splash
+38) InvisibleJoker
+39) SlyJoker
+40) DeviousJoker
+41) Runner
+42) TheSun
+43) Certificate
+44) RideTheBus
+45) ReservedParking
+46) Death
+47) SpareTrousers
+48) MadJoker
+49) GreenJoker
+50) Uranus
+
+Packs: 
+Spectral - Wraith, Ectoplasm
+Standard - Red Seal Foil FiveOfHearts, NineOfHearts, Glass EightOfHearts
+JumboStandard - ThreeOfSpades, Bonus SixOfSpades, Gold QueenOfClubs, Stone SevenOfClubs, TenOfHearts
+Standard - AceOfDiamonds, Blue Seal Wild NineOfSpades, Purple Seal TenOfDiamonds
+Arcana - TheWorld, TheHermit, TheHangedMan
+JumboStandard - Mult TwoOfHearts, Stone AceOfSpades, Red Seal Stone JackOfDiamonds, TenOfSpades, ThreeOfClubs
+
+==ANTE 7==
+Boss: TheWater
+Voucher: OmenGlobe
+Tags: BuffoonTag, MeteorTag
+Shop Queue: 
+1) Saturn
+2) Death
+3) HangingChad
+4) HangingChad
+5) TheHighPriestess
+6) SlyJoker
+7) Uranus
+8) Photograph
+9) ShootTheMoon
+10) TheWheelOfFortune
+11) Death
+12) CleverJoker
+13) CreditCard
+14) Uranus
+15) Astronomer
+16) ChaostheClown
+17) RedCard
+18) ToDoList
+19) Egg
+20) OopsAll6s
+21) Holographic Scholar
+22) CleverJoker
+23) TradingCard
+24) DelayedGratification
+25) RiffRaff
+26) GoldenTicket
+27) RiffRaff
+28) SlyJoker
+29) Banner
+30) AbstractJoker
+31) ReservedParking
+32) WeeJoker
+33) Hallucination
+34) Eris
+35) Justice
+36) Supernova
+37) HangingChad
+38) EightBall
+39) TheHangedMan
+40) Jupiter
+41) Holographic Hologram
+42) TheSun
+43) MysticSummit
+44) GiftCard
+45) Erosion
+46) Ceres
+47) InvisibleJoker
+48) Mars
+49) MysticSummit
+50) Drunkard
+
+Packs: 
+Arcana - TheDevil, TheWheelOfFortune, TheLovers
+Celestial - Eris, Mercury, Pluto
+MegaCelestial - Mars, Earth, Pluto, Jupiter, Saturn
+MegaArcana - TheStar, TheLovers, TheHangedMan, Justice, TheMagician
+MegaStandard - Bonus SixOfHearts, Blue Seal KingOfDiamonds, QueenOfHearts, Gold Seal NineOfHearts, Bonus FiveOfHearts
+Buffoon - RedCard, MrBones
+
+==ANTE 8==
+Boss: VioletVessel
+Voucher: Wasteful
+Tags: FoilTag, RareTag
+Shop Queue: 
+1) MailInRebate
+2) CreditCard
+3) TradingCard
+4) ReservedParking
+5) TheDevil
+6) Bull
+7) Uranus
+8) Earth
+9) TheHangedMan
+10) LoyaltyCard
+11) GreedyJoker
+12) TheLovers
+13) WalkieTalkie
+14) TheEmpress
+15) Madness
+16) Cloud9
+17) SmileyFace
+18) TheFool
+19) TheHangedMan
+20) MailInRebate
+21) MailInRebate
+22) ReservedParking
+23) GreenJoker
+24) Jupiter
+25) Cavendish
+26) Ramen
+27) TheWorld
+28) Hack
+29) Superposition
+30) OddTodd
+31) ChaostheClown
+32) Pareidolia
+33) CreditCard
+34) Egg
+35) CraftyJoker
+36) Uranus
+37) Matador
+38) FourFingers
+39) ToDoList
+40) Negative MysticSummit
+41) ToDoList
+42) Misprint
+43) GreenJoker
+44) SmileyFace
+45) Negative CreditCard
+46) Holographic StoneJoker
+47) TheHierophant
+48) Swashbuckler
+49) BusinessCard
+50) Justice
+
+Packs: 
+Arcana - Temperance, Death, TheLovers
+Celestial - Ceres, Pluto, Uranus
+Arcana - TheMoon, TheHierophant, TheStar
+Standard - TwoOfClubs, Purple Seal EightOfDiamonds, Wild FiveOfSpades
+Arcana - TheChariot, Temperance, TheSun
+Arcana - TheHermit, Temperance, TheLovers
+
