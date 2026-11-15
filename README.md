@@ -8,7 +8,10 @@ Balatro seed search. You write a filter in JAML (YAML-shaped), and a SIMD engine
 | `Motely.CLI` | `motely`, the command-line search |
 | `Motely.Tests` | The test suite |
 | `Motely.Wasm` | Browser build via WebAssembly |
+| `Motely.Web` | The seed lab, a web app on `motely-wasm` and `jaml-ui` |
+| `vscode-jaml` | The JAML extension for VS Code, as a packaged `.vsix` |
 | `Filters/` | Filter files |
+| `docs/` | Release notes |
 
 ## Filters
 
@@ -35,7 +38,7 @@ Some keys and names have a second spelling that loads the same clause:
 | Written | Means |
 |---|---|
 | `ante: 2` | `antes: [2]` (any list of numbers may be one number) |
-| `requireMega: true` | `requireMegaPack: true` |
+| `requireMega: true` | `requireMegaPack: true` (under `sources:`) |
 | `soulJoker: Perkeo` | `legendaryJoker: Perkeo` |
 | `voucher: Reroll Surplus`, `boss: The Hook`, `tarotCard: Fool` | `RerollSurplus`, `TheHook`, `TheFool`: any case, spaces optional, "The" optional, when exactly one name fits |
 | `rank: K` | `rank: King` (J, Q, K, A) |
@@ -65,7 +68,7 @@ Without `with:` a shop clause reads the shop the deck alone gives, whatever vouc
 
 A wrong key or name fails to load with one line, on its own line of the file. An unknown property is named (`Property 'luckMoney' not found`). A name of the wrong kind says what it is not (`'Showman' is not a common joker`). `shopItems:` written beside `joker:` is an unknown property; it belongs under `sources:`.
 
-Limits, each a load error: `*name` aliases aren't read, so write the value out where it's used. A key written twice in one mapping is refused. Every number in a list (`antes`, `rolls`, `shopItems`, `boosterPacks`, other source slots, event rolls) runs from 0 to 999. Antes run from 0 to 39. `min` and `max` are 0 or more, `max` is not below `min`, and an `or` needs `min: 1` or more. An `and` or `or` needs at least one clause, and a filter takes at most 256 `should:` clauses. Event, voucher and tag `rolls` need at least one roll, and boss `antes` run from 1.
+Limits, each a load error: `*name` aliases aren't read, so write the value out where it's used. A key written twice in one mapping is refused. Every number in a list (`antes`, `rolls`, `shopItems`, `boosterPacks`, other source slots, event rolls) runs from 0 to 999. Antes run from 0 to 39. `min` and `max` are 0 or more, and `max` is not below `min`. An `and` takes no `min` or `max`, and an `or` takes no `max` and needs `min: 1` or more. An `and` or `or` needs at least one clause, and a filter takes at most 256 `should:` clauses. Event, voucher and tag `rolls` need at least one roll, and boss `antes` run from 1.
 
 ## CLI
 
@@ -80,16 +83,18 @@ Exit codes: `0` finished, `1` bad input, `130` interrupted (the resume point is 
 
 | Flag | Searches |
 |---|---|
-| *(none)* | Sequential sweep of every seed. Resume with `--startBatch`/`--startSeed` |
+| *(none)* | Sequential sweep of every seed. Resume with `--startBatch`/`--startSeed`/`--startPercent`, end with `--endBatch`/`--stopSeed`. `--batchCharCount` sets how many trailing characters one batch sweeps (default 3) |
 | `--seeds A1B2C3D4,E5F6G7H8` | Exactly these seeds |
 | `--seeds file.csv` | Every seed in a file: one per line, first column. A motely CSV, a plain list, or a spreadsheet export all work. Repeats run once, and bad lines are warned about and skipped. Up to 65,536 seeds print in file order; a longer list is split across the threads and prints as found |
 | `--seeds -` | Seeds read from stdin |
 | `--replay` | The filter file's own `seeds:` block |
-| `--keyword WORD` / `--keywords A,B` | Seeds that contain the word(s) |
+| `--keyword WORD` / `--keywords A,B` | Seeds that contain the word(s). `--padding` names the characters that fill the other slots (default: all of 1-9 and A-Z) |
 | `--random N` | N random seeds |
 | `--aesthetic NAME\|all` | Pattern families such as palindromes |
 
-**Other options:** `--deck`, `--stake` (override the filter's values), `--threads`, `--collect N` (stop after N matches), `--cutoff N|auto|off` (minimum score to print), `--save` (merge the printed seeds into the filter's `seeds:` block), `-q`.
+**Other options:** `--deck`, `--stake` (override the filter's values), `--threads`, `--collect N` (stop after N matches), `--cutoff N|auto|max|off`, `--save` (merge the printed seeds into the filter's `seeds:` block), `-q`.
+
+**Cutoff.** `--cutoff N` prints seeds that score at least N. `auto`, the default, prints every match until finds flood in, then only seeds that tie or beat the best score so far. `max` prints only a seed that beats every score before it. `off` prints every match. A filter's own top-level `cutoff: N` is the floor when the flag is not given. Only `should` clauses score, so a filter without them scores every seed 0 and a cutoff above zero prints nothing.
 
 ### Researching a pile of seeds
 
@@ -105,6 +110,8 @@ motely --jaml longColaDanker --seeds pile.csv --save       # keep the winners in
 ## Build and test
 
 ```sh
-dotnet build Motely.slnx
-dotnet test Motely.Tests
+dotnet test Motely.Tests       # builds the engine, the CLI and the suite, and runs it
+dotnet build Motely.slnx       # every project, Motely.Wasm included
 ```
+
+`Motely.slnx` holds `Motely.Wasm`, which needs `dotnet workload install wasm-tools` and, for its folder access, the Bootsharp.FileSystem sponsor feed. Without the feed, add `-p:MotelyFileSystem=false`. `Motely.Wasm/README.md` has the rest.
