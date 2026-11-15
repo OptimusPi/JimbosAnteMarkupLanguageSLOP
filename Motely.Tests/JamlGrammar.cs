@@ -668,6 +668,7 @@ internal sealed class JamlGrammar
             var entry = new JsonObject { ["form"] = m.Form.ToString() };
             if (m.Enum is { } e) entry["enum"] = e.Name;
             if (m.Object is { } o) entry["type"] = DefOf(o).Name;
+            if (m.Required) entry["required"] = true;
             return KeyValuePair.Create(m.Key, (JsonNode?)entry);
         }));
         return Serialize(new JsonObject

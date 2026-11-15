@@ -277,7 +277,8 @@
       },
       "legendary": {
         "form": "Name",
-        "enum": "MotelyJokerLegendary"
+        "enum": "MotelyJokerLegendary",
+        "required": true
       }
     },
     "jokerClause": {
