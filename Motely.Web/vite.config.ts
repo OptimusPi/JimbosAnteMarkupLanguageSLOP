@@ -14,6 +14,10 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom", "motely-wasm"],
   },
+  // jaml-ui finds its sprite sheets beside its own files. Pre-bundled for the dev server, those
+  // paths point into .vite/deps, where no image is, and every card draws blank. Served as it
+  // ships, the sheets load.
+  optimizeDeps: { exclude: ["jaml-ui"] },
   server: {
     port: Number(process.env.PORT) || 5173,
     strictPort: true,
