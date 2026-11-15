@@ -1,4 +1,4 @@
-# The engine's gate: every push to master, every PR, and every release (release.yml calls this).
+# The engine's gate: every push to main, every PR, and every release (release.yml calls this).
 # `test` builds Motely.slnx (Motely.Wasm included) and runs the whole xunit suite in Release.
 # `aot` NativeAOT-publishes Motely.CLI (the trim/AOT gate) and runs one filter on two seeds.
 # `wasm` publishes Motely.Wasm with NativeAOT-LLVM and runs its node:test suite.
@@ -11,7 +11,7 @@ name: ci
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
   workflow_call:
 
@@ -31,7 +31,9 @@ jobs:
         with:
           global-json-file: global.json
       - if: env.HAS_REWAFFLE == 'true'
-        run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "${{ secrets.REWAFFLE_TOKEN }}" --store-password-in-clear-text
+        env:
+          REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
       - run: dotnet workload install wasm-tools
       - name: build
         run: |
@@ -84,12 +86,14 @@ jobs:
           node-version: 26
           registry-url: https://npm.pkg.github.com
           scope: "@rewaffle"
-      - run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "${{ secrets.REWAFFLE_TOKEN }}" --store-password-in-clear-text
+      - env:
+          REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
       - run: dotnet workload install wasm-tools
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
-      - run: dotnet publish -c Release
+      - run: npm run build
       - run: npm test
       - uses: actions/upload-artifact@v5
         with:
@@ -117,4 +121,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
       - run: npm ls
+      - name: Install this run's motely-wasm
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: |
+          tarball=$(cd ../Motely.Wasm && npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP" | tail -n 1)
+          npm install --no-save "$RUNNER_TEMP/$tarball"
+          diff -r ../Motely.Wasm/bin/motely-wasm node_modules/motely-wasm/bin/motely-wasm
       - run: npm run build

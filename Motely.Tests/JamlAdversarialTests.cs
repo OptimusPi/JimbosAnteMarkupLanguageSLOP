@@ -58,6 +58,42 @@ public sealed class JamlAdversarialTests
     [InlineData("must:\n  - legendaryJoker: Perkeo\n    antes: [1]\n    soulEditionRolls: 5000\n")]
     public void AnOutOfRangeBound_IsRefused(string yaml) => RefusedWith(yaml, "out of range");
 
+    [Theory]
+    [InlineData("and", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
+    [InlineData("or", "[{ joker: Blueprint }, { joker: Brainstorm }]", "")]
+    [InlineData("and", "~", "    clauses: [{ joker: Blueprint }, { joker: Brainstorm }]\n")]
+    [InlineData("or", "~", "    clauses: [{ joker: Blueprint }, { joker: Brainstorm }]\n")]
+    public void AndOr_LoadAsAListOrUnderClauses(string key, string value, string rest)
+    {
+        Assert.True(JamlConfig.TryLoad($"must:\n  - {key}: {value}\n{rest}", out var config, out var error), error);
+        Assert.Equal(2, Assert.IsAssignableFrom<LogicClause>(Assert.Single(config!.Must)).Clauses.Length);
+    }
+
+    [Theory]
+    [InlineData("and")]
+    [InlineData("or")]
+    public void AndOr_WrittenAsAMapping_IsRefused(string key) =>
+        RefusedWith(
+            $"must:\n  - {key}: {{ clauses: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}] }}\n",
+            "Expected 'SequenceStart', got 'MappingStart'");
+
+    [Theory]
+    [InlineData("and", "max: 2", "an and takes no min or max")]
+    [InlineData("and", "min: 2", "an and takes no min or max")]
+    [InlineData("or", "max: 2", "an or takes no max")]
+    [InlineData("or", "min: 0", "an or needs min: 1 or more")]
+    public void AndOr_BoundsOutsideTheDeclaredOnes_AreRefused(string key, string bound, string why) =>
+        RefusedWith($"must:\n  - {key}: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}]\n    {bound}\n", why);
+
+    [Theory]
+    [InlineData("and", "min: 1\n    max: ~")]
+    [InlineData("or", "min: 2\n    max: ~")]
+    public void AndOr_DeclaredBounds_Load(string key, string bounds)
+    {
+        string yaml = $"must:\n  - {key}: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}]\n    {bounds}\n";
+        Assert.True(JamlConfig.TryLoad(yaml, out _, out var error), error);
+    }
+
     [Fact]
     public void AnAliasBetweenRealKeys_IsRefused() =>
         RefusedWith(

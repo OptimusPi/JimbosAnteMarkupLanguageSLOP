@@ -249,8 +249,9 @@ async Task<int> SearchAsync(ParseResult parseResult, string filterPath, Cancella
     using var sink = new ConsoleResultSink(plan.TallyLabels);
     var saved = parseResult.GetValue(saveOption) ? new MotelyTopSeedSink.Collector(int.MaxValue) : null;
 
-    // A filter with no clauses has no score provider, and then finds arrive only on the
-    // seed-match channel. With a provider they arrive on both, so listen to exactly one.
+    // A filter with no score provider (nothing for the scoring pass to evaluate and no floor above
+    // zero) sends its finds only on the seed-match channel. With a provider they arrive on both,
+    // so listen to exactly one.
     // The engine applies a fixed floor or auto's rate limiter (clamps to its per-thread running
     // max only while finds flood in). Max is one record across every thread, so it gates here.
     settings = settings.SeedScoreDesc is not null

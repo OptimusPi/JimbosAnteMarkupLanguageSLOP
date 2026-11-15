@@ -4,7 +4,7 @@ using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 namespace Motely.Filters;
 
-/// <summary>JAML clause discriminators, scalar-or-list converters, and logic-clause payloads.</summary>
+/// <summary>JAML clause discriminators and scalar-or-list converters.</summary>
 internal static class JamlClauseBinding
 {
     internal static IReadOnlyCollection<string> ClauseKeys => DiscriminatorKeys;

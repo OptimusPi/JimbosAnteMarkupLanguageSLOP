@@ -508,20 +508,11 @@ export interface JamlBloodstoneTriggerClause {
 }
 
 export interface JamlAndClause {
-  and?: JamlClause[] | JamlAndPayload | null;
+  and?: JamlClause[] | null;
   clauses?: JamlClause[];
   label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
-  mode?: LogicScoreModeName;
-  score?: number;
-}
-
-export interface JamlAndPayload {
-  clauses?: JamlClause[];
-  label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
+  max?: null;
+  min?: 1;
   mode?: LogicScoreModeName;
   score?: number;
 }
@@ -529,19 +520,10 @@ export interface JamlAndPayload {
 export interface JamlOrClause {
   clauses?: JamlClause[];
   label?: string | number | boolean | null;
-  max?: number | null;
+  max?: null;
   min?: number;
   mode?: LogicScoreModeName;
-  or?: JamlClause[] | JamlOrPayload | null;
-  score?: number;
-}
-
-export interface JamlOrPayload {
-  clauses?: JamlClause[];
-  label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
-  mode?: LogicScoreModeName;
+  or?: JamlClause[] | null;
   score?: number;
 }
 

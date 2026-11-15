@@ -30,10 +30,11 @@ jobs:
       - name: Pick the notes
         id: notes
         shell: bash
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          tag="${{ inputs.tag || github.ref_name }}"
-          notes="docs/RELEASE-${tag#v}.md"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          notes="docs/RELEASE-${TAG#v}.md"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -f "$notes" ]; then echo "file=$notes" >> "$GITHUB_OUTPUT"; fi
       - uses: softprops/action-gh-release@v2
         with:

@@ -109,6 +109,99 @@ public sealed class MotelyScoreCutoffTests
         Assert.Equal(0, Matches(int.MaxValue));
     }
 
+    [Theory]
+    [InlineData("deck: Red\n", "ALEEB")]
+    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n", "ALEEB")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n", "P1111111")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n    min: 0\n", "ALEEB")]
+    [InlineData("mustNot:\n  - legendaryJoker: Perkeo\n    antes: [1]\n", "ALEEB")]
+    public void Cutoff_HoldsWhenNoClauseScores(string yaml, string seed)
+    {
+        Assert.Equal(1, CutoffMatches(yaml, seed, int.MinValue));
+        Assert.Equal(1, CutoffMatches(yaml, seed, 0));
+        Assert.Equal(0, CutoffMatches(yaml, seed, 1));
+
+        Assert.Equal(0, CutoffMatches("cutoff: 1\n" + yaml, seed, null));
+        Assert.Equal(1, CutoffMatches("cutoff: 1\n" + yaml, seed, int.MinValue));
+    }
+
+    private static long CutoffMatches(string yaml, string seed, int? engineCutoff)
+    {
+        using var search = Motely.Filters.MotelySearchBuilder
+            .CreateSettings(Motely.Filters.JamlConfig.FromJaml(yaml), engineCutoff)
+            .WithSeedList([seed])
+            .WithThreadCount(1)
+            .WithQuietMode(true)
+            .WithAutoScoreCutoff(false)
+            .Start();
+        search.AwaitCompletion();
+        return search.MatchingSeeds;
+    }
+
+    [Theory]
+    [InlineData("deck: Red\n")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n    min: 0\n")]
+    public void FloorNoSeedCanReach_ScoresWithoutAllocating(string yaml)
+    {
+        var settings = Motely.Filters.MotelySearchBuilder.CreateSettings(
+            Motely.Filters.JamlConfig.FromJaml(yaml),
+            1
+        );
+        var measured = new AllocationMeasuringScoreDesc(settings.SeedScoreDesc!);
+
+        using var search = settings
+            .WithSeedScoreProvider(measured)
+            .WithSequentialSearch()
+            .WithBatchCharacterCount(3)
+            .WithStartBatchIndex(0)
+            .WithEndBatchIndex(2)
+            .WithThreadCount(1)
+            .WithQuietMode(true)
+            .WithAutoScoreCutoff(false)
+            .Start();
+        search.AwaitCompletion();
+
+        Assert.Equal(0, search.MatchingSeeds);
+        Assert.True(measured.MeasuredCalls > 1000, $"{measured.MeasuredCalls} calls measured");
+        Assert.Equal(0, measured.Bytes);
+    }
+
+    private sealed class AllocationMeasuringScoreDesc(IMotelySeedScoreDesc inner)
+        : IMotelySeedScoreDesc,
+            IMotelySeedScoreProvider
+    {
+        private IMotelySeedScoreProvider? _provider;
+        private bool _warm;
+
+        public long MeasuredCalls { get; private set; }
+        public long Bytes { get; private set; }
+
+        public IMotelySeedScoreProvider CreateScoreProvider(ref MotelyFilterCreationContext ctx)
+        {
+            _provider = inner.CreateScoreProvider(ref ctx);
+            return this;
+        }
+
+        public VectorMask Score(
+            ref MotelyVectorSearchContext searchContext,
+            MotelyScoredSeedResult[] buffer,
+            VectorMask baseFilterMask,
+            int scoreThreshold = int.MinValue
+        )
+        {
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            VectorMask scored = _provider!.Score(ref searchContext, buffer, baseFilterMask, scoreThreshold);
+            long bytes = GC.GetAllocatedBytesForCurrentThread() - before;
+            if (_warm)
+            {
+                MeasuredCalls++;
+                Bytes += bytes;
+            }
+            _warm = true;
+            return scored;
+        }
+    }
+
     [Fact]
     public void WithScoredResultGate_GatesCallbacksMatchingSeedsAndStopAfter()
     {
