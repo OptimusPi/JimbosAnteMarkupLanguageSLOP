@@ -52,6 +52,22 @@ public sealed class LegendarySoulOrderTests
         Assert.Contains(MotelyJoker.Showman, clause.With.Jokers);
     }
 
+    /// <summary>
+    /// <c>entries:</c> binds the same list as <c>soulOrder:</c>, so it takes the same check: it
+    /// used to load a soul with no legendary, or none at all, which can never match.
+    /// </summary>
+    [Theory]
+    [InlineData("entries: [{}]", "not a legendary")]
+    [InlineData("entries: [{ legendary: Blueprint }]", "not a legendary")]
+    [InlineData("entries: []", "at least one soul")]
+    public void Entries_TakesTheSoulOrderCheck(string entries, string reason)
+    {
+        var ok = JamlConfig.TryLoad($"must:\n  - soulOrder:\n      - {{ legendary: Perkeo }}\n    {entries}\n", out _, out var error);
+        Assert.False(ok);
+        Assert.Contains(reason, error);
+        Assert.True(JamlConfig.TryLoad("must:\n  - soulOrder:\n      - { legendary: Perkeo }\n    entries:\n      - { legendary: Chicot }\n", out _, out error), error);
+    }
+
     [Fact]
     public void SoulOrder_RejectsNonLegendary()
     {
