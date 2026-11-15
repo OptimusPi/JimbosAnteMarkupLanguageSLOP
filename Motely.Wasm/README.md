@@ -29,7 +29,8 @@ MotelyJamlyzer.analyze(config);                     // one result per seed in th
 
 A filter is plain JSON, typed by `motely-wasm/jaml`: `JamlFilter`, `JamlClause`, every clause and
 source block, and every enum as its canonical names (`MotelyJokerName`, `MotelyDeckName`, …).
-The JSON Schema ships beside them as `motely-wasm/jaml/schema.json`.
+The JSON Schema ships beside them as `motely-wasm/jaml/schema.json`, and `motely-wasm/jaml/vocab.json`
+lists the clause keys, the members each clause accepts and every enum's names, for an editor to offer.
 
 ```ts
 import type { JamlFilter } from "motely-wasm/jaml";
@@ -136,8 +137,15 @@ artifact. To develop the web app on macOS, drop the published npm package's `bin
 into `Motely.Wasm/bin/` (matching version; the `jaml/` types in the repo are identical to the
 published ones).
 
-`jaml/` (the TypeScript declarations and the schema) is kept by hand: the generator is no longer
-in the tree and no test checks it against the loader.
+`jaml/index.d.ts`, `jaml/motely-filter.schema.json` and `jaml/vocab.json` are generated from the
+filter loader and never edited. After a change to a clause class, a rule or a description, run
+this from the repository root and commit what it writes:
+
+```sh
+dotnet run --project Motely.CLI -- schema
+```
+
+`dotnet test Motely.Tests` fails while a committed file differs from what the command writes.
 
 Install [Binaryen](https://github.com/WebAssembly/binaryen/releases) **version 130** (131 at
 most) and put `wasm-opt` on PATH first. Bootsharp runs it on every Release publish; when it's

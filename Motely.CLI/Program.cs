@@ -5,6 +5,7 @@ using Motely;
 using Motely.Analysis;
 using Motely.CLI;
 using Motely.Enums;
+using Motely.Filters;
 
 // motely: search a JAML filter.
 // stdout carries results only (CSV rows); everything else goes to stderr.
@@ -134,12 +135,44 @@ rootCommand.SetAction(
     }
 );
 
+// motely schema: writes the files that describe a filter to editors and TypeScript, from the loader.
+Option<string> schemaOutOption = new("--out")
+{
+    Description = $"The folder to write into (default: {JamlSchemaGenerator.Directory}, from the repository root).",
+};
+Command schemaCommand = new(
+    "schema",
+    $"Write {JamlSchemaGenerator.TypesFile}, {JamlSchemaGenerator.SchemaFile} and {JamlSchemaGenerator.VocabFile} from the filter loader."
+)
+{
+    schemaOutOption,
+};
+schemaCommand.SetAction(parseResult => WriteSchemaFiles(parseResult.GetValue(schemaOutOption)));
+rootCommand.Subcommands.Add(schemaCommand);
+
 var parsed = rootCommand.Parse(args);
 if (parsed.Action is ParseErrorAction parseError)
     parseError.ShowHelp = false;
 
 // The signal handlers above own Ctrl+C, so the library's own termination handling stays off.
 return await parsed.InvokeAsync(new InvocationConfiguration { ProcessTerminationTimeout = null }, cts.Token);
+
+int WriteSchemaFiles(string? folder)
+{
+    folder ??= JamlSchemaGenerator.Directory;
+    if (!Directory.Exists(folder))
+    {
+        Console.Error.WriteLine($"Error: no folder '{folder}'. Run from the repository root, or name one with --out.");
+        return 1;
+    }
+    foreach (var (name, text) in JamlSchemaGenerator.Generate())
+    {
+        var path = Path.Combine(folder, name);
+        File.WriteAllText(path, text);
+        Console.Error.WriteLine($"wrote {path} ({text.AsSpan().Count('\n')} lines)");
+    }
+    return 0;
+}
 
 async Task<int> SearchAsync(ParseResult parseResult, string filterPath, CancellationToken cancellationToken)
 {
