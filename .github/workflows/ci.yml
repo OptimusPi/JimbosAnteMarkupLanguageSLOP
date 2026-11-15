@@ -217,3 +217,5 @@ jobs:
           npm install --no-save "$RUNNER_TEMP/$tarball"
           diff -r ../Motely.Wasm/bin/motely-wasm node_modules/motely-wasm/bin/motely-wasm
       - run: npm run build
+      - name: Check the Seed Pile against this run's engine
+        run: node scripts/seed-pile-check.mjs

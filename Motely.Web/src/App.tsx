@@ -11,9 +11,20 @@ import {
 } from "jaml-ui";
 import { AgentPanel } from "./AgentPanel.js";
 import { FilterFolder, type OpenedFilter } from "./FilterFolder.js";
+import { SeedPile } from "./SeedPile.js";
 import { useSeedLabWebMCP } from "./webmcp.js";
 
 const SEED_RE = /^[1-9A-Z]{0,8}$/;
+
+/** The pile is the front page; the lab is the filter editor; the agent talks to a server. */
+type TabId = "pile" | "lab" | "agent";
+
+function tabFrom(param: string | undefined, fallback: TabId): TabId {
+  if (param === "agent" || param === "server") return "agent";
+  if (param === "lab") return "lab";
+  if (param === "pile") return "pile";
+  return fallback;
+}
 
 function normalizeSeed(raw: string | null | undefined): string | null {
   if (raw === null || raw === undefined) return null;
@@ -26,17 +37,18 @@ function normalizeSeed(raw: string | null | undefined): string | null {
 }
 
 function getQueryParams(): {
-  tab: "lab" | "agent";
+  tab: TabId;
   initialOpened: OpenedFilter | null;
   agentInput: string;
 } {
   if (typeof window === "undefined") {
-    return { tab: "lab", initialOpened: null, agentInput: "" };
+    return { tab: "pile", initialOpened: null, agentInput: "" };
   }
   try {
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get("tab")?.toLowerCase();
-    const tab: "lab" | "agent" = tabParam === "agent" || tabParam === "server" ? "agent" : "lab";
+    // A link that carries a seed or a filter was made for the lab, so it still opens there.
+    const tab = tabFrom(tabParam, params.has("seed") || params.has("filter") ? "lab" : "pile");
     const seed = params.has("seed") ? normalizeSeed(params.get("seed")) : null;
     const seedDisplay = seed === "" ? '""' : seed;
     const filter = params.get("filter")?.trim();
@@ -59,14 +71,14 @@ function getQueryParams(): {
     const agentInput = prompt || (seed !== null ? `analyze ${seedDisplay}` : "");
     return { tab, initialOpened, agentInput };
   } catch {
-    return { tab: "lab", initialOpened: null, agentInput: "" };
+    return { tab: "pile", initialOpened: null, agentInput: "" };
   }
 }
 
 export function App({ folders }: { folders: boolean }) {
   const [initialParams] = useState(getQueryParams);
   const [opened, setOpened] = useState<OpenedFilter | null>(initialParams.initialOpened);
-  const [tab, setTab] = useState<"lab" | "agent">(initialParams.tab);
+  const [tab, setTab] = useState<TabId>(initialParams.tab);
   const [agentInput, setAgentInput] = useState<string>(initialParams.agentInput);
 
   // Sync state if URL changes externally (e.g. browser back/forward)
@@ -83,7 +95,7 @@ export function App({ folders }: { folders: boolean }) {
   }, []);
 
   const handleTabChange = useCallback((id: string) => {
-    const nextTab = id === "agent" ? "agent" : "lab";
+    const nextTab = tabFrom(id, "pile");
     setTab(nextTab);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -131,13 +143,16 @@ export function App({ folders }: { folders: boolean }) {
         </div>
         <JimboTabs
           tabs={[
+            { id: "pile", label: "Seed Pile" },
             { id: "lab", label: "Seed Lab" },
             { id: "agent", label: "Server Agent" },
           ]}
           activeTab={tab}
           onTabChange={handleTabChange}
         />
-        {tab === "agent" ? (
+        {tab === "pile" ? (
+          <SeedPile />
+        ) : tab === "agent" ? (
           <AgentPanel onInspect={handleInspect} initialInput={agentInput} />
         ) : (
           <>
