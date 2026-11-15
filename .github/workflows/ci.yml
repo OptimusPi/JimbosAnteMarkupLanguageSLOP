@@ -1,0 +1,132 @@
+# The engine's gate: every push to main, every PR, and every release (release.yml calls this).
+# `test` builds Motely.slnx (Motely.Wasm included) and runs the whole xunit suite in Release.
+# `aot` NativeAOT-publishes Motely.CLI (the trim/AOT gate) and runs one filter on two seeds.
+# `wasm` publishes Motely.Wasm with NativeAOT-LLVM and runs its node:test suite.
+# `web` builds Motely.Web against that package.
+# REWAFFLE_TOKEN: read:packages on rewaffle's GitHub Packages (NuGet and npm). Without it (a PR
+# from a fork, or a repo where the secret isn't set) `test` builds Motely.Wasm without
+# Bootsharp.FileSystem (-p:MotelyFileSystem=false), and `wasm`/`web`, which need the packages,
+# are skipped with a warning in the run summary instead of failing on an empty password.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  REWAFFLE_NUGET: https://nuget.pkg.github.com/rewaffle/index.json
+  HAS_REWAFFLE: ${{ secrets.REWAFFLE_TOKEN != '' }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - if: env.HAS_REWAFFLE == 'true'
+        env:
+          REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
+      - run: dotnet workload install wasm-tools
+      - name: build
+        run: |
+          fs=$([ "$HAS_REWAFFLE" = "true" ] && echo true || echo false)
+          dotnet build Motely.slnx -c Release -p:MotelyFileSystem=$fs
+      - run: dotnet test Motely.slnx -c Release --no-build
+
+  aot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - run: dotnet publish Motely.CLI -c Release -r linux-x64 -o out/motely
+      - run: out/motely/Motely.CLI --jaml legendary-perkeo --seeds ALEEB,PIROCKS --quiet
+      - uses: actions/upload-artifact@v5
+        with:
+          name: motely-linux-x64
+          path: out/motely/Motely.CLI
+
+  # Job-level `if:` can't read secrets, so this job turns "is REWAFFLE_TOKEN set" into an output.
+  secrets-gate:
+    runs-on: ubuntu-latest
+    outputs:
+      rewaffle: ${{ steps.check.outputs.rewaffle }}
+    steps:
+      - id: check
+        run: |
+          echo "rewaffle=$HAS_REWAFFLE" >> "$GITHUB_OUTPUT"
+          if [ "$HAS_REWAFFLE" != "true" ]; then
+            echo "::warning::REWAFFLE_TOKEN is not set: the wasm and web jobs are skipped, so this run does not test motely-wasm."
+            echo "### wasm/web skipped: REWAFFLE_TOKEN is not set" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  wasm:
+    needs: secrets-gate
+    if: needs.secrets-gate.outputs.rewaffle == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Motely.Wasm
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          scope: "@rewaffle"
+      - env:
+          REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
+      - run: dotnet workload install wasm-tools
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+      - run: npm run build
+      - run: npm test
+      - uses: actions/upload-artifact@v5
+        with:
+          name: motely-wasm
+          path: Motely.Wasm/bin/motely-wasm
+
+  web:
+    needs: wasm
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Motely.Web
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          scope: "@rewaffle"
+      - uses: actions/download-artifact@v6
+        with:
+          name: motely-wasm
+          path: Motely.Wasm/bin/motely-wasm
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+      - run: npm ls
+      - name: Install this run's motely-wasm
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
+        run: |
+          tarball=$(cd ../Motely.Wasm && npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP" | tail -n 1)
+          npm install --no-save "$RUNNER_TEMP/$tarball"
+          diff -r ../Motely.Wasm/bin/motely-wasm node_modules/motely-wasm/bin/motely-wasm
+      - run: npm run build

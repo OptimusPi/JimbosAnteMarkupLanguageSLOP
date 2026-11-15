@@ -1,0 +1,32 @@
+name: Merchant of Death
+author: claude
+description: Ante 1 sells Tarot Merchant. Buy it, and Death is in the ante 2 or 3 shop that the Merchant's tarot rate rolls.
+deck: Red
+stake: White
+
+must:
+  - voucher: TarotMerchant
+    antes: [1]
+  - tarotCard: Death
+    antes: [2, 3]
+    with:
+      vouchers: [TarotMerchant]
+should:
+  - tarotCard: Death
+    antes: [2, 3, 4]
+    score: 10
+    with:
+      vouchers: [TarotMerchant]
+  - tarotCard: [TheHangedMan, Strength]
+    antes: [2, 3, 4]
+    score: 3
+    with:
+      vouchers: [TarotMerchant]
+  - joker: [Hologram, DNA]
+    antes: [1, 2, 3]
+    score: 8
+    with:
+      vouchers: [TarotMerchant]
+  - voucher: TarotTycoon
+    antes: [2, 3]
+    score: 5
