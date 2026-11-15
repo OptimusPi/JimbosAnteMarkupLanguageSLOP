@@ -19,12 +19,12 @@ public sealed class JamlClauseRuleTests
     [InlineData("joker", "- joker: Blueprint\n    min: 3\n    max: 2", "max is below min (min defaults to 1), so nothing can match.")]
     [InlineData("joker", "- joker: Blueprint\n    max: 0", "max is below min (min defaults to 1), so nothing can match.")]
     // and, or
-    [InlineData("and", "- and:" + Nested + "\n    min: 2", "an and takes no min or max: set them on its clauses.")]
-    [InlineData("and", "- and:" + Nested + "\n    min: 0", "an and takes no min or max: set them on its clauses.")]
-    [InlineData("and", "- and:" + Nested + "\n    max: 5", "an and takes no min or max: set them on its clauses.")]
+    [InlineData("and", "- and:" + Nested + "\n    min: 2", "an and accepts no min or max: set them on its clauses.")]
+    [InlineData("and", "- and:" + Nested + "\n    min: 0", "an and accepts no min or max: set them on its clauses.")]
+    [InlineData("and", "- and:" + Nested + "\n    max: 5", "an and accepts no min or max: set them on its clauses.")]
     [InlineData("and", "- and:" + Nested + "\n    min: 2\n    max: 1", "max is below min (min defaults to 1), so nothing can match.")]
-    [InlineData("or", "- or:" + Nested + "\n    max: 3", "an or takes no max: set it on its clauses.")]
-    [InlineData("or", "- or:" + Nested + "\n    min: 0\n    max: 0", "an or takes no max: set it on its clauses.")]
+    [InlineData("or", "- or:" + Nested + "\n    max: 3", "an or accepts no max: set it on its clauses.")]
+    [InlineData("or", "- or:" + Nested + "\n    min: 0\n    max: 0", "an or accepts no max: set it on its clauses.")]
     [InlineData("or", "- or:" + Nested + "\n    min: 0", "an or needs min: 1 or more.")]
     [InlineData("and", "- and: []", "clauses: needs at least one clause.")]
     [InlineData("or", "- or:\n    mode: Max", "clauses: needs at least one clause.")]
@@ -108,7 +108,7 @@ public sealed class JamlClauseRuleTests
     {
         Assert.False(JamlConfig.TryLoad($"must:\n  {clause}\n", out _, out var error));
         Assert.Equal(
-            $"JAML: '{name}' is not a legendary joker (legendaryJoker takes Canio, Triboulet, Yorick, Chicot or Perkeo).",
+            $"JAML: '{name}' is not a legendary joker (legendaryJoker accepts Canio, Triboulet, Yorick, Chicot or Perkeo).",
             error);
 
         Assert.False(JamlConfig.TryLoad("must:\n  - legendaryJoker: Blueprint\n    antes: [40]\n", out _, out error));
@@ -141,7 +141,7 @@ public sealed class JamlClauseRuleTests
 
         Assert.True(JamlConfig.TryLoad(Should(256), out _, out var error), error);
         Assert.False(JamlConfig.TryLoad(Should(257), out _, out error));
-        Assert.Equal("JAML: should: holds 257 clauses; a filter takes at most 256.", error);
+        Assert.Equal("JAML: should: holds 257 clauses; a filter holds at most 256.", error);
         Assert.True(JamlConfig.TryLoad(Should(257).Replace("should:", "must:"), out _, out error), error);
     }
 

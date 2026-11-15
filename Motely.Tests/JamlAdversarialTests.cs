@@ -78,9 +78,9 @@ public sealed class JamlAdversarialTests
             "Expected 'SequenceStart', got 'MappingStart'");
 
     [Theory]
-    [InlineData("and", "max: 2", "an and takes no min or max")]
-    [InlineData("and", "min: 2", "an and takes no min or max")]
-    [InlineData("or", "max: 2", "an or takes no max")]
+    [InlineData("and", "max: 2", "an and accepts no min or max")]
+    [InlineData("and", "min: 2", "an and accepts no min or max")]
+    [InlineData("or", "max: 2", "an or accepts no max")]
     [InlineData("or", "min: 0", "an or needs min: 1 or more")]
     public void AndOr_BoundsOutsideTheDeclaredOnes_AreRefused(string key, string bound, string why) =>
         RefusedWith($"must:\n  - {key}: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}]\n    {bound}\n", why);

@@ -68,7 +68,7 @@ Without `with:` a shop clause reads the shop the deck alone gives, whatever vouc
 
 A wrong key or name fails to load with one line, on its own line of the file. An unknown property is named (`Property 'luckMoney' not found`). A name of the wrong kind says what it is not (`'Showman' is not a common joker`). `shopItems:` written beside `joker:` is an unknown property; it belongs under `sources:`.
 
-Limits, each a load error: `*name` aliases aren't read, so write the value out where it's used. A key written twice in one mapping is refused. Every number in a list (`antes`, `rolls`, `shopItems`, `boosterPacks`, other source slots, event rolls) runs from 0 to 999. Antes run from 0 to 39. `min` and `max` are 0 or more, and `max` is not below `min`. An `and` takes no `min` or `max`, and an `or` takes no `max` and needs `min: 1` or more. An `and` or `or` needs at least one clause, and a filter takes at most 256 `should:` clauses. Event, voucher and tag `rolls` need at least one roll, and boss `antes` run from 1.
+Limits, each a load error: `*name` aliases aren't read, so write the value out where it's used. A key written twice in one mapping is refused. Every number in a list (`antes`, `rolls`, `shopItems`, `boosterPacks`, other source slots, event rolls) runs from 0 to 999. Antes run from 0 to 39. `min` and `max` are 0 or more, and `max` is not below `min`. An `and` takes no `min` or `max`, and an `or` takes no `max` and needs `min: 1` or more. An `and` or `or` needs at least one clause, and a filter holds at most 256 `should:` clauses. Event, voucher and tag `rolls` need at least one roll, and boss `antes` run from 1.
 
 ## CLI
 

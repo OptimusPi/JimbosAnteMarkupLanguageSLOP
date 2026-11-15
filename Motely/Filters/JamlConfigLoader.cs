@@ -103,12 +103,12 @@ public static partial class JamlConfigLoader
         new(JamlRuleKind.Range, [typeof(IMotelyClause)], "max", "min and max run from 0 up.") { Min = 0 },
         new(JamlRuleKind.NotBelowMin, [typeof(IMotelyClause)], "max",
             "max is below min (min defaults to 1), so nothing can match."),
-        new(JamlRuleKind.Forbidden, [typeof(AndClause)], "min", "an and takes no min or max: set them on its clauses.")
+        new(JamlRuleKind.Forbidden, [typeof(AndClause)], "min", "an and accepts no min or max: set them on its clauses.")
         {
             Default = 1,
         },
-        new(JamlRuleKind.Forbidden, [typeof(AndClause)], "max", "an and takes no min or max: set them on its clauses."),
-        new(JamlRuleKind.Forbidden, [typeof(OrClause)], "max", "an or takes no max: set it on its clauses."),
+        new(JamlRuleKind.Forbidden, [typeof(AndClause)], "max", "an and accepts no min or max: set them on its clauses."),
+        new(JamlRuleKind.Forbidden, [typeof(OrClause)], "max", "an or accepts no max: set it on its clauses."),
         new(JamlRuleKind.MinItems, [typeof(LogicClause)], "clauses", "clauses: needs at least one clause.") { Min = 1 },
         new(JamlRuleKind.NotNull, [typeof(IAnteScopedClause)], "antes", "antes: needs a number or a list of them."),
         new(JamlRuleKind.NotNull, [typeof(IRollScopedClause)], "rolls", "rolls: needs a number or a list of them."),
@@ -134,7 +134,7 @@ public static partial class JamlConfigLoader
         // The Soul only ever gives a legendary, so any other joker here could never match. The
         // message stands alone ({0} is the first joker that is none), without the clause prefix.
         new(JamlRuleKind.Names, [typeof(LegendaryJokerClause)], "jokers",
-            "JAML: '{0}' is not a legendary joker (legendaryJoker takes Canio, Triboulet, Yorick, Chicot or Perkeo).")
+            "JAML: '{0}' is not a legendary joker (legendaryJoker accepts Canio, Triboulet, Yorick, Chicot or Perkeo).")
         {
             NamesOf = typeof(MotelyJokerLegendary),
         },
@@ -163,7 +163,7 @@ public static partial class JamlConfigLoader
     /// <summary>Checked after the clauses. {0} in the message is the count the document holds.</summary>
     internal static readonly JamlRule ShouldLimit =
         new(JamlRuleKind.MaxItems, [typeof(JamlConfig)], "should",
-            $"JAML: should: holds {{0}} clauses; a filter takes at most {MotelyScoredSeedResult.MAX_TALLY_COUNT}.")
+            $"JAML: should: holds {{0}} clauses; a filter holds at most {MotelyScoredSeedResult.MAX_TALLY_COUNT}.")
         {
             Max = MotelyScoredSeedResult.MAX_TALLY_COUNT,
         };
