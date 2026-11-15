@@ -395,10 +395,10 @@ public sealed partial record TarotCardSourceConfig
     /// <summary><c>requireMega:</c> is <c>requireMegaPack:</c>.</summary>
     public bool? RequireMega { get => null; set => RequireMegaPack = value ?? RequireMegaPack; }
 
-    public int[] ShopItems { get; set; } = [];
-    public int[] BoosterPacks { get; set; } = [];
-    public int[] Emperor { get; set; } = [];
-    public int[] PurpleSealOrEightBall { get; set; } = [];
+    public int[] ShopItems { get; set => field = value ?? []; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
+    public int[] Emperor { get; set => field = value ?? []; } = [];
+    public int[] PurpleSealOrEightBall { get; set => field = value ?? []; } = [];
 
     /// <summary>
     /// When true, booster arcana scoring may consume the Charm-tag bonus pack (second weighted slot, no natural Arcana).
@@ -411,7 +411,7 @@ public sealed partial record TarotCardSourceConfig
     /// Arcana packs in the same clause draw after them. Listing a pack assumes the player skipped
     /// that blind for a Charm Tag; pair it with a <c>smallBlindTag</c>/<c>bigBlindTag</c> must.
     /// </summary>
-    public int[] TagPacks { get; set; } = [];
+    public int[] TagPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>When true, only Mega-sized Arcana packs count (Normal/Jumbo still advance the stream).</summary>
     public bool RequireMegaPack { get; set; }

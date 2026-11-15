@@ -371,26 +371,26 @@ public sealed partial record JokerSourceConfig
     public bool? RequireMega { get => null; set => RequireMegaPack = value ?? RequireMegaPack; }
 
     /// <summary>Assembled shop slots via the full shop item stream (any item type).</summary>
-    public int[] ShopItems { get; set; } = [];
-    public int[] BoosterPacks { get; set; } = [];
+    public int[] ShopItems { get; set => field = value ?? []; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>When true, only Mega-sized Buffoon packs count (Normal/Jumbo still advance the stream).</summary>
     public bool RequireMegaPack { get; set; }
 
     /// <summary>0..n rolls of the joker stream keyed by the Judgement tarot (rarity-polled, no stickers).</summary>
-    public int[] Judgement { get; set; } = [];
+    public int[] Judgement { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls of the joker stream keyed by the Wraith spectral (always Rare, no stickers).</summary>
-    public int[] Wraith { get; set; } = [];
+    public int[] Wraith { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls of the common-pool stream Riff-Raff spawns from (no stickers).</summary>
-    public int[] RiffRaff { get; set; } = [];
+    public int[] RiffRaff { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls of the Rare Tag's joker stream.</summary>
-    public int[] RareTag { get; set; } = [];
+    public int[] RareTag { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls of the Uncommon Tag's joker stream.</summary>
-    public int[] UncommonTag { get; set; } = [];
+    public int[] UncommonTag { get; set => field = value ?? []; } = [];
 
     /// <summary>
     /// Any consumable/joker/tag spawn stream is named. No joker desc walks these in SIMD;
@@ -414,14 +414,14 @@ public sealed partial record JokerSourceConfig
         || AllShopJokers.Length > 0;
 
     /// <summary>0..n rolls on the common shop joker PRNG only (fast path).</summary>
-    public int[] CommonShopJokers { get; set; } = [];
+    public int[] CommonShopJokers { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls on the uncommon shop joker PRNG only (fast path; not the same indices as <see cref="ShopItems"/> when slots mix types).</summary>
-    public int[] UncommonShopJokers { get; set; } = [];
+    public int[] UncommonShopJokers { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls on the rare shop joker PRNG only (fast path).</summary>
-    public int[] RareShopJokers { get; set; } = [];
+    public int[] RareShopJokers { get; set => field = value ?? []; } = [];
 
     /// <summary>0..n rolls on the all-rarity shop joker stream (fast path).</summary>
-    public int[] AllShopJokers { get; set; } = [];
+    public int[] AllShopJokers { get; set => field = value ?? []; } = [];
 }

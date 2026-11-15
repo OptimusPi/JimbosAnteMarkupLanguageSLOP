@@ -53,6 +53,12 @@ public sealed class MotelyScoreCutoff
     /// <summary>Whether max (strict new-record) mode is active.</summary>
     public bool IsMax => _max;
 
+    /// <summary>
+    /// Max passes only a score above every score before it. Only should clauses score, so with
+    /// none every seed scores 0 and the first match is the only one that can ever pass.
+    /// </summary>
+    public bool EndsAfterFirstMatch(int shouldClauseCount) => _max && shouldClauseCount == 0;
+
     /// <summary>The current running-maximum in auto mode (int.MinValue before the first seed).</summary>
     public int CurrentHigh => Volatile.Read(ref _learned);
 

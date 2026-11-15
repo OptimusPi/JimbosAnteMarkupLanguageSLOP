@@ -239,6 +239,45 @@ public sealed class MotelyScoreCutoffTests
         Assert.Single(record);
     }
 
+    [Theory]
+    [InlineData("deck: Red\n")]
+    [InlineData("mustNot:\n  - voucher: Hieroglyph\n    antes: [1]\n")]
+    public void WithScoredResultGate_GatesTheJamlyzerRider_OnAFilterWithNothingToScore(string yaml)
+    {
+        var config = Motely.Filters.JamlConfig.FromJaml(yaml);
+        string[] seeds = ["ALEEB", "PIROCKS", "P1111111", "MOTELY77"];
+
+        List<string> Analyzed(Func<int, bool>? gate)
+        {
+            var analyzed = new List<string>();
+            using var search = Motely.Filters.MotelySearchBuilder
+                .CreateSettings(config, int.MinValue)
+                .WithSeedList(seeds)
+                .WithThreadCount(1)
+                .WithQuietMode(true)
+                .WithAutoScoreCutoff(false)
+                .WithScoredResultGate(gate)
+                .WithSeedAnalyzeProvider(Motely.Analysis.MotelyJamlyzer.CreateRiderDesc(config, result => analyzed.Add(result.Seed), eventRolls: 1))
+                .Start();
+            search.AwaitCompletion();
+            return analyzed;
+        }
+
+        Assert.True(Analyzed(null).Count >= 2, "the rider sees every match with no gate");
+        Assert.Empty(Analyzed(_ => false));
+        Assert.Single(Analyzed(MotelyScoreCutoff.Max().ShouldEmit));
+    }
+
+    [Fact]
+    public void Max_EndsAfterTheFirstMatch_OnlyWhenNothingScores()
+    {
+        Assert.True(MotelyScoreCutoff.Max().EndsAfterFirstMatch(shouldClauseCount: 0));
+        Assert.False(MotelyScoreCutoff.Max().EndsAfterFirstMatch(shouldClauseCount: 1));
+        Assert.False(MotelyScoreCutoff.Auto().EndsAfterFirstMatch(shouldClauseCount: 0));
+        Assert.False(MotelyScoreCutoff.Off().EndsAfterFirstMatch(shouldClauseCount: 0));
+        Assert.False(MotelyScoreCutoff.Fixed(1).EndsAfterFirstMatch(shouldClauseCount: 0));
+    }
+
     [Fact]
     public void WithScoredResultGate_GatesCallbacksMatchingSeedsAndStopAfter()
     {

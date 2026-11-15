@@ -138,7 +138,8 @@ internal static class JamlClauseBinding
     /// <summary>
     /// A list of numbers (<c>antes</c>, <c>shopItems</c>, …) as a list, or as one number for a list
     /// of one: <c>ante: 2</c> is <c>antes: [2]</c>. Each number reads as YamlDotNet reads an int; a
-    /// null value stays null, as without this converter.
+    /// null value stays null here, and the property it lands on keeps its default (<c>ante: ~</c>,
+    /// a <c>sources:</c> slot) or the loader refuses it (<c>antes: ~</c>, <c>rolls: ~</c>).
     /// </summary>
     internal sealed class IntListConverter : IYamlTypeConverter
     {

@@ -129,8 +129,8 @@ public sealed partial record StandardCardSourceConfig
     /// <summary><c>requireMega:</c> is <c>requireMegaPack:</c>.</summary>
     public bool? RequireMega { get => null; set => RequireMegaPack = value ?? RequireMegaPack; }
 
-    public int[] ShopItems { get; set; } = [];
-    public int[] BoosterPacks { get; set; } = [];
+    public int[] ShopItems { get; set => field = value ?? []; } = [];
+    public int[] BoosterPacks { get; set => field = value ?? []; } = [];
 
     /// <summary>When true, only Mega-sized Standard packs count (Normal/Jumbo still advance the stream).</summary>
     public bool RequireMegaPack { get; set; }
