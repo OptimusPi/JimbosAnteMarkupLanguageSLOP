@@ -47,6 +47,14 @@ test("a value the engine cannot run is refused at its line", () => {
   assert.match(JamlConfigLoader.check("must:\n  - joker: 5\n"), /JAML line 2: '5' is not a name/);
 });
 
+test("soulOrder: entries: takes the same check as soulOrder:", () => {
+  const written = (entries) => `must:\n  - soulOrder: [{ legendary: Perkeo }]\n    entries: ${entries}\n`;
+  assert.match(JamlConfigLoader.check(written("[{}]")), /not a legendary/);
+  assert.match(JamlConfigLoader.check(written("[{ legendary: Blueprint }]")), /not a legendary/);
+  assert.match(JamlConfigLoader.check(written("[]")), /at least one soul/);
+  assert.equal(JamlConfigLoader.check(written("[{ legendary: Yorick }]")), null);
+});
+
 test("a key written twice is refused on its line", () => {
   assert.equal(
     JamlConfigLoader.check("must:\n  - joker: Blueprint\n    antes: [1]\n    antes: [2]\n"),

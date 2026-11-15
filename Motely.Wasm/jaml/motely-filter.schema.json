@@ -6333,7 +6333,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/soulOrderEntry"
-          }
+          },
+          "minItems": 1
         },
         "label": {
           "description": "The clause's column name in results. Derived from the clause when not written.",

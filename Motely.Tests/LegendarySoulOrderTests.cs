@@ -87,6 +87,48 @@ public sealed class LegendarySoulOrderTests
         Assert.Contains("at least one soul", error);
     }
 
+    // entries: is a third spelling of the same list. It used to skip the check soulOrder: takes.
+    [Theory]
+    [InlineData("entries: [{}]", "not a legendary")]
+    [InlineData("entries: [{ legendary: Blueprint }]", "not a legendary")]
+    [InlineData("entries: []", "at least one soul")]
+    [InlineData("entries: ~", "at least one soul")]
+    public void Entries_TakesTheSameCheckAsSoulOrder(string entries, string expected)
+    {
+        var ok = JamlConfig.TryLoad(
+            $$"""
+            name: entries
+            must:
+              - soulOrder: [{ legendary: Perkeo }]
+                {{entries}}
+            """,
+            out _,
+            out var error
+        );
+
+        Assert.False(ok);
+        Assert.Contains(expected, error);
+    }
+
+    [Fact]
+    public void Entries_WithLegendaries_Loads()
+    {
+        var ok = JamlConfig.TryLoad(
+            """
+            name: entries
+            must:
+              - soulOrder: [{ legendary: Perkeo }]
+                entries: [{ legendary: Yorick }, { legendary: Canio }]
+            """,
+            out var config,
+            out var error
+        );
+
+        Assert.True(ok, error);
+        var clause = Assert.IsType<LegendarySoulOrderClause>(Assert.Single(config!.Must));
+        Assert.Equal([MotelyJoker.Yorick, MotelyJoker.Canio], clause.Entries.Select(entry => entry.Legendary));
+    }
+
     // 43GS2F56 raw Joker4 = Perkeo, Yorick, Yorick, Yorick (E3 acceptance).
     [Fact]
     public void SoulOrder_RawSequence_MatchesRunWideOrder()
