@@ -185,7 +185,7 @@ internal static class JamlClauseBinding
             {
                 throw new FormatException($"'{text}' is not a number: write a whole number, or a list of them, as in [1, 2].", ex);
             }
-            if (value is < 0 or > MotelyGlobals.MaxRollIndex)
+            if (JamlConfigLoader.ListNumber.BrokenBy(value))
                 throw new YamlException(scalar.Start, scalar.End, $"`{value}` is out of range: a number in this list runs from 0 to {MotelyGlobals.MaxRollIndex}.");
             return value;
         }
@@ -194,14 +194,24 @@ internal static class JamlClauseBinding
             nested(value, type);
     }
 
-    private static bool IsCategoryAny(Scalar scalar)
+    /// <summary>
+    /// The words that mean "any" where a name, a card or an event's rolls is written, in any case.
+    /// An empty value means the same.
+    /// </summary>
+    internal static readonly string[] AnyWords = ["any", "~", "null"];
+
+    internal static bool IsAnyWord(string value)
     {
-        if (scalar.Style is not (ScalarStyle.Plain or ScalarStyle.SingleQuoted or ScalarStyle.DoubleQuoted))
-            return false;
-        var text = scalar.Value.Trim();
-        return text.Length == 0
-            || text.Equals("any", StringComparison.OrdinalIgnoreCase)
-            || text.Equals("~", StringComparison.OrdinalIgnoreCase)
-            || text.Equals("null", StringComparison.OrdinalIgnoreCase);
+        var text = value.AsSpan().Trim();
+        if (text.Length == 0)
+            return true;
+        foreach (var word in AnyWords)
+            if (text.Equals(word, StringComparison.OrdinalIgnoreCase))
+                return true;
+        return false;
     }
+
+    private static bool IsCategoryAny(Scalar scalar) =>
+        scalar.Style is ScalarStyle.Plain or ScalarStyle.SingleQuoted or ScalarStyle.DoubleQuoted
+        && IsAnyWord(scalar.Value);
 }

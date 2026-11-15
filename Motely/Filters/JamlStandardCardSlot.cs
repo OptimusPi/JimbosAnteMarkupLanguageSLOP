@@ -59,12 +59,5 @@ internal sealed class JamlStandardCardSlotConverter : IYamlTypeConverter
     public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer nested) =>
         nested(value, type);
 
-    private static bool IsCategoryAny(Scalar scalar)
-    {
-        var text = scalar.Value.Trim();
-        return text.Length == 0
-            || text.Equals("any", StringComparison.OrdinalIgnoreCase)
-            || text.Equals("~", StringComparison.OrdinalIgnoreCase)
-            || text.Equals("null", StringComparison.OrdinalIgnoreCase);
-    }
+    private static bool IsCategoryAny(Scalar scalar) => JamlClauseBinding.IsAnyWord(scalar.Value);
 }

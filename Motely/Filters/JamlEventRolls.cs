@@ -49,18 +49,11 @@ public sealed class JamlEventRolls
         {
             if (!int.TryParse(scalar.Value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var roll))
                 throw new YamlException(scalar.Start, scalar.End, $"`{scalar.Value}` is not a roll: write a whole number, or a list of them, as in [1, 2].");
-            if (roll is < 0 or > MotelyGlobals.MaxRollIndex)
+            if (JamlConfigLoader.ListNumber.BrokenBy(roll))
                 throw new YamlException(scalar.Start, scalar.End, $"`{roll}` is out of range: a roll runs from 0 to {MotelyGlobals.MaxRollIndex}.");
             return roll;
         }
 
-        private static bool IsEmpty(Scalar scalar)
-        {
-            var text = scalar.Value.Trim();
-            return text.Length == 0
-                || text.Equals("any", StringComparison.OrdinalIgnoreCase)
-                || text.Equals("~", StringComparison.OrdinalIgnoreCase)
-                || text.Equals("null", StringComparison.OrdinalIgnoreCase);
-        }
+        private static bool IsEmpty(Scalar scalar) => JamlClauseBinding.IsAnyWord(scalar.Value);
     }
 }
