@@ -1,11 +1,15 @@
-# A release is the GitHub Release for a v* tag. `git tag v29.0.0 && git push --tags` starts this
-# workflow for the pushed tag. A manual run takes the name of a tag that already exists; it does
-# not create tags, and the `tag` job fails when the name is not a tag.
-# ci.yml gates it on the tag's commit (the xunit suite, AOT, wasm, web), then the GitHub Release
-# is created for the tag with docs/RELEASE-<version>.md from that commit as its body when that
-# file exists, generated notes otherwise.
-# On a manual run the workflow files are the ones on the ref the run was started from; the code
-# that is tested and the notes come from the tag's commit.
+# A release is the GitHub Release for a v* tag, made after ci.yml passes on the tag's commit.
+# `git tag v29.0.0 && git push --tags` starts this workflow for the pushed tag.
+# A manual run takes a tag name.
+# - The tag exists: CI runs on the tag's commit, then the tag's release is created or updated.
+# - The tag does not exist: CI runs on the head of the ref the run was started from, then the
+#   release step creates the tag on that same commit. The name must be v<MotelyVersion> as
+#   Directory.Build.props has it on that commit.
+# The release body is docs/RELEASE-<version>.md when that file exists, generated notes otherwise.
+# On a manual run the file is read from the ref the run was started from, so a correction to the
+# notes on main reaches a published release by running this again for the same tag.
+# The release carries motely-wasm-<version>.tgz, the npm package that run built, tested and
+# packed from the tag's commit. A package already attached to a release is never replaced.
 name: release
 
 on:
@@ -14,33 +18,49 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to release (e.g. v29.0.0)"
+        description: "Tag to release (e.g. v29.0.0). Created on this ref's head if it does not exist."
         required: true
 
 permissions:
   contents: write
 
 jobs:
-  # `commit` is the commit inputs.tag points at on a manual run. On a tag push it is empty and
-  # actions/checkout uses the pushed tag's commit.
+  # On a manual run `commit` is the commit CI tests: the tag's commit when the tag exists, the
+  # head of the ref the run was started from when it does not. `create` is set in the second case
+  # only, to that same commit; the release step creates the tag there. On a tag push both are
+  # empty and actions/checkout uses the pushed tag's commit.
   tag:
     runs-on: ubuntu-latest
     outputs:
       commit: ${{ steps.resolve.outputs.commit }}
+      create: ${{ steps.resolve.outputs.create }}
     steps:
+      - uses: actions/checkout@v6
+        if: github.event_name == 'workflow_dispatch'
       - name: Resolve the tag
         id: resolve
         if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag }}
         run: |
-          if ! commit=$(gh api "repos/$GITHUB_REPOSITORY/commits/tags/$TAG" --jq .sha); then
-            echo "::error::'$TAG' is not a tag in $GITHUB_REPOSITORY. Push the tag first; this workflow does not create it."
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::'$TAG' is not a release tag. Write it as v<major>.<minor>.<patch>, e.g. v29.0.0."
             exit 1
           fi
-          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+          existing=$(git ls-remote origin "refs/tags/$TAG" | awk -v ref="refs/tags/$TAG" '$2 == ref')
+          if [ -n "$existing" ]; then
+            git fetch --quiet --no-tags --depth=1 origin "+refs/tags/$TAG:refs/tags/$TAG"
+            echo "commit=$(git rev-parse "refs/tags/$TAG^{commit}")" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          version=$(sed -n 's:.*<MotelyVersion>\(.*\)</MotelyVersion>.*:\1:p' Directory.Build.props)
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error::$TAG does not exist, and it cannot be created here: $GITHUB_SHA is version $version."
+            exit 1
+          fi
+          echo "commit=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "create=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
 
   ci:
     needs: tag
@@ -56,8 +76,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: ${{ needs.tag.outputs.commit }}
       - name: Pick the notes
         id: notes
         shell: bash
@@ -67,8 +85,18 @@ jobs:
           notes="docs/RELEASE-${TAG#v}.md"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -f "$notes" ]; then echo "file=$notes" >> "$GITHUB_OUTPUT"; fi
+      # The npm tarball ci.yml's `wasm` job built, tested and packed in this run. That job is
+      # skipped without REWAFFLE_TOKEN; this step then fails, and nothing is released untested.
+      - uses: actions/download-artifact@v6
+        with:
+          name: motely-wasm-package
+          path: release-assets
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.notes.outputs.tag }}
+          target_commitish: ${{ needs.tag.outputs.create }}
           body_path: ${{ steps.notes.outputs.file }}
           generate_release_notes: ${{ steps.notes.outputs.file == '' }}
+          files: release-assets/motely-wasm-*.tgz
+          fail_on_unmatched_files: true
+          overwrite_files: false

@@ -1,9 +1,10 @@
 # The engine's gate: every push to main, every PR, and every release (release.yml calls this).
-# A caller can pass `ref` to check out a commit other than the event's; release.yml passes the
-# tag's commit on a manual run.
+# A caller can pass `ref` to check out a commit other than the event's; on a manual run
+# release.yml passes the commit the tag is on, or will be created on.
 # `test` builds Motely.slnx (Motely.Wasm included) and runs the whole xunit suite in Release.
 # `aot` NativeAOT-publishes Motely.CLI (the trim/AOT gate) and runs one filter on two seeds.
-# `wasm` publishes Motely.Wasm with NativeAOT-LLVM and runs its node:test suite.
+# `wasm` publishes Motely.Wasm with NativeAOT-LLVM and wasm-opt, runs its node:test suite, packs
+# the npm tarball and loads that tarball by name under Node.
 # `web` builds Motely.Web against that package.
 # REWAFFLE_TOKEN: read:packages on rewaffle's GitHub Packages (NuGet and npm). Without it (a PR
 # from a fork, or a repo where the secret isn't set) `test` builds Motely.Wasm without
@@ -103,15 +104,72 @@ jobs:
           REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
         run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
       - run: dotnet workload install wasm-tools
+      # Bootsharp runs wasm-opt on a Release publish and only warns when it is missing. The package
+      # that ships is the optimized one, so the build step below fails when wasm-opt did not run.
+      - name: Install Binaryen 130
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_130/binaryen-version_130-x86_64-linux.tar.gz
+          echo "0a18362361ad05465118cd8eeb72edaeec89de6894bc283576ef4e07aa3babcc  binaryen.tar.gz" | sha256sum --check
+          tar -xzf binaryen.tar.gz
+          echo "$RUNNER_TEMP/binaryen-version_130/bin" >> "$GITHUB_PATH"
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
-      - run: npm run build
+      - name: Build with wasm-opt
+        shell: bash
+        run: |
+          wasm-opt --version
+          npm run build 2>&1 | tee "$RUNNER_TEMP/build.log"
+          if grep -q "Failed to run Binaryen optimization" "$RUNNER_TEMP/build.log"; then
+            echo "::error::wasm-opt did not run: this is not the optimized build that ships."
+            exit 1
+          fi
       - run: npm test
       - uses: actions/upload-artifact@v5
         with:
           name: motely-wasm
           path: Motely.Wasm/bin/motely-wasm
+      # The tarball `npm publish` uploads, packed from the build the tests above ran against.
+      # release.yml attaches it to the GitHub Release.
+      - name: Pack the npm package
+        shell: bash
+        run: npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
+      - name: Load the packed package by name under Node
+        shell: bash
+        run: |
+          mkdir "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          npm init --yes > /dev/null
+          npm install "$RUNNER_TEMP"/motely-wasm-*.tgz
+          cat > check.mjs <<'EOF'
+          import assert from "node:assert/strict";
+          import bootsharp, { JamlConfigLoader, JamlSearchBuilder } from "motely-wasm";
+          import schema from "motely-wasm/jaml/schema.json" with { type: "json" };
+          await import("motely-wasm/jaml");
+          await bootsharp.boot();
+          const config = JamlConfigLoader.fromJaml("deck: Red\nstake: White\nmust:\n  - voucher: Telescope\n    antes: [1]\n");
+          const finds = [];
+          const search = JamlSearchBuilder.createSettings(config)
+            .withThreadCount(1)
+            .withQuietMode(true)
+            .withSeedList(["ALEEB", "AAAAAAAA", "PIROCKS"])
+            .withSeedMatchCallback((seed) => finds.push(seed))
+            .start();
+          await search.waitForCompletionAsync();
+          assert.equal(search.totalSeedsSearched, 3n);
+          assert.equal(BigInt(finds.length), search.matchingSeeds);
+          search.dispose();
+          assert.equal(typeof schema.definitions, "object");
+          console.log(`motely-wasm loads by name: 3 seeds searched, ${finds.length} matched`);
+          EOF
+          node check.mjs
+      - uses: actions/upload-artifact@v5
+        with:
+          name: motely-wasm-package
+          path: ${{ runner.temp }}/motely-wasm-*.tgz
+          if-no-files-found: error
 
   web:
     needs: wasm
