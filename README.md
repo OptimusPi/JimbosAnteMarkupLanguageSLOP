@@ -116,4 +116,10 @@ dotnet test Motely.Tests       # builds the engine, the CLI and the suite, and r
 dotnet build Motely.slnx       # every project, Motely.Wasm included
 ```
 
+```sh
+dotnet run --project Motely.CLI -- schema   # rewrites Motely.Wasm/jaml from the filter loader
+```
+
+`Motely.Wasm/jaml/index.d.ts`, `motely-filter.schema.json` and `vocab.json` describe what the loader accepts, for TypeScript and editors. They are generated, never edited: after a change to a clause class, to the rule table in `Motely/Filters/JamlConfigLoader.cs` or to a description in `Motely/Filters/Schema/JamlSchemaAnnotations.cs`, run the command from the repository root and commit the three files. The suite fails while a committed file differs from what the command writes. `--out <folder>` writes somewhere else.
+
 `Motely.slnx` holds `Motely.Wasm`, which needs `dotnet workload install wasm-tools` and, for its folder access, the Bootsharp.FileSystem sponsor feed. Without the feed, add `-p:MotelyFileSystem=false`. `Motely.Wasm/README.md` has the rest.

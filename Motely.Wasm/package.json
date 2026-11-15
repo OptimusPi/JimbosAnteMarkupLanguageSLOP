@@ -14,6 +14,7 @@
       "default": "./jaml/index.mjs"
     },
     "./jaml/schema.json": "./jaml/motely-filter.schema.json",
+    "./jaml/vocab.json": "./jaml/vocab.json",
     "./*": "./bin/motely-wasm/generated/modules/*.g.mjs"
   },
   "browser": {

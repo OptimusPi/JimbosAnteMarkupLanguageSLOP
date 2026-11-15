@@ -73,6 +73,10 @@ internal static class JamlEnumName
         ["A"] = nameof(MotelyStandardcardRank.Ace),
     };
 
+    /// <summary>The short names <paramref name="enumType"/> reads beside its own (a rank's J, Q, K, A).</summary>
+    internal static IReadOnlyCollection<string> ShortNames(Type enumType) =>
+        enumType == typeof(MotelyStandardcardRank) ? RankLetters.Keys : [];
+
     /// <summary>
     /// Normalized display spellings whose in-game name writes a digit where the C# enum writes a word
     /// (or vice versa), mapped to the normalized C# enum name.

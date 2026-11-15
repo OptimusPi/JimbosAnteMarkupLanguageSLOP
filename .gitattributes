@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Written by `dotnet run --project Motely.CLI -- schema` with \n line ends on every OS, and the
+# suite compares them with what the generator writes, byte for byte.
+Motely.Wasm/jaml/index.d.ts text eol=lf
+Motely.Wasm/jaml/motely-filter.schema.json text eol=lf
+Motely.Wasm/jaml/vocab.json text eol=lf
