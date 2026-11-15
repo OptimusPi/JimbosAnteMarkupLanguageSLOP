@@ -234,4 +234,16 @@ public sealed class JamlAdversarialTests
         search.Dispose();
         Assert.True(best >= 0, $"best score {best}");
     }
+
+    [Theory]
+    [InlineData("id:\nmust:\n  - joker: Blueprint\n    antes: [1]\nseeds:\n")]
+    [InlineData("id: ~\nmust:\n  - joker: Blueprint\n    antes: [1]\nseeds: ~\n")]
+    public void EmptyIdOrSeedsScalar_NormalizesToNonNullAndAnalyzesCleanly(string yaml)
+    {
+        var config = ProofSearch.LoadOrThrow(yaml);
+        Assert.NotNull(config.Id);
+        Assert.NotNull(config.Seeds);
+        Assert.Empty(config.Seeds);
+        Assert.Empty(Motely.Analysis.MotelyJamlyzer.Analyze(config));
+    }
 }

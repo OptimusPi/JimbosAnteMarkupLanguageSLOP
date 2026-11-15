@@ -35,6 +35,8 @@ public static partial class JamlConfigLoader
         {
             var config = Deserializer.Deserialize<JamlConfig?>(new JamlParser(text))
                 ?? throw new InvalidOperationException("JAML: the document is empty.");
+            config.Id ??= "";
+            config.Seeds ??= [];
             CheckBounds(config.Must);
             CheckBounds(config.Should);
             CheckBounds(config.MustNot);
