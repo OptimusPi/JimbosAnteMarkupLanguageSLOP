@@ -53,7 +53,10 @@ public static partial class JamlConfigLoader
             var inner = ex;
             while (inner.InnerException is YamlException next)
                 inner = next;
-            var message = $"JAML line {inner.Start.Line}: {inner.InnerException?.Message ?? inner.Message}";
+            var reason = inner.InnerException is NullReferenceException
+                ? "this key needs a value; ~ is not one."
+                : inner.InnerException?.Message ?? inner.Message;
+            var message = $"JAML line {inner.Start.Line}: {reason}";
             throw new JamlFilterException(message, (int)inner.Start.Line, (int)inner.Start.Column, ex);
         }
     }

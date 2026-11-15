@@ -254,10 +254,10 @@ async Task<int> SearchAsync(ParseResult parseResult, string filterPath, Cancella
     // so listen to exactly one.
     // The engine applies a fixed floor or auto's rate limiter (clamps to its per-thread running
     // max only while finds flood in). Max is one record across every thread, so it gates here.
+    settings = settings.WithScoredResultGate(cutoff.IsMax ? cutoff.ShouldEmit : null);
     settings = settings.SeedScoreDesc is not null
         ? settings
             .WithAutoScoreCutoff(cutoff.IsAuto)
-            .WithScoredResultGate(cutoff.IsMax ? cutoff.ShouldEmit : null)
             .WithScoredResultCallback(result =>
             {
                 sink.OnScored(in result);
@@ -430,5 +430,5 @@ static string ResolveFilterPath(string filter)
         if (File.Exists(candidate))
             return candidate;
     }
-    return Path.Combine("Filters", filter + extensions[0]);
+    return Path.HasExtension(filter) ? filter : Path.Combine("Filters", filter + extensions[0]);
 }

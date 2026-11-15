@@ -94,6 +94,20 @@ public sealed class JamlAdversarialTests
         Assert.True(JamlConfig.TryLoad(yaml, out _, out var error), error);
     }
 
+    [Theory]
+    [InlineData("must:\n  - or: [{ joker: Blueprint }]\n    min: ~\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    min: ~\n")]
+    [InlineData("must:\n  - joker: Blueprint\n    score: ~\n")]
+    public void ANullWhereANumberGoes_SaysSo(string yaml) =>
+        RefusedWith(yaml, "JAML line 3: this key needs a value");
+
+    [Theory]
+    [InlineData("and", "[]", "")]
+    [InlineData("or", "[]", "")]
+    [InlineData("or", "~", "")]
+    public void AndOr_WithNoClauses_IsRefused(string key, string value, string rest) =>
+        RefusedWith($"must:\n  - {key}: {value}\n{rest}", "needs at least one clause");
+
     [Fact]
     public void AnAliasBetweenRealKeys_IsRefused() =>
         RefusedWith(
