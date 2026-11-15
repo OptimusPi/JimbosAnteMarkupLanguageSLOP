@@ -125,6 +125,10 @@ npm test                         # node --test "tests/*.test.mjs"
 `npm run build` is `dotnet publish` plus `scripts/patch-dist-base64-polyfill.mjs`; a bare
 `dotnet publish` leaves the fallback out. `npm pack` and `npm publish` run the build first.
 
+Each GitHub release from 32.0.1 on carries `motely-wasm-<version>.tgz`: the package CI built
+with `wasm-opt`, tested and packed at the tag's commit. `npm publish motely-wasm-<version>.tgz`
+publishes that file as it is; npm runs no script for a tarball, so nothing is built.
+
 macOS: NativeAOT-LLVM publishes no `runtime.osx-arm64.Microsoft.DotNet.ILCompiler.LLVM` on any
 public feed (Bootsharp 0.9 bundles only the win/linux host compilers), so `dotnet publish` can't
 run the AOT step on a Mac — CI publishes on ubuntu-latest and uploads `bin/motely-wasm` as an
@@ -137,7 +141,8 @@ in the tree and no test checks it against the loader.
 
 Install [Binaryen](https://github.com/WebAssembly/binaryen/releases) **version 130** (131 at
 most) and put `wasm-opt` on PATH first. Bootsharp runs it on every Release publish; when it's
-missing it logs a warning and ships an unoptimized binary. Binaryen 132 and later write the
+missing it logs a warning and ships an unoptimized binary. CI installs 130 and fails the build
+when `wasm-opt` did not run. Binaryen 132 and later write the
 "compact imports" encoding under the `--all-features` flag Bootsharp passes, and no engine
 loads that yet (Node: `unknown import kind 0x7f`).
 
