@@ -65,3 +65,7 @@ nuget.config.local
 .mcp.json
 .mcp.local.json
 .playwright-mcp/
+
+# Agent/teamwork scratch and local data
+/.agents/
+/scola.csv

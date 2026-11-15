@@ -11,9 +11,23 @@ public sealed class CliProcessTests : IDisposable
 
     public void Dispose() => Directory.Delete(_home, recursive: true);
 
+    /// <summary>
+    /// The <c>dotnet</c> host that runs Motely.CLI.dll. Under <c>dotnet test</c> the process can be testhost.exe,
+    /// which has no runtimeconfig for the CLI and cannot run another assembly, so it is not used.
+    /// </summary>
+    private static string DotnetHost()
+    {
+        var current = Environment.ProcessPath;
+        if (current is not null
+            && string.Equals(Path.GetFileNameWithoutExtension(current), "dotnet", StringComparison.OrdinalIgnoreCase))
+            return current;
+        var fromSdk = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH");
+        return string.IsNullOrEmpty(fromSdk) ? "dotnet" : fromSdk;
+    }
+
     private (int ExitCode, string Out, string Error) Run(params string[] args)
     {
-        var start = new ProcessStartInfo(Environment.ProcessPath!)
+        var start = new ProcessStartInfo(DotnetHost())
         {
             WorkingDirectory = _home,
             RedirectStandardOutput = true,
