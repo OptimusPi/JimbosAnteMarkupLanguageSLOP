@@ -31,7 +31,10 @@ const SCORE_RE = /^-?\d{1,7}$/;
  * A motely results row is columns split by commas, semicolons or tabs: a seed, then nothing but
  * scores (`1JHBI111, 41, 0`). Its first column is the seed and the scores are not. Any other
  * line gives every seed on it, so one per line, a row of them with spaces, or a spreadsheet
- * column all work, and `ALEEB 12345678` is two seeds. A results file's header line is skipped.
+ * column all work, and `ALEEB 12345678` is two seeds.
+ *
+ * A results file's header line (`seed,score,...`) is skipped, and it settles the question for
+ * the rows under it: each gives its first column and nothing else, however long its scores are.
  */
 export function seedsIn(text: string): string[] {
   const seen = new Set<string>();
@@ -43,11 +46,17 @@ export function seedsIn(text: string): string[] {
       seeds.push(seed);
     }
   };
+  let underHeader = false;
   for (const line of text.split(/\r?\n/)) {
-    if (RESULTS_HEADER_RE.test(line)) continue;
+    if (RESULTS_HEADER_RE.test(line)) {
+      underHeader = true;
+      continue;
+    }
     const columns = line.split(/[,;\t]/).map((column) => column.trim().replace(/^["']|["']$/g, ""));
     const isResultsRow =
-      columns.length > 1 && asSeed(columns[0]) !== null && columns.slice(1).every((column) => SCORE_RE.test(column));
+      columns.length > 1 &&
+      asSeed(columns[0]) !== null &&
+      (underHeader || columns.slice(1).every((column) => SCORE_RE.test(column)));
     if (isResultsRow) take(columns[0]);
     else line.split(/[\s,;|"']+/).forEach(take);
   }

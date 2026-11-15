@@ -19,6 +19,11 @@ assert.deepEqual(
 assert.deepEqual(seedsIn("ALEEB\t41\t0\nPIROCKS;7;1"), ["ALEEB", "PIROCKS"], "tabs and semicolons split a results row too");
 assert.deepEqual(seedsIn("ALEEB 12345678"), ["ALEEB", "12345678"], "a seed made of digits, beside another, is a seed");
 assert.deepEqual(seedsIn("ALEEB,12345678"), ["ALEEB", "12345678"], "eight digits is a seed, not a score");
+assert.deepEqual(
+  seedsIn("seed,score,count\nALEEB,12345678,1\nPIROCKS,99999999,0"),
+  ["ALEEB", "PIROCKS"],
+  "under a results header, a long score is still a score",
+);
 assert.deepEqual(seedsIn("SEED"), ["SEED"], "the word SEED alone is a seed");
 assert.deepEqual(seedsIn("SEED ALEEB"), ["SEED", "ALEEB"], "and so is SEED beside another");
 assert.deepEqual(seedsIn("ALEEB\nALEEB\nPIROCKS"), ["ALEEB", "PIROCKS"], "repeats count once");
