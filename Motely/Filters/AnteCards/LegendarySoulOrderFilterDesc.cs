@@ -23,13 +23,13 @@ public sealed partial class LegendarySoulOrderClause: IMotelyClause, IWithScoped
     public SoulOrderEntry[]? SoulOrder
     {
         get => Entries;
-        set => Entries = RequireSoulOrder(value);
+        set => Entries = value!;
     }
 
     public SoulOrderEntry[]? SoulOrders
     {
         get => Entries;
-        set => Entries = RequireSoulOrder(value);
+        set => Entries = value!;
     }
 
     // The plain-loader rewrite dropped JamlValidator, whose CheckSoulOrder rejected a soulOrder

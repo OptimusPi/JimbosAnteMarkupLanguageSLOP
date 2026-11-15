@@ -457,8 +457,7 @@ public sealed class JamlSchemaTests
             void Refused(JsonObject written)
             {
                 var filter = Filter(written);
-                if (Loads(filter, out _))
-                    return; // not every way in is checked as it binds: entries: is not, soulOrder: is
+                Assert.False(Loads(filter, out _), $"the loader accepts {Text(filter)}, which breaks: {rule.Message}");
                 Assert.False(Check.IsValid(Text(filter)), $"the loader refuses {Text(filter)} and the schema allows it");
                 shown++;
             }
