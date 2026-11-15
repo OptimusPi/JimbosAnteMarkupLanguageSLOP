@@ -1,6 +1,11 @@
-# Cutting a release is `git tag v29.0.0 && git push --tags`. ci.yml gates it (the xunit suite),
-# then the GitHub Release is created with docs/RELEASE-<version>.md as its body when that file
-# exists, generated notes otherwise.
+# A release is the GitHub Release for a v* tag. `git tag v29.0.0 && git push --tags` starts this
+# workflow for the pushed tag. A manual run takes the name of a tag that already exists; it does
+# not create tags, and the `tag` job fails when the name is not a tag.
+# ci.yml gates it on the tag's commit (the xunit suite, AOT, wasm, web), then the GitHub Release
+# is created for the tag with docs/RELEASE-<version>.md from that commit as its body when that
+# file exists, generated notes otherwise.
+# On a manual run the workflow files are the ones on the ref the run was started from; the code
+# that is tested and the notes come from the tag's commit.
 name: release
 
 on:
@@ -9,24 +14,50 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to release (e.g. v29.0.0)"
+        description: "Existing tag to release (e.g. v29.0.0)"
         required: true
 
 permissions:
   contents: write
 
 jobs:
+  # `commit` is the commit inputs.tag points at on a manual run. On a tag push it is empty and
+  # actions/checkout uses the pushed tag's commit.
+  tag:
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.resolve.outputs.commit }}
+    steps:
+      - name: Resolve the tag
+        id: resolve
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          if ! commit=$(gh api "repos/$GITHUB_REPOSITORY/commits/tags/$TAG" --jq .sha); then
+            echo "::error::'$TAG' is not a tag in $GITHUB_REPOSITORY. Push the tag first; this workflow does not create it."
+            exit 1
+          fi
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+
   ci:
+    needs: tag
     uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.tag.outputs.commit }}
     # ci.yml restores from rewaffle's feeds with REWAFFLE_TOKEN; a called workflow sees no secrets
     # unless they are passed down.
     secrets: inherit
 
   release:
-    needs: ci
+    needs: [tag, ci]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.tag.outputs.commit }}
       - name: Pick the notes
         id: notes
         shell: bash
