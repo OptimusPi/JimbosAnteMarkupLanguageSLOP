@@ -246,4 +246,64 @@ public sealed class JamlAdversarialTests
         Assert.Empty(config.Seeds);
         Assert.Empty(Motely.Analysis.MotelyJamlyzer.Analyze(config));
     }
+
+    private const string OneClause = "must:\n  - joker: Blueprint\n    antes: [1]\n";
+
+    [Theory]
+    [InlineData("seeds: [~, ALEEB]")]
+    [InlineData("seeds:\n  - ALEEB\n  - ~")]
+    [InlineData("seeds:\n  - null")]
+    [InlineData("seeds:\n  - NULL")]
+    public void NullSeedEntry_IsRefusedWithAReason(string seeds)
+    {
+        Assert.False(JamlConfigLoader.TryLoad(OneClause + seeds + "\n", out _, out var error));
+        Assert.Contains("seeds: holds a null entry", error);
+    }
+
+    [Theory]
+    [InlineData("legendaryJoker: Blueprint", "Blueprint")]
+    [InlineData("legendaryJoker: [Perkeo, Showman]", "Showman")]
+    [InlineData("soulJoker: Joker", "Joker")]
+    public void LegendaryJoker_NamingAnotherKindOfJoker_IsRefused(string key, string name)
+    {
+        Assert.False(JamlConfigLoader.TryLoad($"must:\n  - {key}\n    antes: [1]\n", out _, out var error));
+        Assert.Contains($"'{name}' is not a legendary joker", error);
+    }
+
+    [Theory]
+    [InlineData("legendaryJoker: Perkeo")]
+    [InlineData("legendaryJoker: [Canio, Triboulet, Yorick, Chicot, Perkeo]")]
+    [InlineData("legendaryJoker: any")]
+    public void LegendaryJoker_NamingLegendaries_Loads(string key)
+    {
+        ProofSearch.LoadOrThrow($"must:\n  - {key}\n    antes: [1]\n");
+    }
+
+    [Fact]
+    public void QuotedNullSeed_IsASeed()
+    {
+        var config = ProofSearch.LoadOrThrow(OneClause + "seeds:\n  - \"NULL\"\n");
+        Assert.Equal(["NULL"], config.Seeds);
+    }
+
+    [Theory]
+    [InlineData("seeds: ~")]
+    [InlineData("seeds: null")]
+    [InlineData("seeds:")]
+    public void SeedsRewrite_OverANullSeedsScalar_WritesOnlyTheFinds(string seeds)
+    {
+        Assert.True(
+            MotelyTopSeedSink.TryRewriteAndValidate(OneClause + seeds + "\n", ["ALEEB"], out var updated, out var error),
+            error);
+        Assert.Equal(["ALEEB"], JamlConfig.FromJaml(updated).Seeds);
+    }
+
+    [Fact]
+    public void SeedsRewrite_QuotesTheSeedNull_SoTheFileStillLoads()
+    {
+        Assert.True(MotelyTopSeedSink.TryRewriteAndValidate(OneClause, ["NULL", "ALEEB"], out var updated, out var error), error);
+        Assert.Equal(["NULL", "ALEEB"], JamlConfig.FromJaml(updated).Seeds);
+        Assert.True(MotelyTopSeedSink.TryRewriteAndValidate(updated, ["PIROCKS"], out var again, out error), error);
+        Assert.Equal(["NULL", "ALEEB", "PIROCKS"], JamlConfig.FromJaml(again).Seeds);
+    }
 }

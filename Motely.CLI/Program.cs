@@ -347,20 +347,32 @@ async Task<int> SearchAsync(ParseResult parseResult, string filterPath, Cancella
     }
     telemetry.Finish(search, interrupted ? "interrupted" : search.StoppedOnMatchLimit ? "stopped" : "finished");
 
+    bool saveFailed = false;
     if (saved is not null)
     {
         var seeds = saved.GetSeeds();
-        if (MotelyTopSeedSink.TryRewriteAndValidate(File.ReadAllText(path), seeds, out var updated, out var saveError))
+        string? saveError;
+        try
         {
-            File.WriteAllText(path, updated);
-            Console.Error.WriteLine($"Saved {seeds.Count:N0} seed(s) into {path}");
+            if (MotelyTopSeedSink.TryRewriteAndValidate(File.ReadAllText(path), seeds, out var updated, out saveError))
+                File.WriteAllText(path, updated);
         }
+        // A read-only or locked filter must not cost the run its summary and resume line.
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            saveError = ex.Message;
+        }
+        if (saveError is null)
+            Console.Error.WriteLine($"Saved {seeds.Count:N0} seed(s) into {path}");
         else
+        {
             Console.Error.WriteLine($"Error: could not save seeds into {path}: {saveError}");
+            saveFailed = true;
+        }
     }
 
     WriteSummary(search, batchCharCount, interrupted);
-    return interrupted ? ExitInterrupted : 0;
+    return interrupted ? ExitInterrupted : saveFailed ? 1 : 0;
 }
 
 /// <summary>'p' pins the current progress line into the scrollback while the search runs.</summary>

@@ -1,4 +1,4 @@
-# MotelyJAML
+# Jimbo's Ante Markup Language (Motely)
 
 Balatro seed search. You write a filter in JAML (YAML-shaped), and a SIMD engine sweeps seeds against it.
 
@@ -79,7 +79,7 @@ dotnet run --project Motely.CLI -- --jaml <filter> [mode] [options]
 `<filter>` is a path, or a bare name that is looked up as `Filters/<name>.yaml` under the current directory.
 
 stdout carries only results (CSV: `seed,score,<tallies>`). Progress, warnings and the summary go to stderr, so `> out.csv` saves a clean file.
-Exit codes: `0` finished, `1` bad input, `130` interrupted (the resume point is printed).
+Exit codes: `0` finished, `1` bad input or a `--save` that could not write, `130` interrupted (the resume point is printed).
 
 **Choosing seeds** (pick one mode; sequential is the default):
 

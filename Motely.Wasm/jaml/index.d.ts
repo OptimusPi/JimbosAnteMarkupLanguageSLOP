@@ -9,6 +9,7 @@ export type MotelyJokerStickerName = "None" | "Eternal" | "Perishable" | "Rental
 export type MotelyJokerCommonName = "Joker" | "GreedyJoker" | "LustyJoker" | "WrathfulJoker" | "GluttonousJoker" | "JollyJoker" | "ZanyJoker" | "MadJoker" | "CrazyJoker" | "DrollJoker" | "SlyJoker" | "WilyJoker" | "CleverJoker" | "DeviousJoker" | "CraftyJoker" | "HalfJoker" | "CreditCard" | "Banner" | "MysticSummit" | "EightBall" | "Misprint" | "RaisedFist" | "ChaostheClown" | "ScaryFace" | "AbstractJoker" | "DelayedGratification" | "GrosMichel" | "EvenSteven" | "OddTodd" | "Scholar" | "BusinessCard" | "Supernova" | "RideTheBus" | "Egg" | "Runner" | "IceCream" | "Splash" | "BlueJoker" | "FacelessJoker" | "GreenJoker" | "Superposition" | "ToDoList" | "Cavendish" | "RedCard" | "SquareJoker" | "RiffRaff" | "Photograph" | "ReservedParking" | "MailInRebate" | "Hallucination" | "FortuneTeller" | "Juggler" | "Drunkard" | "GoldenJoker" | "Popcorn" | "WalkieTalkie" | "SmileyFace" | "GoldenTicket" | "Swashbuckler" | "HangingChad" | "ShootTheMoon";
 export type MotelyJokerUncommonName = "JokerStencil" | "FourFingers" | "Mime" | "CeremonialDagger" | "MarbleJoker" | "LoyaltyCard" | "Dusk" | "Fibonacci" | "SteelJoker" | "Hack" | "Pareidolia" | "SpaceJoker" | "Burglar" | "Blackboard" | "SixthSense" | "Constellation" | "Hiker" | "CardSharp" | "Madness" | "Seance" | "Vampire" | "Shortcut" | "Hologram" | "Cloud9" | "Rocket" | "MidasMask" | "Luchador" | "GiftCard" | "TurtleBean" | "Erosion" | "ToTheMoon" | "StoneJoker" | "LuckyCat" | "Bull" | "DietCola" | "TradingCard" | "FlashCard" | "SpareTrousers" | "Ramen" | "Seltzer" | "Castle" | "MrBones" | "Acrobat" | "SockAndBuskin" | "Troubadour" | "Certificate" | "SmearedJoker" | "Throwback" | "RoughGem" | "Bloodstone" | "Arrowhead" | "OnyxAgate" | "GlassJoker" | "Showman" | "FlowerPot" | "MerryAndy" | "OopsAll6s" | "TheIdol" | "SeeingDouble" | "Matador" | "Satellite" | "Cartomancer" | "Astronomer" | "Bootstraps";
 export type MotelyJokerRareName = "DNA" | "Vagabond" | "Baron" | "Obelisk" | "BaseballCard" | "AncientJoker" | "Campfire" | "Blueprint" | "WeeJoker" | "HitTheRoad" | "TheDuo" | "TheTrio" | "TheFamily" | "TheOrder" | "TheTribe" | "Stuntman" | "InvisibleJoker" | "Brainstorm" | "DriversLicense" | "BurntJoker";
+export type MotelyJokerLegendaryName = "Canio" | "Triboulet" | "Yorick" | "Chicot" | "Perkeo";
 export type MotelyPlanetCardName = "Mercury" | "Venus" | "Earth" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "PlanetX" | "Ceres" | "Eris";
 export type MotelySpectralCardName = "Familiar" | "Grim" | "Incantation" | "Talisman" | "Aura" | "Wraith" | "Sigil" | "Ouija" | "Ectoplasm" | "Immolate" | "Ankh" | "DejaVu" | "Hex" | "Trance" | "Medium" | "Cryptid" | "TheSoul" | "BlackHole";
 export type MotelyTarotCardName = "TheFool" | "TheMagician" | "TheHighPriestess" | "TheEmpress" | "TheEmperor" | "TheHierophant" | "TheLovers" | "TheChariot" | "Justice" | "TheHermit" | "TheWheelOfFortune" | "Strength" | "TheHangedMan" | "Death" | "Temperance" | "TheDevil" | "TheTower" | "TheStar" | "TheMoon" | "TheSun" | "Judgement" | "TheWorld";
@@ -111,7 +112,7 @@ export interface JamlStandardCardSourceConfig {
 
 export interface JamlSoulOrderEntry {
   antes?: number | number[];
-  legendary?: MotelyJokerName;
+  legendary: MotelyJokerLegendaryName;
 }
 
 export interface JamlJokerClause {
@@ -184,15 +185,15 @@ export interface JamlLegendaryJokerClause {
   edition?: MotelyItemEditionName | null;
   jokers?: MotelyJokerName | "Any" | MotelyJokerName[] | null;
   label?: string | number | boolean | null;
-  legendaryJoker?: MotelyJokerName | "Any" | MotelyJokerName[] | null;
-  legendaryJokers?: MotelyJokerName | "Any" | MotelyJokerName[] | null;
+  legendaryJoker?: MotelyJokerLegendaryName | "Any" | MotelyJokerLegendaryName[] | null;
+  legendaryJokers?: MotelyJokerLegendaryName | "Any" | MotelyJokerLegendaryName[] | null;
   max?: number | null;
   min?: number;
   rolls?: number | number[];
   score?: number;
   soulCardOnly?: boolean;
   soulEditionRolls?: number;
-  soulJoker?: MotelyJokerName | "Any" | MotelyJokerName[] | null;
+  soulJoker?: MotelyJokerLegendaryName | "Any" | MotelyJokerLegendaryName[] | null;
   sources?: JamlLegendaryJokerSourceConfig | null;
   with?: JamlWith;
 }
@@ -259,7 +260,6 @@ export interface JamlStandardCardClause {
 }
 
 export interface JamlStandardCardSlot {
-  card?: MotelyStandardCardName | null;
   edition?: MotelyItemEditionName | null;
   enhancement?: MotelyItemEnhancementName | null;
   rank?: MotelyStandardcardRankName | null;

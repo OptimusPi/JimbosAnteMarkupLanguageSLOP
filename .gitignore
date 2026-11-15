@@ -69,3 +69,7 @@ nuget.config.local
 # Agent/teamwork scratch and local data
 /.agents/
 /scola.csv
+
+# Source snapshots and CLI output redirected into the tree by accident.
+/*.zip
+/Filters/*.csv

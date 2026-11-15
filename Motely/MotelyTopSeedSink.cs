@@ -172,6 +172,8 @@ public static class MotelyTopSeedSink
                 seeds.Add(string.Empty);
                 continue;
             }
+            if (IsYamlNull(part))
+                continue;
             var seed = part.Trim('"', '\'');
             if (seed.Length > 0)
                 seeds.Add(seed);
@@ -189,6 +191,8 @@ public static class MotelyTopSeedSink
                 seeds.Add(string.Empty);
                 continue;
             }
+            if (IsYamlNull(item))
+                continue;
             var seed = item.Trim('"', '\'');
             if (seed.Length > 0)
                 seeds.Add(seed);
@@ -196,6 +200,9 @@ public static class MotelyTopSeedSink
 
         return seeds;
     }
+
+    /// <summary>YAML's null, as the loader reads an unquoted scalar: no seed, not a seed named "~".</summary>
+    private static bool IsYamlNull(string scalar) => scalar is "~" or "null" or "Null" or "NULL";
 
     private static string StripComment(string text)
     {
@@ -209,7 +216,8 @@ public static class MotelyTopSeedSink
             return ["seeds: []"];
 
         var lines = new List<string>(seeds.Count + 1) { "seeds:" };
-        lines.AddRange(seeds.Select(static seed => seed.Length == 0 ? "  - \"\"" : $"  - {seed}"));
+        // Unquoted, the seed NULL is YAML's null and the file would no longer load.
+        lines.AddRange(seeds.Select(static seed => seed is "" or "NULL" ? $"  - \"{seed}\"" : $"  - {seed}"));
         return lines;
     }
 

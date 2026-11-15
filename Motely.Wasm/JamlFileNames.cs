@@ -22,19 +22,30 @@ public static class JamlFileNames
         Extensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>"sub/filter" is "/sub/filter.yaml"; a name with a filter extension keeps it.</summary>
+    /// <exception cref="ArgumentException">The name is empty or names a folder.</exception>
     public static string ToUri(string name)
     {
         string path = name.Replace('\\', '/').TrimStart('/');
+        if (path.Length == 0 || path.EndsWith('/'))
+            throw new ArgumentException($"'{name}' is not a filter name.", nameof(name));
         return "/" + (IsFilter(path) ? path : path + ".yaml");
     }
 
-    /// <summary>"/sub/filter.yaml" is "sub/filter" (a <c>.yml</c>/<c>.jaml</c> name keeps it); null for a file that is not a filter.</summary>
+    /// <summary>
+    /// "/sub/filter.yaml" is "sub/filter" (a <c>.yml</c>/<c>.jaml</c> name keeps it); null for a file
+    /// that is not a filter. The extension stays on when dropping it would leave a name
+    /// <see cref="ToUri"/> reads as another file ("/x.yml.yaml", or "/x.YAML" where case counts)
+    /// or as no name at all ("/.yaml"), so every listed name leads back to its own file.
+    /// </summary>
     public static string? ToName(string uri)
     {
         string path = uri.TrimStart('/');
-        if (path.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-            return path[..^".yaml".Length];
-        return IsFilter(path) ? path : null;
+        if (!IsFilter(path))
+            return null;
+        if (!path.EndsWith(".yaml", StringComparison.Ordinal))
+            return path;
+        string stem = path[..^".yaml".Length];
+        return stem.Length == 0 || stem.EndsWith('/') || IsFilter(stem) ? path : stem;
     }
 
     /// <summary>

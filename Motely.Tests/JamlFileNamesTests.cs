@@ -19,7 +19,7 @@ public sealed class JamlFileNamesTests
 
     [Theory]
     [InlineData("/perkeo.yaml", "perkeo")]
-    [InlineData("/sub/perkeo.YAML", "sub/perkeo")]
+    [InlineData("/sub/perkeo.YAML", "sub/perkeo.YAML")]
     [InlineData("/sub/perkeo.yml", "sub/perkeo.yml")]
     [InlineData("/sub/perkeo.jaml", "sub/perkeo.jaml")]
     [InlineData("/sub/perkeo.JAML", "sub/perkeo.JAML")]
@@ -28,6 +28,29 @@ public sealed class JamlFileNamesTests
     public void A_file_is_named_without_its_yaml_extension(string uri, string? name)
     {
         Assert.Equal(name, JamlFileNames.ToName(uri));
+    }
+
+    [Theory]
+    [InlineData("/perkeo.yaml")]
+    [InlineData("/sub/perkeo.YAML")]
+    [InlineData("/x.yml")]
+    [InlineData("/x.yml.yaml")]
+    [InlineData("/x.yaml.yaml")]
+    [InlineData("/sub/x.jaml.yaml")]
+    [InlineData("/.yaml")]
+    [InlineData("/sub/.yaml")]
+    public void A_listed_name_leads_back_to_its_own_file(string uri)
+    {
+        Assert.Equal(uri, JamlFileNames.ToUri(JamlFileNames.ToName(uri)!));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("/")]
+    [InlineData("sub/")]
+    public void An_empty_name_is_refused(string name)
+    {
+        Assert.Throws<ArgumentException>(() => JamlFileNames.ToUri(name));
     }
 
     [Theory]

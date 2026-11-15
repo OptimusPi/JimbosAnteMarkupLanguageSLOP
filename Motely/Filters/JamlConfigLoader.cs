@@ -37,6 +37,10 @@ public static partial class JamlConfigLoader
                 ?? throw new InvalidOperationException("JAML: the document is empty.");
             config.Id ??= "";
             config.Seeds ??= [];
+            // An unquoted ~ or null in the list is YAML's null, not a seed: a replay would dereference it.
+            if (config.Seeds.Contains(null!))
+                throw new InvalidOperationException(
+                    "JAML: seeds: holds a null entry (~ or null). Write the seed (quote it if it is the word NULL), or \"\" for the 0-character seed.");
             CheckBounds(config.Must);
             CheckBounds(config.Should);
             CheckBounds(config.MustNot);
@@ -94,6 +98,11 @@ public static partial class JamlConfigLoader
                 throw OutOfRange(clause, "an or needs min: 1 or more.");
             if (clause is IAnteScopedClause { Antes: { } antes } && antes.Any(ante => ante > MotelyGlobals.MaxAnte))
                 throw OutOfRange(clause, $"antes run from 0 to {MotelyGlobals.MaxAnte}.");
+            // The Soul only ever gives a legendary, so any other joker here could never match.
+            if (clause is LegendaryJokerClause { Jokers: { } wanted }
+                && wanted.Where(static j => !IsLegendary(j)).Select(static j => (MotelyJoker?)j).FirstOrDefault() is { } other)
+                throw new InvalidOperationException(
+                    $"JAML: '{other}' is not a legendary joker (legendaryJoker takes Canio, Triboulet, Yorick, Chicot or Perkeo).");
             if (clause is LegendaryJokerClause { SoulEditionRolls: < 0 or > MotelyGlobals.MaxRollIndex })
                 throw OutOfRange(clause, $"soulEditionRolls runs from 0 to {MotelyGlobals.MaxRollIndex}.");
             if (clause is LegendarySoulOrderClause { MaxAnte: < 0 or > MotelyGlobals.MaxAnte })
@@ -102,6 +111,9 @@ public static partial class JamlConfigLoader
                 CheckBounds(logic.Clauses);
         }
     }
+
+    private static bool IsLegendary(MotelyJoker joker) =>
+        (MotelyJokerRarity)((int)joker & MotelyGlobals.JokerRarityMask) == MotelyJokerRarity.Legendary;
 
     private static InvalidOperationException OutOfRange(IMotelyClause clause, string rule)
     {

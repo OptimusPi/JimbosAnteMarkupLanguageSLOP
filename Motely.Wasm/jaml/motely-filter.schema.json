@@ -538,6 +538,24 @@
           }
         ]
       },
+      "MotelyJokerLegendary": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": [
+              "Canio",
+              "Triboulet",
+              "Yorick",
+              "Chicot",
+              "Perkeo"
+            ]
+          },
+          {
+            "type": "string",
+            "pattern": "^(?:[^A-Za-z0-9,]*(?:[tT][hH][eE][^A-Za-z0-9,]*)?(?:[cC][^A-Za-z0-9,]*[aA][^A-Za-z0-9,]*[nN][^A-Za-z0-9,]*[iI][^A-Za-z0-9,]*[oO]|[tT][^A-Za-z0-9,]*[rR][^A-Za-z0-9,]*[iI][^A-Za-z0-9,]*[bB][^A-Za-z0-9,]*[oO][^A-Za-z0-9,]*[uU][^A-Za-z0-9,]*[lL][^A-Za-z0-9,]*[eE][^A-Za-z0-9,]*[tT]|[yY][^A-Za-z0-9,]*[oO][^A-Za-z0-9,]*[rR][^A-Za-z0-9,]*[iI][^A-Za-z0-9,]*[cC][^A-Za-z0-9,]*[kK]|[cC][^A-Za-z0-9,]*[hH][^A-Za-z0-9,]*[iI][^A-Za-z0-9,]*[cC][^A-Za-z0-9,]*[oO][^A-Za-z0-9,]*[tT]|[pP][^A-Za-z0-9,]*[eE][^A-Za-z0-9,]*[rR][^A-Za-z0-9,]*[kK][^A-Za-z0-9,]*[eE][^A-Za-z0-9,]*[oO])[^A-Za-z0-9,]*)$"
+          }
+        ]
+      },
       "MotelyPlanetCard": {
         "anyOf": [
           {
@@ -1574,20 +1592,27 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
               }
             }
           ]
         },
         "legendary": {
-          "$ref": "#/definitions/enums/MotelyJoker"
+          "$ref": "#/definitions/enums/MotelyJokerLegendary"
         }
-      }
+      },
+      "required": [
+        "legendary"
+      ]
     },
     "jokerClause": {
       "type": "object",
@@ -1596,12 +1621,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -1609,12 +1638,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -1712,7 +1745,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -1720,7 +1754,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -1775,12 +1810,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -1788,12 +1827,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -1909,7 +1952,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -1917,7 +1961,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -1972,12 +2017,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -1985,12 +2034,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2050,7 +2103,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2058,7 +2112,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -2169,12 +2224,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2182,12 +2241,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2247,7 +2310,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2255,7 +2319,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rareJoker": {
           "anyOf": [
@@ -2366,12 +2431,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2379,12 +2448,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2448,7 +2521,7 @@
                 {
                   "anyOf": [
                     {
-                      "$ref": "#/definitions/enums/MotelyJoker"
+                      "$ref": "#/definitions/enums/MotelyJokerLegendary"
                     },
                     {
                       "type": "string",
@@ -2459,7 +2532,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/enums/MotelyJoker"
+                    "$ref": "#/definitions/enums/MotelyJokerLegendary"
                   }
                 }
               ]
@@ -2476,7 +2549,7 @@
                 {
                   "anyOf": [
                     {
-                      "$ref": "#/definitions/enums/MotelyJoker"
+                      "$ref": "#/definitions/enums/MotelyJokerLegendary"
                     },
                     {
                       "type": "string",
@@ -2487,7 +2560,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/enums/MotelyJoker"
+                    "$ref": "#/definitions/enums/MotelyJokerLegendary"
                   }
                 }
               ]
@@ -2500,7 +2573,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2508,17 +2582,22 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
               }
             }
           ]
@@ -2530,7 +2609,9 @@
           "type": "boolean"
         },
         "soulEditionRolls": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999
         },
         "soulJoker": {
           "anyOf": [
@@ -2539,7 +2620,7 @@
                 {
                   "anyOf": [
                     {
-                      "$ref": "#/definitions/enums/MotelyJoker"
+                      "$ref": "#/definitions/enums/MotelyJokerLegendary"
                     },
                     {
                       "type": "string",
@@ -2550,7 +2631,7 @@
                 {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/enums/MotelyJoker"
+                    "$ref": "#/definitions/enums/MotelyJokerLegendary"
                   }
                 }
               ]
@@ -2582,12 +2663,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2595,12 +2680,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2622,7 +2711,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2630,7 +2720,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "planetCard": {
           "anyOf": [
@@ -2741,12 +2832,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2754,12 +2849,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2781,7 +2880,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2789,7 +2889,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -2900,12 +3001,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2913,12 +3018,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -2940,7 +3049,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -2948,7 +3058,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -3059,12 +3170,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3072,12 +3187,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3129,7 +3248,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3137,7 +3257,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rank": {
           "anyOf": [
@@ -3233,16 +3354,6 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "card": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/enums/MotelyStandardCard"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
         "edition": {
           "anyOf": [
             {
@@ -3302,12 +3413,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3315,12 +3430,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3362,7 +3481,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3370,7 +3490,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rank": {
           "$ref": "#/definitions/enums/MotelyStandardcardRank"
@@ -3387,12 +3508,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3400,12 +3525,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3447,7 +3576,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3455,7 +3585,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -3472,12 +3603,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3485,12 +3620,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3512,7 +3651,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3520,18 +3660,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -3603,12 +3749,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3616,12 +3766,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3643,7 +3797,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3651,18 +3806,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -3734,12 +3895,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3747,12 +3912,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3774,7 +3943,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3782,18 +3952,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -3893,12 +4069,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3906,12 +4086,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -3961,7 +4145,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -3969,18 +4154,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4052,26 +4243,36 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 39
+              },
+              "minItems": 1
             }
           ]
         },
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 39
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4148,7 +4349,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4156,7 +4358,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -4170,12 +4373,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4183,12 +4390,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4266,7 +4477,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4274,7 +4486,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "packs": {
           "anyOf": [
@@ -4307,13 +4520,18 @@
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4329,12 +4547,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4342,12 +4564,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4369,7 +4595,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4377,7 +4604,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "pokerHand": {
           "anyOf": [
@@ -4438,12 +4666,16 @@
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
               }
             }
           ]
@@ -4460,12 +4692,16 @@
         "ante": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4473,12 +4709,16 @@
         "antes": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 39
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 39
               }
             }
           ]
@@ -4510,7 +4750,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4518,7 +4759,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rank": {
           "anyOf": [
@@ -4596,7 +4838,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4604,18 +4847,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4668,7 +4917,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4676,18 +4926,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4720,7 +4976,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4728,7 +4985,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "misprintMult": {
           "anyOf": [
@@ -4756,13 +5014,18 @@
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4792,7 +5055,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4800,18 +5064,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4864,7 +5134,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4872,18 +5143,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -4956,7 +5233,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -4964,18 +5242,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5028,7 +5312,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5036,18 +5321,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5100,7 +5391,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5108,18 +5400,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5152,7 +5450,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5160,18 +5459,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5244,7 +5549,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5252,18 +5558,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5293,7 +5605,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5301,7 +5614,8 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "parkingPayout": {
           "anyOf": [
@@ -5326,13 +5640,18 @@
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5382,7 +5701,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5390,18 +5710,24 @@
           ]
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "rolls": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999
             },
             {
               "type": "array",
               "items": {
-                "type": "integer"
-              }
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 999
+              },
+              "minItems": 1
             }
           ]
         },
@@ -5591,7 +5917,8 @@
         "max": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "type": "null"
@@ -5599,10 +5926,13 @@
           ]
         },
         "maxAnte": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 39
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0
         },
         "score": {
           "type": "integer"
@@ -5611,7 +5941,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/soulOrderEntry"
-          }
+          },
+          "minItems": 1
         },
         "soulOrders": {
           "type": "array",

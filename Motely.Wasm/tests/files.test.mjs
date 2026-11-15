@@ -88,8 +88,72 @@ test("a file call that fails says why on Errors.last()", async () => {
   assert.match(Errors.last() ?? "", /missing/);
 });
 
+test("renaming onto a name that is taken is refused, and both files stay as they were", async () => {
+  changes.length = 0;
+  Errors.last();
+  await assert.rejects(JamlFiles.rename("perkeo", "sub/cola.yml"));
+  assert.match(Errors.last() ?? "", /already in the folder/);
+  assert.deepEqual([...JamlFiles.list()], ["perkeo", "sub/cola.yml"]);
+  assert.equal(await JamlFiles.load("perkeo"), "name: perkeo\nseeds: [ALEEB]\n");
+  assert.equal(await JamlFiles.load("sub/cola.yml"), "name: cola\n");
+  assert.deepEqual(changes, []);
+});
+
+test("an empty name is refused before it reaches the folder", async () => {
+  Errors.last();
+  await assert.rejects(JamlFiles.save("", "name: nothing\n"));
+  assert.match(Errors.last() ?? "", /not a filter name/);
+});
+
+test("a subscriber that throws does not stop later changes from arriving", async () => {
+  const thrower = () => {
+    throw new Error("subscriber bug");
+  };
+  JamlFiles.onChange.subscribe(thrower);
+  await JamlFiles.save("first", "name: first\n");
+  JamlFiles.onChange.unsubscribe(thrower);
+  changes.length = 0;
+  await JamlFiles.save("second", "name: second\n");
+  assert.deepEqual(changes.map((c) => [c.kind, c.name]), [["added", "second"]]);
+  await JamlFiles.remove("first");
+  await JamlFiles.remove("second");
+  Errors.last();
+});
+
+test("a folder that cannot be mounted rejects and leaves the current one mounted", async () => {
+  changes.length = 0;
+  const denied = new DirMock("locked", [new FileMock("secret.yaml", "name: secret\n")]);
+  denied.queryPermission = async () => "prompt";
+  denied.requestPermission = async () => "denied";
+  picked = () => denied;
+  Errors.last();
+  await assert.rejects(JamlFiles.pickFolder());
+  assert.match(Errors.last() ?? "", /denied access/);
+  picked = () => folder;
+  assert.equal(JamlFiles.isMounted(), true);
+  assert.deepEqual([...JamlFiles.list()], ["perkeo", "sub/cola.yml"]);
+  assert.equal(await JamlFiles.load("perkeo"), "name: perkeo\nseeds: [ALEEB]\n");
+  assert.deepEqual(changes, []);
+});
+
+test("picking another folder swaps the list: the old names leave, the new ones arrive", async () => {
+  changes.length = 0;
+  const other = new DirMock("other", [new FileMock("cola.yaml", "name: other cola\n")]);
+  picked = () => other;
+  assert.equal(await JamlFiles.pickFolder(), true);
+  assert.deepEqual([...JamlFiles.list()], ["cola"]);
+  assert.equal(await JamlFiles.load("cola"), "name: other cola\n");
+  assert.deepEqual(
+    changes.map((c) => [c.kind, c.name]),
+    [["removed", "perkeo"], ["removed", "sub/cola.yml"], ["added", "cola"]],
+  );
+  picked = () => folder;
+});
+
 test("unmounting clears the list, and file calls then say no folder is mounted", async () => {
+  changes.length = 0;
   await JamlFiles.unmount();
+  assert.deepEqual(changes, [{ kind: "removed", name: "cola" }]);
   assert.equal(JamlFiles.isMounted(), false);
   assert.deepEqual([...JamlFiles.list()], []);
   Errors.last();
