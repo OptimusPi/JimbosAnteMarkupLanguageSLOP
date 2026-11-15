@@ -29,7 +29,10 @@ MotelyJamlyzer.analyze(config);                     // one result per seed in th
 
 A filter is plain JSON, typed by `motely-wasm/jaml`: `JamlFilter`, `JamlClause`, every clause and
 source block, and every enum as its canonical names (`MotelyJokerName`, `MotelyDeckName`, …).
-The JSON Schema ships beside them as `motely-wasm/jaml/schema.json`.
+The JSON Schema ships beside them as `motely-wasm/jaml/schema.json`, and
+`motely-wasm/jaml/vocab.json` is the same grammar without the value rules, for an editor: the root
+keys, each clause key and its type, each type's members and what each one takes, and every enum's
+names.
 
 ```ts
 import type { JamlFilter } from "motely-wasm/jaml";
@@ -136,8 +139,32 @@ artifact. To develop the web app on macOS, drop the published npm package's `bin
 into `Motely.Wasm/bin/` (matching version; the `jaml/` types in the repo are identical to the
 published ones).
 
-`jaml/` (the TypeScript declarations and the schema) is kept by hand: the generator is no longer
-in the tree and no test checks it against the loader.
+`jaml/` (the TypeScript declarations, the schema and the vocabulary) is generated from the loader
+by `Motely.Tests` (`JamlGrammar.cs`); nothing in it is typed by hand. Keys and members come from
+YamlDotNet's static type inspector, the table the deserializer binds from. Names come from the
+enums, and their loose spellings from the loader's own name reader. The value rules are rows in
+`Motely.Tests/JamlSchemaRules.cs` that restate the loader's checks; the loader does not read them.
+`dotnet test Motely.Tests` is what holds all of it to the loader: it fails when a committed file
+is not what the generator writes, when a rule row and the loader disagree, and when the schema and
+the loader give different verdicts on any member under a spread of values or on a test filter.
+After a change to a clause class or a loader check, write the files again and commit them:
+
+```
+MOTELY_WRITE_JAML=1 dotnet test Motely.Tests --filter JamlGrammarTests      # bash
+$env:MOTELY_WRITE_JAML=1; dotnet test Motely.Tests --filter JamlGrammarTests # PowerShell
+```
+
+Where the schema and the loader part ways, all four of them:
+
+- Both `min` and `max` written: the loader refuses a `max` below `min`. A schema cannot compare
+  two keys (it does refuse a `max` below 1 when `min` is left out).
+- One list written by two keys (`ante` and `antes`, `and` and `clauses`): the loader keeps the
+  one written last. A schema does not see order.
+- A number or boolean written as text (`"010"`, `"+5"`, `"yes"`): the loader takes it, since
+  every YAML scalar is text. The schema describes the JSON form and asks for a number or a
+  boolean, as `index.d.ts` does.
+- A letter outside A-Z inside a name (`Blueprinté`): the name pattern lets it through as
+  punctuation, the loader counts it as a letter and refuses.
 
 Install [Binaryen](https://github.com/WebAssembly/binaryen/releases) **version 130** (131 at
 most) and put `wasm-opt` on PATH first. Bootsharp runs it on every Release publish; when it's

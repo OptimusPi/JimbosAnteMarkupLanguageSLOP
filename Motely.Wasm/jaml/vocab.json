@@ -1,0 +1,2035 @@
+{
+  "root": {
+    "author": {
+      "form": "Text"
+    },
+    "cutoff": {
+      "form": "Int"
+    },
+    "dateCreated": {
+      "form": "Text"
+    },
+    "deck": {
+      "form": "Name",
+      "enum": "MotelyDeck"
+    },
+    "description": {
+      "form": "Text"
+    },
+    "id": {
+      "form": "Text"
+    },
+    "must": {
+      "form": "Clauses"
+    },
+    "mustNot": {
+      "form": "Clauses"
+    },
+    "name": {
+      "form": "Text"
+    },
+    "seeds": {
+      "form": "Texts"
+    },
+    "should": {
+      "form": "Clauses"
+    },
+    "stake": {
+      "form": "Name",
+      "enum": "MotelyStake"
+    }
+  },
+  "clauses": {
+    "joker": "jokerClause",
+    "jokers": "jokerClause",
+    "commonJoker": "commonJokerClause",
+    "commonJokers": "commonJokerClause",
+    "uncommonJoker": "uncommonJokerClause",
+    "uncommonJokers": "uncommonJokerClause",
+    "rareJoker": "rareJokerClause",
+    "rareJokers": "rareJokerClause",
+    "legendaryJoker": "legendaryJokerClause",
+    "legendaryJokers": "legendaryJokerClause",
+    "soulJoker": "legendaryJokerClause",
+    "planetCard": "planetCardClause",
+    "planetCards": "planetCardClause",
+    "spectralCard": "spectralCardClause",
+    "spectralCards": "spectralCardClause",
+    "tarotCard": "tarotCardClause",
+    "tarotCards": "tarotCardClause",
+    "standardCard": "standardCardClause",
+    "standardCards": "standardCardClause",
+    "erraticRank": "erraticRankClause",
+    "erraticRanks": "erraticRankClause",
+    "erraticSuit": "erraticSuitClause",
+    "erraticSuits": "erraticSuitClause",
+    "voucher": "voucherClause",
+    "vouchers": "voucherClause",
+    "tag": "tagClause",
+    "tags": "tagClause",
+    "smallBlindTag": "smallBlindTagClause",
+    "bigBlindTag": "bigBlindTagClause",
+    "boss": "bossClause",
+    "bosses": "bossClause",
+    "boosterPack": "boosterPackClause",
+    "boosterPacks": "boosterPackClause",
+    "pokerHand": "pokerHandClause",
+    "pokerHands": "pokerHandClause",
+    "startingDraw": "startingDrawClause",
+    "luckyMoney": "luckyMoneyClause",
+    "luckyMult": "luckyMultClause",
+    "misprintMult": "misprintMultClause",
+    "wheelOfFortune": "wheelOfFortuneClause",
+    "wheelStaysFlipped": "wheelStaysFlippedClause",
+    "glassDestroy": "glassDestroyClause",
+    "cavendishExtinct": "cavendishExtinctClause",
+    "grosMichelExtinct": "grosMichelExtinctClause",
+    "spaceLevelup": "spaceLevelupClause",
+    "businessPayout": "businessPayoutClause",
+    "parkingPayout": "parkingPayoutClause",
+    "bloodstoneTrigger": "bloodstoneTriggerClause",
+    "and": "andClause",
+    "or": "orClause",
+    "soulOrder": "legendarySoulOrderClause",
+    "soulOrders": "legendarySoulOrderClause"
+  },
+  "types": {
+    "legendaryJokerSourceConfig": {
+      "arcanaPacks": {
+        "form": "Ints"
+      },
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "spectralPacks": {
+        "form": "Ints"
+      },
+      "tagPacks": {
+        "form": "Ints"
+      }
+    },
+    "jokerSourceConfig": {
+      "allShopJokers": {
+        "form": "Ints"
+      },
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "commonShopJokers": {
+        "form": "Ints"
+      },
+      "judgement": {
+        "form": "Ints"
+      },
+      "rareShopJokers": {
+        "form": "Ints"
+      },
+      "rareTag": {
+        "form": "Ints"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "riffRaff": {
+        "form": "Ints"
+      },
+      "shopItems": {
+        "form": "Ints"
+      },
+      "uncommonShopJokers": {
+        "form": "Ints"
+      },
+      "uncommonTag": {
+        "form": "Ints"
+      },
+      "wraith": {
+        "form": "Ints"
+      }
+    },
+    "with": {
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJoker"
+      },
+      "luck": {
+        "form": "Name",
+        "enum": "MotelyLuck"
+      },
+      "vouchers": {
+        "form": "Names",
+        "enum": "MotelyVoucher"
+      }
+    },
+    "planetSourceConfig": {
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "shopItems": {
+        "form": "Ints"
+      }
+    },
+    "spectralCardSourceConfig": {
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "etherealTag": {
+        "form": "Bool"
+      },
+      "omenGlobe": {
+        "form": "Bool"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "seance": {
+        "form": "Ints"
+      },
+      "shopItems": {
+        "form": "Ints"
+      },
+      "sixthSense": {
+        "form": "Ints"
+      }
+    },
+    "tarotCardSourceConfig": {
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "charmTag": {
+        "form": "Bool"
+      },
+      "emperor": {
+        "form": "Ints"
+      },
+      "purpleSealOrEightBall": {
+        "form": "Ints"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "shopItems": {
+        "form": "Ints"
+      },
+      "tagPacks": {
+        "form": "Ints"
+      }
+    },
+    "standardCardSourceConfig": {
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "requireMega": {
+        "form": "Bool"
+      },
+      "requireMegaPack": {
+        "form": "Bool"
+      },
+      "shopItems": {
+        "form": "Ints"
+      }
+    },
+    "standardCardSlot": {
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "enhancement": {
+        "form": "Name",
+        "enum": "MotelyItemEnhancement"
+      },
+      "rank": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "seal": {
+        "form": "Name",
+        "enum": "MotelyItemSeal"
+      },
+      "suit": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      }
+    },
+    "soulOrderEntry": {
+      "antes": {
+        "form": "Ints"
+      },
+      "legendary": {
+        "form": "Name",
+        "enum": "MotelyJokerLegendary"
+      }
+    },
+    "jokerClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "joker": {
+        "form": "Names",
+        "enum": "MotelyJoker"
+      },
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJoker"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "legendarySources": {
+        "form": "Object",
+        "type": "legendaryJokerSourceConfig"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "jokerSourceConfig"
+      },
+      "stickers": {
+        "form": "Names",
+        "enum": "MotelyJokerSticker"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "commonJokerClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "commonJoker": {
+        "form": "Names",
+        "enum": "MotelyJokerCommon"
+      },
+      "commonJokers": {
+        "form": "Names",
+        "enum": "MotelyJokerCommon"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJokerCommon"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "jokerSourceConfig"
+      },
+      "stickers": {
+        "form": "Names",
+        "enum": "MotelyJokerSticker"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "uncommonJokerClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJokerUncommon"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "jokerSourceConfig"
+      },
+      "stickers": {
+        "form": "Names",
+        "enum": "MotelyJokerSticker"
+      },
+      "uncommonJoker": {
+        "form": "Names",
+        "enum": "MotelyJokerUncommon"
+      },
+      "uncommonJokers": {
+        "form": "Names",
+        "enum": "MotelyJokerUncommon"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "rareJokerClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJokerRare"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rareJoker": {
+        "form": "Names",
+        "enum": "MotelyJokerRare"
+      },
+      "rareJokers": {
+        "form": "Names",
+        "enum": "MotelyJokerRare"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "jokerSourceConfig"
+      },
+      "stickers": {
+        "form": "Names",
+        "enum": "MotelyJokerSticker"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "legendaryJokerClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "jokers": {
+        "form": "Names",
+        "enum": "MotelyJokerLegendary"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "legendaryJoker": {
+        "form": "Names",
+        "enum": "MotelyJokerLegendary"
+      },
+      "legendaryJokers": {
+        "form": "Names",
+        "enum": "MotelyJokerLegendary"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "soulCardOnly": {
+        "form": "Bool"
+      },
+      "soulEditionRolls": {
+        "form": "Int"
+      },
+      "soulJoker": {
+        "form": "Names",
+        "enum": "MotelyJokerLegendary"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "legendaryJokerSourceConfig"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "planetCardClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "planetCard": {
+        "form": "Names",
+        "enum": "MotelyPlanetCard"
+      },
+      "planetCards": {
+        "form": "Names",
+        "enum": "MotelyPlanetCard"
+      },
+      "planets": {
+        "form": "Names",
+        "enum": "MotelyPlanetCard"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "planetSourceConfig"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "spectralCardClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "spectralCardSourceConfig"
+      },
+      "spectralCard": {
+        "form": "Names",
+        "enum": "MotelySpectralCard"
+      },
+      "spectralCards": {
+        "form": "Names",
+        "enum": "MotelySpectralCard"
+      },
+      "spectrals": {
+        "form": "Names",
+        "enum": "MotelySpectralCard"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "tarotCardClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "tarotCardSourceConfig"
+      },
+      "tarotCard": {
+        "form": "Names",
+        "enum": "MotelyTarotCard"
+      },
+      "tarotCards": {
+        "form": "Names",
+        "enum": "MotelyTarotCard"
+      },
+      "tarots": {
+        "form": "Names",
+        "enum": "MotelyTarotCard"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "standardCardClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "card": {
+        "form": "Name",
+        "enum": "MotelyStandardCard"
+      },
+      "edition": {
+        "form": "Name",
+        "enum": "MotelyItemEdition"
+      },
+      "enhancement": {
+        "form": "Name",
+        "enum": "MotelyItemEnhancement"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rank": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "seal": {
+        "form": "Name",
+        "enum": "MotelyItemSeal"
+      },
+      "sources": {
+        "form": "Object",
+        "type": "standardCardSourceConfig"
+      },
+      "standardCard": {
+        "form": "CardSlot",
+        "enum": "MotelyStandardCard",
+        "type": "standardCardSlot"
+      },
+      "standardCards": {
+        "form": "CardSlot",
+        "enum": "MotelyStandardCard",
+        "type": "standardCardSlot"
+      },
+      "suit": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "erraticRankClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "erraticRank": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "erraticRanks": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rank": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "erraticSuitClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "erraticSuit": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      },
+      "erraticSuits": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "suit": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      }
+    },
+    "voucherClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "voucher": {
+        "form": "Names",
+        "enum": "MotelyVoucher"
+      },
+      "vouchers": {
+        "form": "Names",
+        "enum": "MotelyVoucher"
+      }
+    },
+    "tagClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "tag": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      },
+      "tags": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      }
+    },
+    "smallBlindTagClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "smallBlindTag": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      },
+      "tag": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      },
+      "tags": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      }
+    },
+    "bigBlindTagClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "bigBlindTag": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "tag": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      },
+      "tags": {
+        "form": "Names",
+        "enum": "MotelyTag"
+      }
+    },
+    "bossClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "boss": {
+        "form": "Names",
+        "enum": "MotelyBossBlind"
+      },
+      "bosses": {
+        "form": "Names",
+        "enum": "MotelyBossBlind"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "boosterPackClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "boosterPack": {
+        "form": "Names",
+        "enum": "MotelyBoosterPack"
+      },
+      "boosterPacks": {
+        "form": "Names",
+        "enum": "MotelyBoosterPack"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "packs": {
+        "form": "Names",
+        "enum": "MotelyBoosterPack"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "pokerHandClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "pokerHand": {
+        "form": "Names",
+        "enum": "MotelyPokerHand"
+      },
+      "pokerHands": {
+        "form": "Names",
+        "enum": "MotelyPokerHand"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "startingDrawClause": {
+      "ante": {
+        "form": "Ints"
+      },
+      "antes": {
+        "form": "Ints"
+      },
+      "card": {
+        "form": "Name",
+        "enum": "MotelyStandardCard"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rank": {
+        "form": "Name",
+        "enum": "MotelyStandardcardRank"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "startingDraw": {
+        "form": "Name",
+        "enum": "MotelyStandardCard"
+      },
+      "suit": {
+        "form": "Name",
+        "enum": "MotelyStandardcardSuit"
+      }
+    },
+    "luckyMoneyClause": {
+      "label": {
+        "form": "Text"
+      },
+      "luckyMoney": {
+        "form": "EventRolls"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "luckyMultClause": {
+      "label": {
+        "form": "Text"
+      },
+      "luckyMult": {
+        "form": "EventRolls"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "misprintMultClause": {
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "misprintMult": {
+        "form": "EventRolls"
+      },
+      "mult": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "wheelOfFortuneClause": {
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "wheelOfFortune": {
+        "form": "EventRolls"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "wheelStaysFlippedClause": {
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "wheelStaysFlipped": {
+        "form": "EventRolls"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "glassDestroyClause": {
+      "glassDestroy": {
+        "form": "EventRolls"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "cavendishExtinctClause": {
+      "cavendishExtinct": {
+        "form": "EventRolls"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "grosMichelExtinctClause": {
+      "grosMichelExtinct": {
+        "form": "EventRolls"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "spaceLevelupClause": {
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "spaceLevelup": {
+        "form": "EventRolls"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    },
+    "businessPayoutClause": {
+      "businessPayout": {
+        "form": "EventRolls"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "parkingPayoutClause": {
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "parkingPayout": {
+        "form": "EventRolls"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "bloodstoneTriggerClause": {
+      "bloodstoneTrigger": {
+        "form": "EventRolls"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "rolls": {
+        "form": "Ints"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "andClause": {
+      "and": {
+        "form": "Clauses"
+      },
+      "clauses": {
+        "form": "Clauses"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "NoValue"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "mode": {
+        "form": "Name",
+        "enum": "LogicScoreMode"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "orClause": {
+      "clauses": {
+        "form": "Clauses"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "NoValue"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "mode": {
+        "form": "Name",
+        "enum": "LogicScoreMode"
+      },
+      "or": {
+        "form": "Clauses"
+      },
+      "score": {
+        "form": "Int"
+      }
+    },
+    "legendarySoulOrderClause": {
+      "boosterPacks": {
+        "form": "Ints"
+      },
+      "entries": {
+        "form": "Objects",
+        "type": "soulOrderEntry"
+      },
+      "label": {
+        "form": "Text"
+      },
+      "max": {
+        "form": "Int"
+      },
+      "maxAnte": {
+        "form": "Int"
+      },
+      "min": {
+        "form": "Int"
+      },
+      "score": {
+        "form": "Int"
+      },
+      "soulOrder": {
+        "form": "Objects",
+        "type": "soulOrderEntry"
+      },
+      "soulOrders": {
+        "form": "Objects",
+        "type": "soulOrderEntry"
+      },
+      "with": {
+        "form": "Object",
+        "type": "with"
+      }
+    }
+  },
+  "enums": {
+    "MotelyDeck": [
+      "Red",
+      "Blue",
+      "Yellow",
+      "Green",
+      "Black",
+      "Magic",
+      "Nebula",
+      "Ghost",
+      "Abandoned",
+      "Checkered",
+      "Zodiac",
+      "Painted",
+      "Anaglyph",
+      "Plasma",
+      "Erratic"
+    ],
+    "MotelyStake": [
+      "White",
+      "Red",
+      "Green",
+      "Black",
+      "Blue",
+      "Purple",
+      "Orange",
+      "Gold"
+    ],
+    "MotelyItemEdition": [
+      "None",
+      "Foil",
+      "Holographic",
+      "Polychrome",
+      "Negative"
+    ],
+    "MotelyJoker": [
+      "Joker",
+      "GreedyJoker",
+      "LustyJoker",
+      "WrathfulJoker",
+      "GluttonousJoker",
+      "JollyJoker",
+      "ZanyJoker",
+      "MadJoker",
+      "CrazyJoker",
+      "DrollJoker",
+      "SlyJoker",
+      "WilyJoker",
+      "CleverJoker",
+      "DeviousJoker",
+      "CraftyJoker",
+      "HalfJoker",
+      "CreditCard",
+      "Banner",
+      "MysticSummit",
+      "EightBall",
+      "Misprint",
+      "RaisedFist",
+      "ChaostheClown",
+      "ScaryFace",
+      "AbstractJoker",
+      "DelayedGratification",
+      "GrosMichel",
+      "EvenSteven",
+      "OddTodd",
+      "Scholar",
+      "BusinessCard",
+      "Supernova",
+      "RideTheBus",
+      "Egg",
+      "Runner",
+      "IceCream",
+      "Splash",
+      "BlueJoker",
+      "FacelessJoker",
+      "GreenJoker",
+      "Superposition",
+      "ToDoList",
+      "Cavendish",
+      "RedCard",
+      "SquareJoker",
+      "RiffRaff",
+      "Photograph",
+      "ReservedParking",
+      "MailInRebate",
+      "Hallucination",
+      "FortuneTeller",
+      "Juggler",
+      "Drunkard",
+      "GoldenJoker",
+      "Popcorn",
+      "WalkieTalkie",
+      "SmileyFace",
+      "GoldenTicket",
+      "Swashbuckler",
+      "HangingChad",
+      "ShootTheMoon",
+      "JokerStencil",
+      "FourFingers",
+      "Mime",
+      "CeremonialDagger",
+      "MarbleJoker",
+      "LoyaltyCard",
+      "Dusk",
+      "Fibonacci",
+      "SteelJoker",
+      "Hack",
+      "Pareidolia",
+      "SpaceJoker",
+      "Burglar",
+      "Blackboard",
+      "SixthSense",
+      "Constellation",
+      "Hiker",
+      "CardSharp",
+      "Madness",
+      "Seance",
+      "Vampire",
+      "Shortcut",
+      "Hologram",
+      "Cloud9",
+      "Rocket",
+      "MidasMask",
+      "Luchador",
+      "GiftCard",
+      "TurtleBean",
+      "Erosion",
+      "ToTheMoon",
+      "StoneJoker",
+      "LuckyCat",
+      "Bull",
+      "DietCola",
+      "TradingCard",
+      "FlashCard",
+      "SpareTrousers",
+      "Ramen",
+      "Seltzer",
+      "Castle",
+      "MrBones",
+      "Acrobat",
+      "SockAndBuskin",
+      "Troubadour",
+      "Certificate",
+      "SmearedJoker",
+      "Throwback",
+      "RoughGem",
+      "Bloodstone",
+      "Arrowhead",
+      "OnyxAgate",
+      "GlassJoker",
+      "Showman",
+      "FlowerPot",
+      "MerryAndy",
+      "OopsAll6s",
+      "TheIdol",
+      "SeeingDouble",
+      "Matador",
+      "Satellite",
+      "Cartomancer",
+      "Astronomer",
+      "Bootstraps",
+      "DNA",
+      "Vagabond",
+      "Baron",
+      "Obelisk",
+      "BaseballCard",
+      "AncientJoker",
+      "Campfire",
+      "Blueprint",
+      "WeeJoker",
+      "HitTheRoad",
+      "TheDuo",
+      "TheTrio",
+      "TheFamily",
+      "TheOrder",
+      "TheTribe",
+      "Stuntman",
+      "InvisibleJoker",
+      "Brainstorm",
+      "DriversLicense",
+      "BurntJoker",
+      "Canio",
+      "Triboulet",
+      "Yorick",
+      "Chicot",
+      "Perkeo"
+    ],
+    "MotelyJokerSticker": [
+      "None",
+      "Eternal",
+      "Perishable",
+      "Rental"
+    ],
+    "MotelyLuck": [
+      "X1",
+      "X2",
+      "X4",
+      "X5",
+      "X8",
+      "X16",
+      "X32",
+      "X64"
+    ],
+    "MotelyVoucher": [
+      "Overstock",
+      "OverstockPlus",
+      "ClearanceSale",
+      "Liquidation",
+      "Hone",
+      "GlowUp",
+      "RerollSurplus",
+      "RerollGlut",
+      "CrystalBall",
+      "OmenGlobe",
+      "Telescope",
+      "Observatory",
+      "Grabber",
+      "NachoTong",
+      "Wasteful",
+      "Recyclomancy",
+      "TarotMerchant",
+      "TarotTycoon",
+      "PlanetMerchant",
+      "PlanetTycoon",
+      "SeedMoney",
+      "MoneyTree",
+      "Blank",
+      "Antimatter",
+      "MagicTrick",
+      "Illusion",
+      "Hieroglyph",
+      "Petroglyph",
+      "DirectorsCut",
+      "Retcon",
+      "PaintBrush",
+      "Palette"
+    ],
+    "MotelyJokerCommon": [
+      "Joker",
+      "GreedyJoker",
+      "LustyJoker",
+      "WrathfulJoker",
+      "GluttonousJoker",
+      "JollyJoker",
+      "ZanyJoker",
+      "MadJoker",
+      "CrazyJoker",
+      "DrollJoker",
+      "SlyJoker",
+      "WilyJoker",
+      "CleverJoker",
+      "DeviousJoker",
+      "CraftyJoker",
+      "HalfJoker",
+      "CreditCard",
+      "Banner",
+      "MysticSummit",
+      "EightBall",
+      "Misprint",
+      "RaisedFist",
+      "ChaostheClown",
+      "ScaryFace",
+      "AbstractJoker",
+      "DelayedGratification",
+      "GrosMichel",
+      "EvenSteven",
+      "OddTodd",
+      "Scholar",
+      "BusinessCard",
+      "Supernova",
+      "RideTheBus",
+      "Egg",
+      "Runner",
+      "IceCream",
+      "Splash",
+      "BlueJoker",
+      "FacelessJoker",
+      "GreenJoker",
+      "Superposition",
+      "ToDoList",
+      "Cavendish",
+      "RedCard",
+      "SquareJoker",
+      "RiffRaff",
+      "Photograph",
+      "ReservedParking",
+      "MailInRebate",
+      "Hallucination",
+      "FortuneTeller",
+      "Juggler",
+      "Drunkard",
+      "GoldenJoker",
+      "Popcorn",
+      "WalkieTalkie",
+      "SmileyFace",
+      "GoldenTicket",
+      "Swashbuckler",
+      "HangingChad",
+      "ShootTheMoon"
+    ],
+    "MotelyJokerUncommon": [
+      "JokerStencil",
+      "FourFingers",
+      "Mime",
+      "CeremonialDagger",
+      "MarbleJoker",
+      "LoyaltyCard",
+      "Dusk",
+      "Fibonacci",
+      "SteelJoker",
+      "Hack",
+      "Pareidolia",
+      "SpaceJoker",
+      "Burglar",
+      "Blackboard",
+      "SixthSense",
+      "Constellation",
+      "Hiker",
+      "CardSharp",
+      "Madness",
+      "Seance",
+      "Vampire",
+      "Shortcut",
+      "Hologram",
+      "Cloud9",
+      "Rocket",
+      "MidasMask",
+      "Luchador",
+      "GiftCard",
+      "TurtleBean",
+      "Erosion",
+      "ToTheMoon",
+      "StoneJoker",
+      "LuckyCat",
+      "Bull",
+      "DietCola",
+      "TradingCard",
+      "FlashCard",
+      "SpareTrousers",
+      "Ramen",
+      "Seltzer",
+      "Castle",
+      "MrBones",
+      "Acrobat",
+      "SockAndBuskin",
+      "Troubadour",
+      "Certificate",
+      "SmearedJoker",
+      "Throwback",
+      "RoughGem",
+      "Bloodstone",
+      "Arrowhead",
+      "OnyxAgate",
+      "GlassJoker",
+      "Showman",
+      "FlowerPot",
+      "MerryAndy",
+      "OopsAll6s",
+      "TheIdol",
+      "SeeingDouble",
+      "Matador",
+      "Satellite",
+      "Cartomancer",
+      "Astronomer",
+      "Bootstraps"
+    ],
+    "MotelyJokerRare": [
+      "DNA",
+      "Vagabond",
+      "Baron",
+      "Obelisk",
+      "BaseballCard",
+      "AncientJoker",
+      "Campfire",
+      "Blueprint",
+      "WeeJoker",
+      "HitTheRoad",
+      "TheDuo",
+      "TheTrio",
+      "TheFamily",
+      "TheOrder",
+      "TheTribe",
+      "Stuntman",
+      "InvisibleJoker",
+      "Brainstorm",
+      "DriversLicense",
+      "BurntJoker"
+    ],
+    "MotelyJokerLegendary": [
+      "Canio",
+      "Triboulet",
+      "Yorick",
+      "Chicot",
+      "Perkeo"
+    ],
+    "MotelyPlanetCard": [
+      "Mercury",
+      "Venus",
+      "Earth",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto",
+      "PlanetX",
+      "Ceres",
+      "Eris"
+    ],
+    "MotelySpectralCard": [
+      "Familiar",
+      "Grim",
+      "Incantation",
+      "Talisman",
+      "Aura",
+      "Wraith",
+      "Sigil",
+      "Ouija",
+      "Ectoplasm",
+      "Immolate",
+      "Ankh",
+      "DejaVu",
+      "Hex",
+      "Trance",
+      "Medium",
+      "Cryptid",
+      "TheSoul",
+      "BlackHole"
+    ],
+    "MotelyTarotCard": [
+      "TheFool",
+      "TheMagician",
+      "TheHighPriestess",
+      "TheEmpress",
+      "TheEmperor",
+      "TheHierophant",
+      "TheLovers",
+      "TheChariot",
+      "Justice",
+      "TheHermit",
+      "TheWheelOfFortune",
+      "Strength",
+      "TheHangedMan",
+      "Death",
+      "Temperance",
+      "TheDevil",
+      "TheTower",
+      "TheStar",
+      "TheMoon",
+      "TheSun",
+      "Judgement",
+      "TheWorld"
+    ],
+    "MotelyStandardCard": [
+      "TwoOfClubs",
+      "ThreeOfClubs",
+      "FourOfClubs",
+      "FiveOfClubs",
+      "SixOfClubs",
+      "SevenOfClubs",
+      "EightOfClubs",
+      "NineOfClubs",
+      "TenOfClubs",
+      "JackOfClubs",
+      "QueenOfClubs",
+      "KingOfClubs",
+      "AceOfClubs",
+      "TwoOfDiamonds",
+      "ThreeOfDiamonds",
+      "FourOfDiamonds",
+      "FiveOfDiamonds",
+      "SixOfDiamonds",
+      "SevenOfDiamonds",
+      "EightOfDiamonds",
+      "NineOfDiamonds",
+      "TenOfDiamonds",
+      "JackOfDiamonds",
+      "QueenOfDiamonds",
+      "KingOfDiamonds",
+      "AceOfDiamonds",
+      "TwoOfHearts",
+      "ThreeOfHearts",
+      "FourOfHearts",
+      "FiveOfHearts",
+      "SixOfHearts",
+      "SevenOfHearts",
+      "EightOfHearts",
+      "NineOfHearts",
+      "TenOfHearts",
+      "JackOfHearts",
+      "QueenOfHearts",
+      "KingOfHearts",
+      "AceOfHearts",
+      "TwoOfSpades",
+      "ThreeOfSpades",
+      "FourOfSpades",
+      "FiveOfSpades",
+      "SixOfSpades",
+      "SevenOfSpades",
+      "EightOfSpades",
+      "NineOfSpades",
+      "TenOfSpades",
+      "JackOfSpades",
+      "QueenOfSpades",
+      "KingOfSpades",
+      "AceOfSpades"
+    ],
+    "MotelyItemEnhancement": [
+      "None",
+      "Bonus",
+      "Mult",
+      "Wild",
+      "Glass",
+      "Steel",
+      "Stone",
+      "Gold",
+      "Lucky"
+    ],
+    "MotelyStandardcardRank": [
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+      "Jack",
+      "Queen",
+      "King",
+      "Ace"
+    ],
+    "MotelyItemSeal": [
+      "None",
+      "Gold",
+      "Red",
+      "Blue",
+      "Purple"
+    ],
+    "MotelyStandardcardSuit": [
+      "Clubs",
+      "Diamonds",
+      "Hearts",
+      "Spades"
+    ],
+    "MotelyTag": [
+      "UncommonTag",
+      "RareTag",
+      "NegativeTag",
+      "FoilTag",
+      "HolographicTag",
+      "PolychromeTag",
+      "InvestmentTag",
+      "VoucherTag",
+      "BossTag",
+      "StandardTag",
+      "CharmTag",
+      "MeteorTag",
+      "BuffoonTag",
+      "HandyTag",
+      "GarbageTag",
+      "EtherealTag",
+      "CouponTag",
+      "DoubleTag",
+      "JuggleTag",
+      "D6Tag",
+      "TopupTag",
+      "SpeedTag",
+      "OrbitalTag",
+      "EconomyTag"
+    ],
+    "MotelyBossBlind": [
+      "TheClub",
+      "TheGoad",
+      "TheHead",
+      "TheHook",
+      "TheManacle",
+      "ThePillar",
+      "ThePsychic",
+      "TheWindow",
+      "TheArm",
+      "TheFish",
+      "TheFlint",
+      "TheHouse",
+      "TheMark",
+      "TheMouth",
+      "TheNeedle",
+      "TheWall",
+      "TheWater",
+      "TheWheel",
+      "TheEye",
+      "TheTooth",
+      "ThePlant",
+      "TheSerpent",
+      "TheOx",
+      "AmberAcorn",
+      "CeruleanBell",
+      "CrimsonHeart",
+      "VerdantLeaf",
+      "VioletVessel"
+    ],
+    "MotelyBoosterPack": [
+      "Arcana",
+      "JumboArcana",
+      "MegaArcana",
+      "Celestial",
+      "JumboCelestial",
+      "MegaCelestial",
+      "Standard",
+      "JumboStandard",
+      "MegaStandard",
+      "Buffoon",
+      "JumboBuffoon",
+      "MegaBuffoon",
+      "Spectral",
+      "JumboSpectral",
+      "MegaSpectral"
+    ],
+    "MotelyPokerHand": [
+      "HighCard",
+      "Pair",
+      "TwoPair",
+      "ThreeOfAKind",
+      "Straight",
+      "Flush",
+      "FullHouse",
+      "FourOfAKind",
+      "StraightFlush"
+    ],
+    "LogicScoreMode": [
+      "Sum",
+      "Max"
+    ]
+  }
+}
