@@ -138,6 +138,70 @@ public sealed class MotelyScoreCutoffTests
         return search.MatchingSeeds;
     }
 
+    [Theory]
+    [InlineData("deck: Red\n")]
+    [InlineData("must:\n  - voucher: Telescope\n    antes: [1]\n    min: 0\n")]
+    public void FloorNoSeedCanReach_ScoresWithoutAllocating(string yaml)
+    {
+        var settings = Motely.Filters.MotelySearchBuilder.CreateSettings(
+            Motely.Filters.JamlConfig.FromJaml(yaml),
+            1
+        );
+        var measured = new AllocationMeasuringScoreDesc(settings.SeedScoreDesc!);
+
+        using var search = settings
+            .WithSeedScoreProvider(measured)
+            .WithSequentialSearch()
+            .WithBatchCharacterCount(3)
+            .WithStartBatchIndex(0)
+            .WithEndBatchIndex(2)
+            .WithThreadCount(1)
+            .WithQuietMode(true)
+            .WithAutoScoreCutoff(false)
+            .Start();
+        search.AwaitCompletion();
+
+        Assert.Equal(0, search.MatchingSeeds);
+        Assert.True(measured.MeasuredCalls > 1000, $"{measured.MeasuredCalls} calls measured");
+        Assert.Equal(0, measured.Bytes);
+    }
+
+    private sealed class AllocationMeasuringScoreDesc(IMotelySeedScoreDesc inner)
+        : IMotelySeedScoreDesc,
+            IMotelySeedScoreProvider
+    {
+        private IMotelySeedScoreProvider? _provider;
+        private bool _warm;
+
+        public long MeasuredCalls { get; private set; }
+        public long Bytes { get; private set; }
+
+        public IMotelySeedScoreProvider CreateScoreProvider(ref MotelyFilterCreationContext ctx)
+        {
+            _provider = inner.CreateScoreProvider(ref ctx);
+            return this;
+        }
+
+        public VectorMask Score(
+            ref MotelyVectorSearchContext searchContext,
+            MotelyScoredSeedResult[] buffer,
+            VectorMask baseFilterMask,
+            int scoreThreshold = int.MinValue
+        )
+        {
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            VectorMask scored = _provider!.Score(ref searchContext, buffer, baseFilterMask, scoreThreshold);
+            long bytes = GC.GetAllocatedBytesForCurrentThread() - before;
+            if (_warm)
+            {
+                MeasuredCalls++;
+                Bytes += bytes;
+            }
+            _warm = true;
+            return scored;
+        }
+    }
+
     [Fact]
     public void WithScoredResultGate_GatesCallbacksMatchingSeedsAndStopAfter()
     {

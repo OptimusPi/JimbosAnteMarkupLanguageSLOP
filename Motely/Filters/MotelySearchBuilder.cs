@@ -191,7 +191,8 @@ public static class MotelySearchBuilder
         int floor = engineCutoff ?? config.Cutoff ?? int.MinValue;
 
         // A JAML with no must/should/mustNot clauses is a valid, real search: deck/stake/seeds
-        // and nothing else, with the host's own predicate free to drive the whole decision.
+        // and nothing else, with the host's own predicate free to drive the whole decision while
+        // the floor is zero or below.
         IMotelySearchSettings settings =
             new MotelySearchSettings<PassthroughFilterDesc.PassthroughFilter>(
                 new PassthroughFilterDesc()

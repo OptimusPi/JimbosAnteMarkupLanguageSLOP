@@ -73,7 +73,26 @@ public sealed class JamlAdversarialTests
     [InlineData("and")]
     [InlineData("or")]
     public void AndOr_WrittenAsAMapping_IsRefused(string key) =>
-        Refused($"must:\n  - {key}: {{ clauses: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}] }}\n");
+        RefusedWith(
+            $"must:\n  - {key}: {{ clauses: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}] }}\n",
+            "Expected 'SequenceStart', got 'MappingStart'");
+
+    [Theory]
+    [InlineData("and", "max: 2", "an and takes no min or max")]
+    [InlineData("and", "min: 2", "an and takes no min or max")]
+    [InlineData("or", "max: 2", "an or takes no max")]
+    [InlineData("or", "min: 0", "an or needs min: 1 or more")]
+    public void AndOr_BoundsOutsideTheDeclaredOnes_AreRefused(string key, string bound, string why) =>
+        RefusedWith($"must:\n  - {key}: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}]\n    {bound}\n", why);
+
+    [Theory]
+    [InlineData("and", "min: 1\n    max: ~")]
+    [InlineData("or", "min: 2\n    max: ~")]
+    public void AndOr_DeclaredBounds_Load(string key, string bounds)
+    {
+        string yaml = $"must:\n  - {key}: [{{ joker: Blueprint }}, {{ joker: Brainstorm }}]\n    {bounds}\n";
+        Assert.True(JamlConfig.TryLoad(yaml, out _, out var error), error);
+    }
 
     [Fact]
     public void AnAliasBetweenRealKeys_IsRefused() =>

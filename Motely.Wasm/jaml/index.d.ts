@@ -511,8 +511,8 @@ export interface JamlAndClause {
   and?: JamlClause[] | null;
   clauses?: JamlClause[];
   label?: string | number | boolean | null;
-  max?: number | null;
-  min?: number;
+  max?: null;
+  min?: 1;
   mode?: LogicScoreModeName;
   score?: number;
 }
@@ -520,7 +520,7 @@ export interface JamlAndClause {
 export interface JamlOrClause {
   clauses?: JamlClause[];
   label?: string | number | boolean | null;
-  max?: number | null;
+  max?: null;
   min?: number;
   mode?: LogicScoreModeName;
   or?: JamlClause[] | null;

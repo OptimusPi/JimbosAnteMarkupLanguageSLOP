@@ -5448,17 +5448,10 @@
           ]
         },
         "max": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": "null"
         },
         "min": {
-          "type": "integer"
+          "const": 1
         },
         "mode": {
           "$ref": "#/definitions/enums/LogicScoreMode"
@@ -5493,17 +5486,11 @@
           ]
         },
         "max": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": "null"
         },
         "min": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 1
         },
         "mode": {
           "$ref": "#/definitions/enums/LogicScoreMode"
