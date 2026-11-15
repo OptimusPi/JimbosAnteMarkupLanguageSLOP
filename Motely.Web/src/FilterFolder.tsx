@@ -1,6 +1,7 @@
 import { useSyncExternalStore, useCallback, useReducer, useState } from "react";
 import { JamlFiles, Errors } from "motely-wasm";
-import { JimboButton, JimboPanel, JimboRow, JimboStack, JimboBadge, JimboErrorBlock } from "jaml-ui";
+import { JimboButton, JimboPanel, JimboRow, JimboStack, JimboBadge } from "jaml-ui";
+import { JimboErrorBlock } from "jaml-ui/ui";
 
 export type OpenedFilter = { name: string; yaml: string };
 
