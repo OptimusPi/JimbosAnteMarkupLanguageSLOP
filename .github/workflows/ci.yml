@@ -136,6 +136,7 @@ jobs:
       - name: Pack the npm package
         shell: bash
         run: npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
+      # Of these three seeds only ALEEB has Magic Trick as its ante 1 voucher; Motely.CLI says the same.
       - name: Load the packed package by name under Node
         shell: bash
         run: |
@@ -149,7 +150,7 @@ jobs:
           import schema from "motely-wasm/jaml/schema.json" with { type: "json" };
           await import("motely-wasm/jaml");
           await bootsharp.boot();
-          const config = JamlConfigLoader.fromJaml("deck: Red\nstake: White\nmust:\n  - voucher: Telescope\n    antes: [1]\n");
+          const config = JamlConfigLoader.fromJaml("deck: Red\nstake: White\nmust:\n  - voucher: MagicTrick\n    antes: [1]\n");
           const finds = [];
           const search = JamlSearchBuilder.createSettings(config)
             .withThreadCount(1)
@@ -159,10 +160,10 @@ jobs:
             .start();
           await search.waitForCompletionAsync();
           assert.equal(search.totalSeedsSearched, 3n);
-          assert.equal(BigInt(finds.length), search.matchingSeeds);
+          assert.deepEqual(finds, ["ALEEB"]);
           search.dispose();
           assert.equal(typeof schema.definitions, "object");
-          console.log(`motely-wasm loads by name: 3 seeds searched, ${finds.length} matched`);
+          console.log("motely-wasm loads by name: of ALEEB, AAAAAAAA and PIROCKS, ALEEB has Magic Trick in ante 1");
           EOF
           node check.mjs
       - uses: actions/upload-artifact@v5
