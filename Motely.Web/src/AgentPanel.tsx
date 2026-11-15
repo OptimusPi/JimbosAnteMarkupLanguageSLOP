@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  JimboButton,
-  JimboErrorBlock,
-  JimboSectionHeader,
-  JimboStatusPill,
-  JimboText,
-  JimboTextInput,
-} from "jaml-ui";
+import { JimboButton, JimboStatusPill, JimboText } from "jaml-ui";
+import { JimboErrorBlock, JimboSectionHeader, JimboTextInput } from "jaml-ui/ui";
 import { runAgent, type AguiProgress } from "./agui.js";
 
 // The server-agent panel: a thin AG-UI client for Motely.MCP's /agui endpoint, which runs the

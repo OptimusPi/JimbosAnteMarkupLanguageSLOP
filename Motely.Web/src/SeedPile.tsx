@@ -4,13 +4,11 @@ import {
   JamlyzerView,
   JimboBadge,
   JimboButton,
-  JimboErrorBlock,
   JimboPanel,
   JimboSeedCopyChip,
   JimboText,
-  JimboTextArea,
-  JimboTextInput,
 } from "jaml-ui";
+import { JimboErrorBlock, JimboTextArea, JimboTextInput } from "jaml-ui/ui";
 import {
   Errors,
   JamlConfigLoader,
