@@ -143,10 +143,10 @@ return await parsed.InvokeAsync(new InvocationConfiguration { ProcessTermination
 
 async Task<int> SearchAsync(ParseResult parseResult, string filterPath, CancellationToken cancellationToken)
 {
-    var path = ResolveFilterPath(filterPath);
-    if (!File.Exists(path))
+    var path = CliFilterPath.Resolve(filterPath);
+    if (path is null)
     {
-        Console.Error.WriteLine($"Error: no filter file at {Path.GetFullPath(path)}.");
+        Console.Error.WriteLine($"Error: {CliFilterPath.NotFound(filterPath)}");
         return 1;
     }
     JamlConfig config;
@@ -202,6 +202,13 @@ async Task<int> SearchAsync(ParseResult parseResult, string filterPath, Cancella
     {
         Console.Error.WriteLine("Error: --collect needs a count of 0 or more.");
         return 1;
+    }
+    if (cutoff.EndsAfterFirstMatch(config.Should.Count))
+    {
+        Console.Error.WriteLine(
+            "Warning: --cutoff max with no should: clauses — every seed scores 0, so the first match is the only row. Stopping there."
+        );
+        collect = 1;
     }
     bool replay = parseResult.GetValue(replayOption);
     string? seedsArgument = parseResult.GetValue(seedsOption);
@@ -419,16 +426,3 @@ static string FormatDuration(TimeSpan span) =>
         : span.ToString(@"hh\:mm\:ss\.f");
 
 // A bare name means Filters/<name>.yaml (or .yml/.jaml).
-static string ResolveFilterPath(string filter)
-{
-    if (File.Exists(filter))
-        return filter;
-    string[] extensions = [".yaml", ".yml", ".jaml"];
-    foreach (var extension in extensions)
-    {
-        var candidate = Path.Combine("Filters", filter + extension);
-        if (File.Exists(candidate))
-            return candidate;
-    }
-    return Path.HasExtension(filter) ? filter : Path.Combine("Filters", filter + extensions[0]);
-}
