@@ -100,8 +100,11 @@ engine's Jamlyzer shows a Medium.
   - An unknown key is now `Property 'luckMoney' not found on type 'Motely.Filters.JokerClause'`;
     31.2.0 said ``'luckMoney' is not a key of a `joker` clause, which takes …``.
   - The "did you mean" hints of 31.1.0 are gone.
-  - A value outside the limits is reported without a line number
-    (`JAML: a and clause is out of range: …`). The 31.2.0 errors sampled all carried one.
+  - A number outside 0 to 999 in a list is reported with its line
+    (``JAML line 4: `1000` is out of range: …``). The limits checked on a whole clause are
+    reported without one (`JAML: a joker clause is out of range: …`): `min` and `max`, an ante
+    above 39, `soulEditionRolls`, an empty list, a `boss` at ante 0 and `with: ~`. The 31.2.0
+    errors sampled all carried a line.
 - **`jaml-ui` 10.0.0 and earlier declare `motely-wasm ^31` as a peer.** A fresh `npm install` of
   one of them beside this engine fails on the peer conflict; an install from an existing
   lockfile gives a warning.
