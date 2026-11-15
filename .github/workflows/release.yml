@@ -1,15 +1,17 @@
-# A release is the GitHub Release for a v* tag, made after ci.yml passes on the tag's commit.
+# A release is the GitHub Release for a v<major>.<minor>.<patch> tag, made after ci.yml passes on
+# the tag's commit. It carries motely-wasm-<version>.tgz, the npm package that run built with
+# wasm-opt, tested and packed.
 # `git tag v29.0.0 && git push --tags` starts this workflow for the pushed tag.
 # A manual run takes a tag name.
 # - The tag exists: CI runs on the tag's commit, then the tag's release is created or updated.
-# - The tag does not exist: CI runs on the head of the ref the run was started from, then the
-#   release step creates the tag on that same commit. The name must be v<MotelyVersion> as
-#   Directory.Build.props has it on that commit.
-# The release body is docs/RELEASE-<version>.md when that file exists, generated notes otherwise.
-# On a manual run the file is read from the ref the run was started from, so a correction to the
-# notes on main reaches a published release by running this again for the same tag.
-# The release carries motely-wasm-<version>.tgz, the npm package that run built, tested and
-# packed from the tag's commit. A package already attached to a release is never replaced.
+# - The tag does not exist: the run must be started from the default branch. CI runs on that
+#   head commit, then the tag is created on that same commit and released.
+# On every path the tag must be the version Directory.Build.props and Motely.Wasm/package.json
+# have on the commit that is released.
+# The release body is docs/RELEASE-<version>.md when that file exists; a new release without one
+# gets generated notes. On a manual run the file is read from the ref the run was started from,
+# so a correction to the notes on main reaches a published release by running this again for
+# the same tag. A package already attached to a release is never replaced.
 name: release
 
 on:
@@ -18,17 +20,20 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to release (e.g. v29.0.0). Created on this ref's head if it does not exist."
+        description: "Tag to release (e.g. v29.0.0). Created on the default branch's head if it does not exist."
         required: true
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
 
 jobs:
   # On a manual run `commit` is the commit CI tests: the tag's commit when the tag exists, the
-  # head of the ref the run was started from when it does not. `create` is set in the second case
-  # only, to that same commit; the release step creates the tag there. On a tag push both are
-  # empty and actions/checkout uses the pushed tag's commit.
+  # head of the default branch when it does not. `create` is set in the second case only, to
+  # that same commit; the release job creates the tag there. On a tag push both are empty and
+  # actions/checkout uses the pushed tag's commit.
   tag:
     runs-on: ubuntu-latest
     outputs:
@@ -36,31 +41,42 @@ jobs:
       create: ${{ steps.resolve.outputs.create }}
     steps:
       - uses: actions/checkout@v6
-        if: github.event_name == 'workflow_dispatch'
       - name: Resolve the tag
         id: resolve
-        if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
-          TAG: ${{ inputs.tag }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          DEFAULT_REF: refs/heads/${{ github.event.repository.default_branch }}
         run: |
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
             echo "::error::'$TAG' is not a release tag. Write it as v<major>.<minor>.<patch>, e.g. v29.0.0."
             exit 1
           fi
-          existing=$(git ls-remote origin "refs/tags/$TAG" | awk -v ref="refs/tags/$TAG" '$2 == ref')
-          if [ -n "$existing" ]; then
-            git fetch --quiet --no-tags --depth=1 origin "+refs/tags/$TAG:refs/tags/$TAG"
-            echo "commit=$(git rev-parse "refs/tags/$TAG^{commit}")" >> "$GITHUB_OUTPUT"
-            exit 0
+          at=$(git rev-parse HEAD)
+          commit=
+          create=
+          if [ "$MANUAL" = "true" ]; then
+            existing=$(git ls-remote origin "refs/tags/$TAG" | awk -v ref="refs/tags/$TAG" '$2 == ref')
+            if [ -n "$existing" ]; then
+              git fetch --quiet --no-tags --depth=1 origin "+refs/tags/$TAG:refs/tags/$TAG"
+              at=$(git rev-parse "refs/tags/$TAG^{commit}")
+            elif [ "$GITHUB_REF" != "$DEFAULT_REF" ]; then
+              echo "::error::$TAG does not exist. A tag is created only by a run started from ${DEFAULT_REF#refs/heads/}."
+              exit 1
+            else
+              create=$at
+            fi
+            commit=$at
           fi
-          version=$(sed -n 's:.*<MotelyVersion>\(.*\)</MotelyVersion>.*:\1:p' Directory.Build.props)
-          if [ "v$version" != "$TAG" ]; then
-            echo "::error::$TAG does not exist, and it cannot be created here: $GITHUB_SHA is version $version."
+          engine=$(git show "$at:Directory.Build.props" | sed -n 's:.*<MotelyVersion>\(.*\)</MotelyVersion>.*:\1:p')
+          package=$(git show "$at:Motely.Wasm/package.json" | node -p 'JSON.parse(require("fs").readFileSync(0, "utf8")).version')
+          if [ "v$engine" != "$TAG" ] || [ "v$package" != "$TAG" ]; then
+            echo "::error::$TAG cannot be released from $at: there the engine is $engine and the package is $package."
             exit 1
           fi
-          echo "commit=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
-          echo "create=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+          echo "create=$create" >> "$GITHUB_OUTPUT"
 
   ci:
     needs: tag
@@ -74,29 +90,72 @@ jobs:
   release:
     needs: [tag, ci]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v6
-      - name: Pick the notes
-        id: notes
-        shell: bash
-        env:
-          TAG: ${{ inputs.tag || github.ref_name }}
-        run: |
-          notes="docs/RELEASE-${TAG#v}.md"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          if [ -f "$notes" ]; then echo "file=$notes" >> "$GITHUB_OUTPUT"; fi
       # The npm tarball ci.yml's `wasm` job built, tested and packed in this run. That job is
       # skipped without REWAFFLE_TOKEN; this step then fails, and nothing is released untested.
       - uses: actions/download-artifact@v6
         with:
           name: motely-wasm-package
           path: release-assets
+      - name: Check the release can be made
+        id: plan
+        shell: bash
+        run: |
+          package="release-assets/motely-wasm-${TAG#v}.tgz"
+          if [ ! -f "$package" ]; then
+            echo "::error::This run packed $(ls release-assets), not motely-wasm-${TAG#v}.tgz."
+            exit 1
+          fi
+          echo "package=$package" >> "$GITHUB_OUTPUT"
+          notes="docs/RELEASE-${TAG#v}.md"
+          if [ -f "$notes" ]; then echo "notes=$notes" >> "$GITHUB_OUTPUT"; fi
+          # softprops/action-gh-release publishes a draft that already has this tag name as that
+          # draft stands: its commit, its body, its files. Only a token that can write sees drafts.
+          releases=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq '.[] | "\(.draft) \(.tag_name)"')
+          if grep -qxF -- "true $TAG" <<<"$releases"; then
+            echo "::error::A draft release for $TAG exists. Delete it on the Releases page, then run this again."
+            exit 1
+          fi
+          if grep -qxF -- "false $TAG" <<<"$releases"; then echo "exists=true" >> "$GITHUB_OUTPUT"; fi
+      # The release action is given no commit: a release that stores one cannot be updated with
+      # this token once a workflow file on the default branch differs from that commit's.
+      - name: Create the tag on the tested commit
+        if: needs.tag.outputs.create != ''
+        shell: bash
+        env:
+          COMMIT: ${{ needs.tag.outputs.create }}
+        run: gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$TAG" -f sha="$COMMIT" --silent
+      # Generated notes are appended to the body on every run, so only a new release gets them.
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.notes.outputs.tag }}
-          target_commitish: ${{ needs.tag.outputs.create }}
-          body_path: ${{ steps.notes.outputs.file }}
-          generate_release_notes: ${{ steps.notes.outputs.file == '' }}
-          files: release-assets/motely-wasm-*.tgz
+          tag_name: ${{ env.TAG }}
+          body_path: ${{ steps.plan.outputs.notes }}
+          generate_release_notes: ${{ steps.plan.outputs.notes == '' && steps.plan.outputs.exists != 'true' }}
+          prerelease: ${{ contains(env.TAG, '-') }}
+          make_latest: legacy
+          files: ${{ steps.plan.outputs.package }}
           fail_on_unmatched_files: true
           overwrite_files: false
+      - name: Check the attached package
+        shell: bash
+        env:
+          PACKAGE: ${{ steps.plan.outputs.package }}
+        run: |
+          name=${PACKAGE##*/}
+          built="sha256:$(sha256sum "$PACKAGE" | cut -d' ' -f1)"
+          attached=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.assets[] | "\(.name) \(.state) \(.digest)"' | awk -v name="$name" '$1 == name { print $2, $3 }')
+          if [ "${attached%% *}" != "uploaded" ]; then
+            echo "::error::$TAG has no complete $name (found: ${attached:-nothing}). Delete the broken file on the release, then run this again."
+            exit 1
+          fi
+          if [ "${attached#* }" = "$built" ]; then
+            echo "$TAG carries $name from this run ($built)."
+          else
+            echo "::notice::$TAG already carried $name (${attached#* }). It was kept; this run's build ($built) was not attached."
+          fi

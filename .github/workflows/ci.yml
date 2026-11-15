@@ -104,26 +104,39 @@ jobs:
           REWAFFLE_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
         run: dotnet nuget add source "$REWAFFLE_NUGET" --name rewaffle --username rewaffle --password "$REWAFFLE_TOKEN" --store-password-in-clear-text
       - run: dotnet workload install wasm-tools
-      # Bootsharp runs wasm-opt on a Release publish and only warns when it is missing. The package
-      # that ships is the optimized one, so the build step below fails when wasm-opt did not run.
+      # Bootsharp runs wasm-opt on a Release publish, ignores its exit code and only warns when it
+      # is missing or fails. The package that ships is the optimized one, so `wasm-opt` on PATH
+      # here is a wrapper that writes down each call's exit code, and the build step reads them.
       - name: Install Binaryen 130
         shell: bash
         run: |
           cd "$RUNNER_TEMP"
-          curl -fsSL -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_130/binaryen-version_130-x86_64-linux.tar.gz
+          curl -fsSL --retry 3 -o binaryen.tar.gz https://github.com/WebAssembly/binaryen/releases/download/version_130/binaryen-version_130-x86_64-linux.tar.gz
           echo "0a18362361ad05465118cd8eeb72edaeec89de6894bc283576ef4e07aa3babcc  binaryen.tar.gz" | sha256sum --check
           tar -xzf binaryen.tar.gz
-          echo "$RUNNER_TEMP/binaryen-version_130/bin" >> "$GITHUB_PATH"
+          mkdir wasm-opt-recorded
+          cat > wasm-opt-recorded/wasm-opt <<'EOF'
+          #!/usr/bin/env bash
+          "$RUNNER_TEMP/binaryen-version_130/bin/wasm-opt" "$@"
+          code=$?
+          echo "$code" >> "$RUNNER_TEMP/wasm-opt.exits"
+          exit "$code"
+          EOF
+          chmod +x wasm-opt-recorded/wasm-opt
+          echo "$RUNNER_TEMP/wasm-opt-recorded" >> "$GITHUB_PATH"
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REWAFFLE_TOKEN }}
       - name: Build with wasm-opt
         shell: bash
         run: |
-          wasm-opt --version
-          npm run build 2>&1 | tee "$RUNNER_TEMP/build.log"
-          if grep -q "Failed to run Binaryen optimization" "$RUNNER_TEMP/build.log"; then
-            echo "::error::wasm-opt did not run: this is not the optimized build that ships."
+          "$RUNNER_TEMP/binaryen-version_130/bin/wasm-opt" --version
+          rm -f "$RUNNER_TEMP/wasm-opt.exits"
+          npm run build
+          exits=none
+          if [ -s "$RUNNER_TEMP/wasm-opt.exits" ]; then exits=$(sort -u "$RUNNER_TEMP/wasm-opt.exits" | tr '\n' ' '); fi
+          if [ "$exits" != "0 " ]; then
+            echo "::error::wasm-opt did not run cleanly during the build (exit codes: $exits), so this is not the optimized build that ships."
             exit 1
           fi
       - run: npm test
