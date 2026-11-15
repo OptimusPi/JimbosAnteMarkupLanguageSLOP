@@ -61,9 +61,8 @@ public sealed partial class LegendarySoulOrderClause: IMotelyClause, IWithScoped
     public int Score { get; set; } = 1;
 
     /// <summary>
-    /// The ordered Souls: entry <c>i</c> is the (i+1)-th Soul the run opens. A filter may write the
-    /// list as <c>soulOrder:</c>, <c>soulOrders:</c> or <c>entries:</c>; all three land here, so all
-    /// three take the same check.
+    /// The ordered Souls: entry <c>i</c> is the (i+1)-th Soul the run opens. A document can write
+    /// this key too, so it takes the same check as <c>soulOrder</c>.
     /// </summary>
     public SoulOrderEntry[] Entries { get; set => field = RequireSoulOrder(value); } = [];
 

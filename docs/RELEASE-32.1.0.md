@@ -1,5 +1,4 @@
 # motely-wasm 32.1.0
-
 `motely-wasm/jaml` is now written by the engine instead of by hand, and gains a vocabulary file
 for editors. One loader fix. A filter that loaded on 32.0.3 still loads unless it is named under
 "Now refused" below.
@@ -60,3 +59,18 @@ The generated files follow the loader where the hand-kept ones did not:
   `max`. The loader still accepts `min: 1` or `max: ~` written out on an `and`.
 - The schema cannot express `max` below `min`. The loader refuses it, and the description of
   `max` says so.
+  - `Any` is taken blank or with spaces around it, and a name with a doubled "the"
+    (`the the fool`) is taken, as the loader reads both.
+- **Lists that may not be empty are typed non-empty**: `[T, ...T[]]` for `rolls` on event,
+  voucher, tag and booster pack clauses, a boss's `antes`, `clauses`, and `soulOrder`. A variable
+  typed `number[]` no longer assigns to those; build the list in place or type it non-empty.
+- **Where the schema and the loader still part ways** is listed in the package README, all four
+  cases: a `max` below a written `min`, one list written by two keys, a number or boolean written
+  as text, and a letter outside A-Z inside a name.
+
+## Now refused
+
+- **`entries:` on a `soulOrder` clause with no legendary in it.** `entries:` binds the same list
+  as `soulOrder:` but skipped its check, so `entries: [{}]`, `entries: [{ legendary: Blueprint }]`
+  and `entries: []` loaded a clause that could never match. They are refused with the same words
+  as `soulOrder:`.

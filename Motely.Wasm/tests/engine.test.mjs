@@ -67,6 +67,13 @@ test("stickers: loads as one name, a list, Any or null, as jaml/index.d.ts types
     assert.equal(JamlConfigLoader.check(`should:\n  - joker: Blueprint\n    stickers: ${written}\n`), null, written);
 });
 
+test("entries: takes the soulOrder check: a soul needs its legendary", () => {
+  const clause = (entries) => `must:\n  - soulOrder:\n      - legendary: Perkeo\n    entries: ${entries}\n`;
+  assert.match(JamlConfigLoader.check(clause("[{}]")), /not a legendary/);
+  assert.match(JamlConfigLoader.check(clause("[]")), /at least one soul/);
+  assert.equal(JamlConfigLoader.check(clause("[{ legendary: Chicot }]")), null);
+});
+
 test("a seed list is searched once each, with one callback per find", async () => {
   const finds = [];
   const search = JamlSearchBuilder.createSettings(JamlConfigLoader.fromJaml(telescope))
